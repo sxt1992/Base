@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		body{margin:0;padding:0;}
+	</style>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+</head>
+<body>
+<div id="showcanvas"></div>
+	<script type="text/javascript">
+		var mycanvas=document.getElementById('mycanvas');
+		var hs300=[{"val":3063.556,"valuedate":1464119945000},{"val":3059.226,"valuedate":1464206345000},{"val":3064.211,"valuedate":1464292744000},{"val":3062.499,"valuedate":1464379144000},{"val":3062.499,"valuedate":1464465543000},{"val":3062.499,"valuedate":1464551943000},{"val":3066.71,"valuedate":1464638342000},{"val":3169.56,"valuedate":1464724742000},{"val":3160.547,"valuedate":1464811142000},{"val":3167.1,"valuedate":1464897541000},{"val":3189.326,"valuedate":1464983941000},{"val":3189.326,"valuedate":1465070340000},{"val":3189.326,"valuedate":1465156740000},{"val":3178.788,"valuedate":1465243140000},{"val":3177.054,"valuedate":1465329539000},{"val":3163.986,"valuedate":1465415939000},{"val":3163.986,"valuedate":1465502339000},{"val":3163.986,"valuedate":1465588738000},{"val":3163.986,"valuedate":1465675138000},{"val":3120.544,"valuedate":1467029216756}];
+		var hs=[{"val":3066.71,"valuedate":1464638342000},{"val":3169.56,"valuedate":1464724742000},{"val":3160.547,"valuedate":1464811142000},{"val":3167.1,"valuedate":1464897541000},{"val":3189.326,"valuedate":1464983941000},{"val":3189.326,"valuedate":1465070340000},{"val":3189.326,"valuedate":1465156740000},{"val":3178.788,"valuedate":1465243140000},{"val":3177.054,"valuedate":1465329539000},{"val":3163.986,"valuedate":1465415939000},{"val":3163.986,"valuedate":1465502339000},{"val":3163.986,"valuedate":1465588738000},{"val":3163.986,"valuedate":1465675138000},{"val":3111.335,"valuedate":1467092653477}];
+		var len=hs300.length>hs.length?hs300.length:hs.length;
+		var val1=[],val2=[];
+		for (var i = 0; i < len; i++) {
+			if(!hs300[i]){
+				hs300[i]=hs300[0];
+			}
+			if(!hs[i]){
+				hs[i]=hs[0];
+			}
+		  val1.push(+((hs300[i].val/hs300[0].val-1)*100).toFixed(3));
+		  val2.push(+((hs[i].val/hs[0].val-1)*100).toFixed(3));
+		}
+		var maxmin=function(arr){
+		  var sMax=Math.ceil(Math.max.apply(null,arr));
+		  var sMin=Math.floor(Math.min.apply(null,arr));
+		  var allDis=sMax-sMin;
+		  var NUM=6;
+		  while(allDis%NUM!=0){
+		    allDis++;
+		  }
+		  var max=sMax;
+		  var min=sMin;
+		  var step=allDis/NUM;
+		  if(step<=0){
+		    return;
+		  }
+		  while(max%step!=0){
+		    max++;
+		  }
+		  while(min%step!=0){
+		    min--;
+		  }
+		  sMax=max;
+		  sMin=min;
+		  return {sMax:sMax,sMin:sMin};
+		}(val1.concat(val2));
+		maxmin.xWord=["2016-05-25","2016-06-05","2016-06-25"];
+		tDrawGraph(320,240,"showcanvas",[
+	         	{
+	         		name : "模拟",
+	         		value:val1,
+	         		color:'#ffa800'
+	         	},{
+	         		name : '沪深300',
+	         		value:val2,
+	         		color:'#0d8ecf'
+	         	}
+	         ],maxmin);
+		function tDrawGraph(w,h,wrapper,theData,params){
+			if(!(theData instanceof Array) && typeof theData=="object"){
+				var tempArr=[];
+				tempArr[0]=theData;
+				theData=tempArr;
+			}
+			var canvas=document.createElement("canvas");
+			canvas.width=w;
+			canvas.height=h;
+			canvas.innerHTML="Your browser doesn't support the HTML5 CANVAS tag.";
+			canvas.style.display="block";
+			canvas.style.margin="auto";
+			canvas.style.cursor="default";
+			document.getElementById(wrapper).appendChild(canvas);
+			if(!canvas||!canvas.getContext)return;
+			var taoCanvas={
+				init:function(myCanvas,data,params){
+					params=params||{};
+					this.canvas=myCanvas;
+					this.ctx=this.canvas.getContext('2d');
+					this.data=data;
+					this.eLeft=(function(e){
+						var offset = e.offsetLeft;
+						if(e.offsetParent != null) offset += arguments.callee(e.offsetParent);
+						return offset;
+					})(this.canvas);
+					this.eTop=(function(e){
+						var offset = e.offsetTop;
+						if(e.offsetParent != null) offset += arguments.callee(e.offsetParent);
+						return offset;
+					})(this.canvas);
+					this.eW=this.canvas.width||300;
+					this.eH=this.canvas.height||150;
+					this.maxVal=params.sMax;
+					this.minVal=params.sMin;
+					this.xWord=params.xWord||["","",""];
+					this.params=params;
+					this.sx=0;
+					this.ex=0;
+					this.hy=5*this.eH/6;
+					this.draw();
+				},
+				draw:function(){
+					this.strokeOXY();
+					var ctx=this.ctx;
+					var d=(this.ex-this.sx)/(this.data[0].value.length-1);
+					var m=this.minVal;
+					ctx.lineWidth=0.5;
+
+					var arcStart=20;
+					for(var i=0;i<this.data.length;i++){
+						var item=this.data[i];
+						var data=item.value;
+
+						//画折线
+						ctx.strokeStyle=item.color;
+						ctx.beginPath();
+						ctx.moveTo(this.sx,this.hy-this.eH*(data[0]-m)/9);
+						for(var j=1;j<data.length;j++){
+							ctx.lineTo(this.sx+d*j,this.hy-this.eH*(data[j]-m)/9);
+							ctx.stroke();
+						}
+						ctx.stroke();
+					}
+					var allWordWidth=0;
+					var potR=3;
+					var pot_Right=6;
+					var ww=[];
+					for(var i=0;i<this.data.length;i++){
+						var item=this.data[i];
+						var data=item.value;
+						ww[i]=ctx.measureText(item.name).width;
+						allWordWidth+=ww[i];
+					}
+					var allWidth=allWordWidth+pot_Right*(2*this.data.length-1)+potR*2*this.data.length;
+					var markerS=(this.eW-allWidth)/2;
+					ctx.textAlign="left";
+					ctx.textBaseline="middle";
+
+					for(var i=0;i<this.data.length;i++){
+						var item=this.data[i];
+
+						allWordWidth+=ctx.measureText(item.name).width;
+						//画点
+						ctx.beginPath();
+						ctx.fillStyle=item.color;
+						ctx.arc(markerS+potR,this.eH/9,3,0,7);
+						ctx.fill();
+						//写字
+						ctx.fillText(item.name,markerS+2*potR+pot_Right,this.eH/9);
+						markerS+=2*potR+2*pot_Right+ww[i];
+					}
+				},
+				strokeOXY:function(){
+					var wordWidth=this.eW/17;
+					this.sx=wordWidth*2.5;
+					this.ex=this.eW-wordWidth;
+					var buchang=(this.maxVal-this.minVal)/6;
+					var ctx=this.ctx;
+
+					ctx.lineWidth=1;
+					ctx.strokeStyle="#333";
+					ctx.moveTo(this.sx,this.hy-6*this.eH/9);
+					ctx.lineTo(this.sx,this.hy);
+					ctx.lineTo(this.ex,this.hy);
+					ctx.stroke();
+					ctx.lineWidth=0.3;
+					ctx.strokeStyle="#666";
+					ctx.fillStyle="#666";
+					
+					for(var i=1;i<7;i++){
+						var start=this.ex;
+						var space=15+Math.random()*2;
+						while(start>this.sx+9){
+							ctx.beginPath();
+							ctx.moveTo(start,this.hy-i*this.eH/9);
+							ctx.lineTo(start-10,this.hy-i*this.eH/9);
+							ctx.stroke();
+							start-=space;
+						}
+						ctx.textAlign="right";
+						ctx.textBaseline="middle";
+
+						ctx.fillText((this.minVal+i*buchang).toFixed(1)+"%",this.sx-5,this.hy-i*this.eH/9);
+					}
+					ctx.fillText(this.minVal.toFixed(1)+"%",this.sx-5,this.hy);
+
+					//x轴
+					ctx.textAlign="center";
+					var xz_height=this.hy+0.5*this.eH/9;
+					ctx.fillText(this.xWord[0],this.sx,xz_height);
+					ctx.fillText(this.xWord[1],(this.sx+this.ex)/2,xz_height);
+					ctx.textAlign="right";
+					ctx.fillText(this.xWord[2],this.ex,xz_height);
+				}
+			};
+			taoCanvas.init(canvas,theData,params);
+		}
+	</script>
+</body>
+</html>

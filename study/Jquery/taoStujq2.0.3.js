@@ -3242,36 +3242,29 @@ jQuery.extend({
 						fns = null;
 					}).promise();
 				},
-				
-				
+	
 				promise: function( obj ) {
 					return obj != null ? jQuery.extend( obj, promise ) : promise;
 				}
 			},
 			deferred = {};
-
-		
+	
 		promise.pipe = promise.then;
-
 		
 		jQuery.each( tuples, function( i, tuple ) {
 			var list = tuple[ 2 ],
 				stateString = tuple[ 3 ];
 
-			
 			promise[ tuple[1] ] = list.add;
 
-			
 			if ( stateString ) {
 				list.add(function() {
 					
 					state = stateString;
-
-				
+	
 				}, tuples[ i ^ 1 ][ 2 ].disable, tuples[ 2 ][ 2 ].lock );
 			}
-
-			
+	
 			deferred[ tuple[0] ] = function() {
 				deferred[ tuple[0] + "With" ]( this === deferred ? promise : this, arguments );
 				return this;
@@ -3279,19 +3272,15 @@ jQuery.extend({
 			deferred[ tuple[0] + "With" ] = list.fireWith;
 		});
 
-		
 		promise.promise( deferred );
-
 		
 		if ( func ) {
 			func.call( deferred, deferred );
 		}
 
-		
 		return deferred;
 	},
 
-	
 	when: function( subordinate /* , ..., subordinateN */ ) {
 		var i = 0,
 			resolveValues = core_slice.call( arguments ),

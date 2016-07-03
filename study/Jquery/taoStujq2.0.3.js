@@ -851,11 +851,44 @@ jQuery.extend({
 
 		return core_concat.apply( [], ret );
 	},
-
+	/* taoNote: 内部使用,唯一标识符 */
 	guid: 1,
-	oxy: function( fn, context ) {
+	/* 
+		taoNote: 改变this指向
+		function show(){
+			alert(this);
+		}
+		$.proxy(show,document) //show中的this指向document
+		类似 call与apply
+	
+	传参 : 放在后面 或者 类似call
+		function show(n1,n2){
+			alert(n1+"\n"+n2);
+			alert(this);
+		}
+
+		$.proxy(show,document)(n1,n2)
+		或者
+		$.proxy(show,document,n1,n2)
+		或者
+		$.proxy(show,document,n1)(n2)
+
+	 */
+	proxy: function( fn, context ) {
 		var tmp, args, proxy;
 
+		/* 
+		taoNote: 改变this指向
+		var obj={
+			show:function(){
+				alert(this);
+			}
+		};
+
+		//支持上述写法,还支持以下特殊写法
+		$.proxy(obj,"show")
+		实现原理就是下面的if
+	 */
 		if ( typeof context === "string" ) {
 			tmp = fn[ context ];
 			context = fn;
@@ -876,6 +909,7 @@ jQuery.extend({
 
 		return proxy;
 	},
+	/* taoNote: 内部使用,多功能操作 */
 	access: function( elems, fn, key, value, chainable, emptyGet, raw ) {
 		var i = 0,
 			length = elems.length,
@@ -966,7 +1000,7 @@ jQuery.ready.promise = function( obj ) {
 jQuery.each("Boolean Number String Function Array Date RegExp Object Error".split(" "), function(i, name) {
 	class2type[ "[object " + name + "]" ] = name.toLowerCase();
 });
-
+/* taoNote: 获取对象是不是类数组 */
 function isArraylike( obj ) {
 	var length = obj.length,
 		type = jQuery.type( obj );
@@ -2976,54 +3010,51 @@ function createOptions( options ) {
 	});
 	return object;
 }
+ /* taoNote: 回调函数
+ 		function aaa(){
+ 			alert(1);
+ 		}
+ 		function bbb(){
+ 			alert(2);
+ 		}
+ 		var cb=$.Callbacks();
 
-/*
- * Create a callback list using the following parameters:
- *
- *	options: an optional list of space-separated options that will change how
- *			the callback list behaves or a more traditional option object
- *
- * By default a callback list will act like an event callback list and can be
- * "fired" multiple times.
- *
- * Possible options:
- *
- *	once:			will ensure the callback list can only be fired once (like a Deferred)
- *
- *	memory:			will keep track of previous values and will call any callback added
- *					after the list has been fired right away with the latest "memorized"
- *					values (like a Deferred)
- *
- *	unique:			will ensure a callback can only be added once (no duplicate in the list)
- *
- *	stopOnFalse:	interrupt callings when a callback returns false
- *
- */
+ 		cb.add(bbb);
+ 		cb.add(aaa);
+
+ 		cb.fire();
+ 		// 结果 alert( 2 ) --- alert( 1 )
+
+ 		add另外写法 add(aaa,bbb)   add([aaa,bbb])
+ 		
+ 		options={
+			 		once:,      //作用到fire
+			 		memory:,    //作用到add
+			 		unique:,    //作用到add
+			 		stopOnFalse //作用到fire
+			 	}
+  */
 jQuery.Callbacks = function( options ) {
-
-	
-	
 	options = typeof options === "string" ?
 		( optionsCache[ options ] || createOptions( options ) ) :
 		jQuery.extend( {}, options );
-
-	var 
+	var // Last fire value (for non-forgettable lists)
 		memory,
-		
+		// Flag to know if list was already fired
 		fired,
-		
+		// Flag to know if list is currently firing
 		firing,
-		
+		// First callback to fire (used internally by add and fireWith)
 		firingStart,
-		
+		// End of the loop when firing
 		firingLength,
-		
+		// Index of currently firing callback (modified by remove if needed)
 		firingIndex,
-		
+		// Actual callback list
 		list = [],
-		
+		// Stack of fire calls for repeatable lists
 		stack = !options.once && [],
-		
+		// Fire callbacks
 		fire = function( data ) {
 			memory = options.memory && data;
 			fired = true;
@@ -3050,9 +3081,8 @@ jQuery.Callbacks = function( options ) {
 				}
 			}
 		},
-		
+		// Actual Callbacks object
 		self = {
-			
 			add: function() {
 				if ( list ) {
 					
@@ -3061,11 +3091,16 @@ jQuery.Callbacks = function( options ) {
 						jQuery.each( args, function( _, arg ) {
 							var type = jQuery.type( arg );
 							if ( type === "function" ) {
+								/* taoNote: 回调函数
+								 add另外写法 add(aaa,bbb)
+								  */
 								if ( !options.unique || !self.has( arg ) ) {
 									list.push( arg );
 								}
 							} else if ( arg && arg.length && type !== "string" ) {
-								
+								/* taoNote: 回调函数
+							 		add另外写法 add([aaa,bbb])
+							 	 */
 								add( arg );
 							}
 						});
@@ -3162,8 +3197,13 @@ jQuery.Callbacks = function( options ) {
 
 	return self;
 };
-jQuery.extend({
+/* 
+	taoNote: 延迟对象
+		$.Deferred
+		$.when
 
+ */
+jQuery.extend({
 	Deferred: function( func ) {
 		var tuples = [
 				
@@ -3295,7 +3335,6 @@ jQuery.extend({
 			}
 		}
 
-		
 		if ( !remaining ) {
 			deferred.resolveWith( resolveContexts, resolveValues );
 		}
@@ -6885,7 +6924,7 @@ var
 	
 	rlocalProtocol = /^(?:about|app|app-storage|.+-extension|file|res|widget):$/,
 	rnoContent = /^(?:GET|HEAD)$/,
-	rprotocol = /^\/\
+	rprotocol = /^\/\//,
 	rurl = /^([\w.+-]+:)(?:\/\/([^\/?#:]*)(?::(\d+)|)|)/,
 
 	
@@ -7285,7 +7324,7 @@ jQuery.extend({
 		
 		
 		s.url = ( ( url || s.url || ajaxLocation ) + "" ).replace( rhash, "" )
-			.replace( rprotocol, ajaxLocParts[ 1 ] + "
+			.replace( rprotocol, ajaxLocParts[ 1 ] + "//" );
 
 		
 		s.type = options.method || options.type || s.method || s.type;

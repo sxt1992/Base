@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>D1</title>
+	<script type="text/javascript">!function(){var tim=["17:16","18:57","14:21","21:24","15:56","17:41","16:18","18:48","22:17","15:02","20:42","17:02","19:33","14:15","10:41","14:14","23:41","19:44","16:33","25:11","25:14","14:37","18:26","16:28","14:11","20:44","24:50","13:19","20:07","10:30","12:55","16:04","10:14"];var fz=0;var mz=0;for(var i=0;i<tim.length;i++){var sj=tim[i].split(":");fz+=parseFloat(sj[0]);mz+=parseFloat(sj[1]);}fz+=mz/60;var sz=fz/60;console.log(tim.length+"个,从第 "+(58-tim.length+1)+" 个开始\n"+sz.toFixed(3));}();</script>
 	<script type="text/javascript" src="jquery-2.0.3.js"></script>
 </head>
 <body>
@@ -11,30 +12,19 @@
 			<li>1</li>
 			<li>2</li>
 			<li>3</li>
+			<li>4</li>
+			<li>5</li>
 		</ul>
 	o</div>
 	<div class="xue">xue</div>
 	<button>jiao</button>
 	<span class="ze">zhongHe</span>
 <script type="text/javascript">
-/*!function(window,undefined){
-	var $=35;
-	//window.jQuery=window.$=$;
-}(this);*/
-/*function Aaa(){
-}
-Aaa.prototype={
-	a:1,
-	b:2
-};
-var a1=new Aaa();
-alert(a1.constructor);*/
-$(function(){
-	var tao=$(document.getElementById("tao"));
-	$("li",tao);
+var tao=function(){};
+/*$(function(){
+	alert($.type(tao));
+});*/
 
-	var ceshimeiyouyong=0;
-});
 </script>
 </body>
 </html>

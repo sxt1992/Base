@@ -22,7 +22,11 @@ JQuery工作原理
 	selector:"div li",
 	context:上下文,
 
-	prevObject:jQuery.fn.jQuery.init[1],
+	prevObject:jQuery.fn.jQuery.init[1], 
+
+					//表示栈,前一个元素
+						1.$("div") 那么prevObject为$(document)
+						2.$("div").eq(2) 当前元素为 $("div").eq(2) 那么prevObject为$("div")
 
 	__proto__: prototype={  // 原型是封装各种方法
 					css:function(a,b){ //此参数为 帮助 理解
@@ -406,6 +410,24 @@ jQuery.fn = jQuery.prototype = {
 
 jQuery.fn.init.prototype = jQuery.fn;
 
+/* 
+taoNote:
+	1.浅拷贝
+		var a={};
+		var b=jQuery.extend(a,{tao:123,xue:345});
+		a {tao:123,xue:345}
+		b 指向 a
+	2.深拷贝
+		var a={};
+		var b=jQuery.extend(true,a,{tao:123,xue:345});
+		a {tao:123,xue:345}
+		b {tao:123,xue:345}与a没有关系
+	3.继承(插件)
+		var a={tao:123,xue:345};
+		jQuery.extend(a);
+		jQuery.tao  123
+		jQuery.xue  345
+ */
 jQuery.extend = jQuery.fn.extend = function() {
 	var options, name, src, copy, copyIsArray, clone,
 		target = arguments[0] || {},
@@ -426,7 +448,10 @@ jQuery.extend = jQuery.fn.extend = function() {
 		target = {};
 	}
 
-	
+	/* 
+	taoNote:
+		判断是不是 继承(插件)
+	 */
 	if ( length === i ) {
 		target = this;
 		--i;
@@ -440,13 +465,15 @@ jQuery.extend = jQuery.fn.extend = function() {
 				src = target[ name ];
 				copy = options[ name ];
 
-				
 				if ( target === copy ) {
 					continue;
 				}
 
-				
 				if ( deep && copy && ( jQuery.isPlainObject(copy) || (copyIsArray = jQuery.isArray(copy)) ) ) {
+				/* 
+				taoNote:
+					深拷贝
+				 */
 					if ( copyIsArray ) {
 						copyIsArray = false;
 						clone = src && jQuery.isArray(src) ? src : [];
@@ -460,18 +487,22 @@ jQuery.extend = jQuery.fn.extend = function() {
 
 				
 				} else if ( copy !== undefined ) {
+				/* 
+				taoNote:
+					浅拷贝
+				 */
 					target[ name ] = copy;
 				}
 			}
 		}
 	}
 
-	
 	return target;
 };
 
 jQuery.extend({
-	
+
+	/* taoNote: 内部使用 */
 	expando: "jQuery" + ( core_version + Math.random() ).replace( /\D/g, "" ),
 
 	noConflict: function( deep ) {
@@ -485,15 +516,8 @@ jQuery.extend({
 
 		return jQuery;
 	},
-
-	
 	isReady: false,
-
-	
-	
 	readyWait: 1,
-
-	
 	holdReady: function( hold ) {
 		if ( hold ) {
 			jQuery.readyWait++;
@@ -501,35 +525,19 @@ jQuery.extend({
 			jQuery.ready( true );
 		}
 	},
-
-	
 	ready: function( wait ) {
-
-		
 		if ( wait === true ? --jQuery.readyWait : jQuery.isReady ) {
 			return;
-		}
-
-		
+		}	
 		jQuery.isReady = true;
-
-		
 		if ( wait !== true && --jQuery.readyWait > 0 ) {
 			return;
 		}
-
-		
 		readyList.resolveWith( document, [ jQuery ] );
-
-		
 		if ( jQuery.fn.trigger ) {
 			jQuery( document ).trigger("ready").off("ready");
 		}
 	},
-
-	
-	
-	
 	isFunction: function( obj ) {
 		return jQuery.type(obj) === "function";
 	},
@@ -555,19 +563,17 @@ jQuery.extend({
 	},
 
 	isPlainObject: function( obj ) {
-		
-		
-		
-		
+		/* 
+		taoNote:
+			判断字面量,返回true,否则false
+			var tao={name:132};
+			var xue=new Object();
+		 */
 		if ( jQuery.type( obj ) !== "object" || obj.nodeType || jQuery.isWindow( obj ) ) {
 			return false;
 		}
-
-		
-		
-		
-		
 		try {
+		/* 去除 类似 window.location 等对象 */
 			if ( obj.constructor &&
 					!core_hasOwn.call( obj.constructor.prototype, "isPrototypeOf" ) ) {
 				return false;
@@ -575,9 +581,6 @@ jQuery.extend({
 		} catch ( e ) {
 			return false;
 		}
-
-		
-		
 		return true;
 	},
 
@@ -592,10 +595,6 @@ jQuery.extend({
 	error: function( msg ) {
 		throw new Error( msg );
 	},
-
-	
-	
-	
 	parseHTML: function( data, context, keepScripts ) {
 		if ( !data || typeof data !== "string" ) {
 			return null;
@@ -624,15 +623,11 @@ jQuery.extend({
 	},
 
 	parseJSON: JSON.parse,
-
-	
 	parseXML: function( data ) {
 		var xml, tmp;
 		if ( !data || typeof data !== "string" ) {
 			return null;
 		}
-
-		
 		try {
 			tmp = new DOMParser();
 			xml = tmp.parseFromString( data , "text/xml" );
@@ -647,32 +642,50 @@ jQuery.extend({
 	},
 
 	noop: function() {},
-
-	
 	globalEval: function( code ) {
 		var script,
 				indirect = eval;
+		/* 
+		taoNote:
+			function tao(){
+				eval('var a=1');
+			}
+			tao();
+			alert(a); //报错因为a被解析成局部变量
 
+			改成:
+				function tao(){
+					window.eval('var a=1');
+				}
+				tao();
+				alert(a); // 1
+
+			  或者
+
+			   function tao(){
+			   		var val=eval;
+					val.eval('var a=1');
+				}
+				tao();
+				alert(a); // 1
+		 */
 		code = jQuery.trim( code );
 
 		if ( code ) {
-			
-			
-			
 			if ( code.indexOf("use strict") === 1 ) {
 				script = document.createElement("script");
 				script.text = code;
 				document.head.appendChild( script ).parentNode.removeChild( script );
 			} else {
-			
-			
 				indirect( code );
 			}
 		}
 	},
 
-	
-	
+	/* taoNote: 转驼峰 
+		ie 特殊 msMarginLeft
+		其它浏览器 MozMarginLeft
+	*/
 	camelCase: function( string ) {
 		return string.replace( rmsPrefix, "ms-" ).replace( rdashAlpha, fcamelCase );
 	},
@@ -680,8 +693,6 @@ jQuery.extend({
 	nodeName: function( elem, name ) {
 		return elem.nodeName && elem.nodeName.toLowerCase() === name.toLowerCase();
 	},
-
-	
 	each: function( obj, callback, args ) {
 		var value,
 			i = 0,
@@ -706,8 +717,6 @@ jQuery.extend({
 					}
 				}
 			}
-
-		
 		} else {
 			if ( isArray ) {
 				for ( ; i < length; i++ ) {
@@ -734,8 +743,13 @@ jQuery.extend({
 	trim: function( text ) {
 		return text == null ? "" : core_trim.call( text );
 	},
-
-	
+	/* taoNote: 转数组 
+		外部使用 1个参数
+		内部使用 2个参数 转为类数组,第二个参数必须有length方法
+		var str=123;
+		console.log( $.makeArray(str,{length:0}) );
+		// 结果为 {0: 123, length: 1}
+	*/
 	makeArray: function( arr, results ) {
 		var ret = results || [];
 
@@ -756,7 +770,6 @@ jQuery.extend({
 	inArray: function( elem, arr, i ) {
 		return arr == null ? -1 : core_indexOf.call( arr, elem, i );
 	},
-
 	merge: function( first, second ) {
 		var l = second.length,
 			i = first.length,
@@ -776,7 +789,19 @@ jQuery.extend({
 
 		return first;
 	},
+	/* taoNote:
+		过滤,得到新数组
+		类似[1,2,3,4,5].filter(function(item,index,arr){});
+		var arr=[1,2,3,4,5];
+		$.grep(arr,function(item,index){
+			return item>2; //值大于2的留下来
+		}); // [3,4,5]
 
+		//第三个参数为 true 时,是上面取反的意思
+		$.grep(arr,function(item,index){
+			return item>2;
+		},true); // [1,2]
+	 */
 	grep: function( elems, callback, inv ) {
 		var retVal,
 			ret = [],
@@ -784,8 +809,6 @@ jQuery.extend({
 			length = elems.length;
 		inv = !!inv;
 
-		
-		
 		for ( ; i < length; i++ ) {
 			retVal = !!callback( elems[ i ], i );
 			if ( inv !== retVal ) {
@@ -796,7 +819,10 @@ jQuery.extend({
 		return ret;
 	},
 
-	
+	/* taoNote:
+		数组处理,并得到新数组
+			类似[1,2,3,4,5].map(function(item,index,arr){});
+	 */
 	map: function( elems, callback, arg ) {
 		var value,
 			i = 0,
@@ -804,7 +830,6 @@ jQuery.extend({
 			isArray = isArraylike( elems ),
 			ret = [];
 
-		
 		if ( isArray ) {
 			for ( ; i < length; i++ ) {
 				value = callback( elems[ i ], i, arg );
@@ -814,7 +839,6 @@ jQuery.extend({
 				}
 			}
 
-		
 		} else {
 			for ( i in elems ) {
 				value = callback( elems[ i ], i, arg );
@@ -825,16 +849,11 @@ jQuery.extend({
 			}
 		}
 
-		
 		return core_concat.apply( [], ret );
 	},
 
-	
 	guid: 1,
-
-	
-	
-	proxy: function( fn, context ) {
+	oxy: function( fn, context ) {
 		var tmp, args, proxy;
 
 		if ( typeof context === "string" ) {
@@ -842,13 +861,10 @@ jQuery.extend({
 			context = fn;
 			fn = tmp;
 		}
-
-		
 		
 		if ( !jQuery.isFunction( fn ) ) {
 			return undefined;
 		}
-
 		
 		args = core_slice.call( arguments, 2 );
 		proxy = function() {
@@ -860,22 +876,17 @@ jQuery.extend({
 
 		return proxy;
 	},
-
-	
-	
 	access: function( elems, fn, key, value, chainable, emptyGet, raw ) {
 		var i = 0,
 			length = elems.length,
 			bulk = key == null;
 
-		
 		if ( jQuery.type( key ) === "object" ) {
 			chainable = true;
 			for ( i in key ) {
 				jQuery.access( elems, fn, i, key[i], true, emptyGet, raw );
 			}
 
-		
 		} else if ( value !== undefined ) {
 			chainable = true;
 
@@ -888,7 +899,6 @@ jQuery.extend({
 				if ( raw ) {
 					fn.call( elems, value );
 					fn = null;
-
 				
 				} else {
 					bulk = fn;
@@ -907,18 +917,12 @@ jQuery.extend({
 
 		return chainable ?
 			elems :
-
-			
 			bulk ?
 				fn.call( elems ) :
 				length ? fn( elems[0], key ) : emptyGet;
 	},
 
 	now: Date.now,
-
-	
-	
-	
 	swap: function( elem, options, callback, args ) {
 		var ret, name,
 			old = {};
@@ -939,25 +943,19 @@ jQuery.extend({
 		return ret;
 	}
 });
-
+/* 
+taoNote:
+	jQuery.ready.promise 延迟对象
+ */
 jQuery.ready.promise = function( obj ) {
 	if ( !readyList ) {
 
 		readyList = jQuery.Deferred();
-
-		
-		
-		
 		if ( document.readyState === "complete" ) {
-			
+			/* taoNote: 解决IE提前触发的hack写法 */
 			setTimeout( jQuery.ready );
-
 		} else {
-
-			
 			document.addEventListener( "DOMContentLoaded", completed, false );
-
-			
 			window.addEventListener( "load", completed, false );
 		}
 	}

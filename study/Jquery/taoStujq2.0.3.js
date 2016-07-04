@@ -128,9 +128,9 @@ jQuery.fn = jQuery.prototype = {
 				/* 
 				taoNote:
 				可以进来的字符串有:
-				2. $(" <li> ")
-				4. $(" <li>fdsafds</li> ")
-				7. $(" <li>fdsafd</li><a>dfsa</a> ")
+				2. $("<li>") 无前后空格
+				4. $("<li>fdsafds</li>") 无前后空格
+				7. $("<li>fdsafd</li><a>dfsa</a>") 无前后空格
 				 */
 
 				match = [ null, selector, null ];
@@ -139,7 +139,16 @@ jQuery.fn = jQuery.prototype = {
 				match = rquickExpr.exec( selector );
 				/* 
 				taoNote:
+					rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/
 					match有效的情况:
+					2. $(" <li> ")  有前后空格
+					4. $(" <li>fdsafds</li> ")  有前后空格
+					7. $(" <li>fdsafd</li><a>dfsa</a> ")  有前后空格
+
+					[" <li>fdsafd</li><a>dfsa</a> ", "<li>fdsafd</li><a>dfsa</a>", undefined]
+
+
+
 					3. $(" <li>fdsafds ")
 						["<li>fdsafds", "<li>", undefined]
 					5. $(" #tao ")
@@ -154,7 +163,7 @@ jQuery.fn = jQuery.prototype = {
 			match为true:
 				一、id选择
 				二、闭合的标签
-			match为false:
+			match为false:(复杂选择器)
 				1. $(" li ")
 				6. $(" .xue ")
 				9. $(" #tao .xue ")
@@ -280,6 +289,7 @@ jQuery.fn = jQuery.prototype = {
 			2. $({})
 			3. $([])
 			4. $(function(){})
+			5. $(null)
 
 			原生 元素 对象
 		 */
@@ -297,6 +307,7 @@ jQuery.fn = jQuery.prototype = {
 			2. $({})
 			3. $([])
 			4. $(function(){})
+			5. $(null)
 
 			函数function(){}
 		 */
@@ -605,6 +616,7 @@ jQuery.extend({
 		}
 		context = context || document;
 
+		/* taoNote: rsingleTag = /^<(\w+)\s*\/?>(?:<\/\1>|)$/  */
 		var parsed = rsingleTag.exec( data ),
 			scripts = !keepScripts && [];
 

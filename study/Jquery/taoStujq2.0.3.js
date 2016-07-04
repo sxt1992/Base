@@ -3214,6 +3214,18 @@ jQuery.Callbacks = function( options ) {
 		$.Deferred
 		$.when
 
+	var dfd=$.Deferred();
+
+	setTimeout(function(){
+		dfd.resolve();
+	},1992);
+
+	dfd.pipe(function(){
+		alert("我是111,哈哈");
+	}).fail(function(){
+		alert("我是222,呵呵");
+	});
+
  */
 jQuery.extend({
 	Deferred: function( func ) {
@@ -3292,19 +3304,33 @@ jQuery.extend({
 
 		return deferred;
 	},
+/* 
+	taoNote: 延迟对象
+		$.when
+	function aaa(){
+		var dfd=$.Deferred();
+		dfd.resolve();
+		return dfd;
+	}
+	function bbb(){
+		var dfd=$.Deferred();
+		dfd.resolve();
+		return dfd;
+	}
 
+	$.when(aaa(),bbb()).done(function(){
+		alert("aaa和bbb都fire了,才执行!");
+	});
+	done 都完成了,才执行
+	fail 有一个未完成,就可以执行
+
+ */
 	when: function( subordinate /* , ..., subordinateN */ ) {
 		var i = 0,
 			resolveValues = core_slice.call( arguments ),
 			length = resolveValues.length,
-
-			
 			remaining = length !== 1 || ( subordinate && jQuery.isFunction( subordinate.promise ) ) ? length : 0,
-
-			
 			deferred = remaining === 1 ? subordinate : jQuery.Deferred(),
-
-			
 			updateFunc = function( i, contexts, values ) {
 				return function( value ) {
 					contexts[ i ] = this;
@@ -3319,7 +3345,6 @@ jQuery.extend({
 
 			progressValues, progressContexts, resolveContexts;
 
-		
 		if ( length > 1 ) {
 			progressValues = new Array( length );
 			progressContexts = new Array( length );
@@ -3356,32 +3381,20 @@ jQuery.support = (function( support ) {
 	}
 
 	input.type = "checkbox";
-
-	
-	
 	support.checkOn = input.value !== "";
 
-	
-	
 	support.optSelected = opt.selected;
 
-	
 	support.reliableMarginRight = true;
 	support.boxSizingReliable = true;
 	support.pixelPosition = false;
-
-	
 	
 	input.checked = true;
 	support.noCloneChecked = input.cloneNode( true ).checked;
 
-	
-	
 	select.disabled = true;
 	support.optDisabled = !opt.disabled;
 
-	
-	
 	input = document.createElement("input");
 	input.value = "t";
 	input.type = "radio";
@@ -3393,19 +3406,14 @@ jQuery.support = (function( support ) {
 
 	fragment.appendChild( input );
 
-	
-	
 	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
 
-	
-	
 	support.focusinBubbles = "onfocusin" in window;
 
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
-	
 	jQuery(function() {
 		var container, marginDiv,
 			
@@ -3426,8 +3434,6 @@ jQuery.support = (function( support ) {
 		
 		div.style.cssText = "-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%";
 
-		
-		
 		jQuery.swap( body, body.style.zoom != null ? { zoom: 1 } : {}, function() {
 			support.boxSizing = div.offsetWidth === 4;
 		});
@@ -3437,10 +3443,6 @@ jQuery.support = (function( support ) {
 			support.pixelPosition = ( window.getComputedStyle( div, null ) || {} ).top !== "1%";
 			support.boxSizingReliable = ( window.getComputedStyle( div, null ) || { width: "4px" } ).width === "4px";
 
-			
-			
-			
-			
 			marginDiv = div.appendChild( document.createElement("div") );
 			marginDiv.style.cssText = div.style.cssText = divReset;
 			marginDiv.style.marginRight = marginDiv.style.width = "0";
@@ -3473,8 +3475,6 @@ var data_user, data_priv,
 
 function Data() {
 	
-	
-	
 	Object.defineProperty( this.cache = {}, 0, {
 		get: function() {
 			return {};
@@ -3488,19 +3488,12 @@ Data.uid = 1;
 
 Data.accepts = function( owner ) {
 	
-	
-	
-	
-	
-	
 	return owner.nodeType ?
 		owner.nodeType === 1 || owner.nodeType === 9 : true;
 };
 
 Data.prototype = {
 	key: function( owner ) {
-		
-		
 		
 		if ( !Data.accepts( owner ) ) {
 			return 0;
@@ -3518,8 +3511,6 @@ Data.prototype = {
 			try {
 				descriptor[ this.expando ] = { value: unlock };
 				Object.defineProperties( owner, descriptor );
-
-			
 			
 			} catch ( e ) {
 				descriptor[ this.expando ] = unlock;
@@ -3527,7 +3518,6 @@ Data.prototype = {
 			}
 		}
 
-		
 		if ( !this.cache[ unlock ] ) {
 			this.cache[ unlock ] = {};
 		}
@@ -3536,17 +3526,11 @@ Data.prototype = {
 	},
 	set: function( owner, data, value ) {
 		var prop,
-			
-			
-			
 			unlock = this.key( owner ),
 			cache = this.cache[ unlock ];
 
-		
 		if ( typeof data === "string" ) {
 			cache[ data ] = value;
-
-		
 		} else {
 			
 			if ( jQuery.isEmptyObject( cache ) ) {
@@ -3562,9 +3546,7 @@ Data.prototype = {
 	},
 	get: function( owner, key ) {
 		
-		
-		
-		
+
 		var cache = this.cache[ this.key( owner ) ];
 
 		return key === undefined ?
@@ -3572,17 +3554,7 @@ Data.prototype = {
 	},
 	access: function( owner, key, value ) {
 		var stored;
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		if ( key === undefined ||
 				((key && typeof key === "string") && value === undefined) ) {
 
@@ -3591,17 +3563,9 @@ Data.prototype = {
 			return stored !== undefined ?
 				stored : this.get( owner, jQuery.camelCase(key) );
 		}
-
-		
-		
-		
-		
-		
 		
 		this.set( owner, key, value );
 
-		
-		
 		return value !== undefined ? value : key;
 	},
 	remove: function( owner, key ) {
@@ -3615,12 +3579,7 @@ Data.prototype = {
 		} else {
 			
 			if ( jQuery.isArray( key ) ) {
-				
-				
-				
-				
-				
-				
+
 				name = key.concat( key.map( jQuery.camelCase ) );
 			} else {
 				camel = jQuery.camelCase( key );

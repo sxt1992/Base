@@ -3572,7 +3572,6 @@ Data.prototype = {
 				}
 			}
 		}
-		console.log(this.expando);
 		return cache;
 	},
 	get: function( owner, key ) {
@@ -3682,7 +3681,6 @@ jQuery.fn.extend({
 			i = 0,
 			data = null;
 
-		
 		if ( key === undefined ) {
 			if ( this.length ) {
 				data = data_user.get( elem );
@@ -3700,10 +3698,8 @@ jQuery.fn.extend({
 					data_priv.set( elem, "hasDataAttrs", true );
 				}
 			}
-
 			return data;
 		}
-
 		
 		if ( typeof key === "object" ) {
 			return this.each(function() {
@@ -3715,50 +3711,30 @@ jQuery.fn.extend({
 			var data,
 				camelKey = jQuery.camelCase( key );
 
-			
-			
-			
-			
-			
 			if ( elem && value === undefined ) {
-				
-				
+		
 				data = data_user.get( elem, key );
 				if ( data !== undefined ) {
 					return data;
 				}
 
-				
-				
 				data = data_user.get( elem, camelKey );
 				if ( data !== undefined ) {
 					return data;
 				}
 
-				
-				
 				data = dataAttr( elem, camelKey, undefined );
 				if ( data !== undefined ) {
 					return data;
 				}
 
-				
 				return;
 			}
 
-			
 			this.each(function() {
-				
-				
+
 				var data = data_user.get( this, camelKey );
-
-				
-				
-				
 				data_user.set( this, camelKey, value );
-
-				
-				
 				
 				if ( key.indexOf("-") !== -1 && data !== undefined ) {
 					data_user.set( this, key, value );
@@ -3776,9 +3752,6 @@ jQuery.fn.extend({
 
 function dataAttr( elem, key, data ) {
 	var name;
-
-	
-	
 	if ( data === undefined && elem.nodeType === 1 ) {
 		name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();
 		data = elem.getAttribute( name );
@@ -3793,8 +3766,6 @@ function dataAttr( elem, key, data ) {
 					rbrace.test( data ) ? JSON.parse( data ) :
 					data;
 			} catch( e ) {}
-
-			
 			data_user.set( elem, key, data );
 		} else {
 			data = undefined;
@@ -3809,8 +3780,7 @@ jQuery.extend({
 		if ( elem ) {
 			type = ( type || "fx" ) + "queue";
 			queue = data_priv.get( elem, type );
-
-			
+	
 			if ( data ) {
 				if ( !queue || jQuery.isArray( data ) ) {
 					queue = data_priv.access( elem, type, jQuery.makeArray(data) );
@@ -3833,7 +3803,6 @@ jQuery.extend({
 				jQuery.dequeue( elem, type );
 			};
 
-		
 		if ( fn === "inprogress" ) {
 			fn = queue.shift();
 			startLength--;
@@ -3841,13 +3810,10 @@ jQuery.extend({
 
 		if ( fn ) {
 
-			
-			
 			if ( type === "fx" ) {
 				queue.unshift( "inprogress" );
 			}
 
-			
 			delete hooks.stop;
 			fn.call( elem, next, hooks );
 		}
@@ -3857,7 +3823,6 @@ jQuery.extend({
 		}
 	},
 
-	
 	_queueHooks: function( elem, type ) {
 		var key = type + "queueHooks";
 		return data_priv.get( elem, key ) || data_priv.access( elem, key, {

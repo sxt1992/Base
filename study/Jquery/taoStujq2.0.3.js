@@ -3773,6 +3773,36 @@ function dataAttr( elem, key, data ) {
 	}
 	return data;
 }
+/* 
+taoNote:
+
+一、静态入队
+	1. 设置指定名字的queue
+		function cb1() {alert(1)}
+		function cb2() {alert(2)}
+
+		var arr = [cb1, cb2];
+		 
+		$.queue(el, 'mx', cb1); // 第三个参数为function
+		$.queue(el, 'mx', cb2); // 第三个参数为function
+		$.queue(el, 'xm', arr); // 第三个参数为数组
+
+	2. 这时可以取到存入的callbacks
+		var cbs1 = $.queue(el, 'mx'); // [cb1, cb2]
+		var cbs2 = $.queue(el, 'xm'); // [cb1, cb2]
+	3.出队
+	$.dequeue(document, 'mx'); //alert(1);
+	$.dequeue(document, 'mx'); //alert(2);
+二、对象入队
+	$(document).queue('q1',cb1);
+	$(document).queue('q1',cb2);
+
+	console.log($(document).queue('q1')); // [cb1, cb2]
+
+	出队
+	$(document).dequeue('q1'); //alert(1);
+	$(document).dequeue('q1'); //alert(2);
+ */
 jQuery.extend({
 	queue: function( elem, type, data ) {
 		var queue;

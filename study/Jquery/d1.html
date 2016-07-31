@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>D1</title>
-	<script type="text/javascript">!function(){var tim=["14:37","18:26","16:28","14:11","20:44","24:50","13:19","20:07","10:30","12:55","16:04","10:14"];var fz=0;var mz=0;for(var i=0;i<tim.length;i++){var sj=tim[i].split(":");fz+=parseFloat(sj[0]);mz+=parseFloat(sj[1]);}fz+=mz/60;var sz=fz/60;console.log("还剩"+tim.length+"个,从第 "+(58-tim.length+1)+" 个开始\n"+sz.toFixed(3));}();</script>
+	<script type="text/javascript">!function(){var tim=["18:26","16:28","14:11","20:44","24:50","13:19","20:07","10:30","12:55","16:04","10:14"];var fz=0;var mz=0;for(var i=0;i<tim.length;i++){var sj=tim[i].split(":");fz+=parseFloat(sj[0]);mz+=parseFloat(sj[1]);}fz+=mz/60;var sz=fz/60;console.log("还剩"+tim.length+"个,从第 "+(58-tim.length+1)+" 个开始\n"+sz.toFixed(3));}();</script>
 	<script type="text/javascript" src="taoStujq2.0.3.js"></script>
 </head>
 <body>
@@ -21,27 +21,17 @@
 	<span class="ze">zhongHe</span>
 <script type="text/javascript">
 $(function(){
-	$("#tao").data("name",{tao:"taoxuejiao",xue:1235446789,jiao:"txj"});
-	$("#tao").data("age",278);
-	$("#tao").data("job","programmer");
-	console.log($("#tao").data("job"));
-	console.log($("#t67ao").data());
-	$(".xue").data("job","tonghuashun");
-	//console.log($("#tao").data("name"));
-	var xie=21;
-	/*var obj={};
-	Object.defineProperties(obj,{
-		xue:{
-			value:123987
-		}
-	});
-	console.log(obj);
-	Object.defineProperties(obj,{
-		xue:{
-			value:11111
-		}
-	});
-	var ttt=35;*/
+	function cb1() {alert(1)}
+	function cb2() {alert(2)}
+
+	var arr = [cb1, cb2];
+	 
+	$.queue(document, 'mx', cb1); // 第三个参数为function
+	$.queue(document, 'mx', cb2); // 第三个参数为function
+	var cbs1 = $.queue(document, 'mx');
+	$.dequeue(document, 'mx');
+	$.dequeue(document, 'mx');
+	var tao=12456;
 });
 
 </script>

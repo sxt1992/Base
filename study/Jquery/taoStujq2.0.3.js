@@ -3368,6 +3368,9 @@ jQuery.extend({
 		return deferred.promise();
 	}
 });
+/* taoNote: 功能检测
+		检测浏览器
+ */
 jQuery.support = (function( support ) {
 	var input = document.createElement("input"),
 		fragment = document.createDocumentFragment(),
@@ -3375,74 +3378,97 @@ jQuery.support = (function( support ) {
 		select = document.createElement("select"),
 		opt = select.appendChild( document.createElement("option") );
 
-	
+	// Finish early in limited environments
 	if ( !input.type ) {
 		return support;
 	}
 
 	input.type = "checkbox";
+
+	// Support: Safari 5.1, iOS 5.1, Android 4.x, Android 2.3
+	// Check the default checkbox/radio value ("" on old WebKit; "on" elsewhere)
 	support.checkOn = input.value !== "";
 
+	// Must access the parent to make an option select properly
+	// Support: IE9, IE10
 	support.optSelected = opt.selected;
 
+	// Will be defined later
 	support.reliableMarginRight = true;
 	support.boxSizingReliable = true;
 	support.pixelPosition = false;
-	
+
+	// Make sure checked status is properly cloned
+	// Support: IE9, IE10
 	input.checked = true;
 	support.noCloneChecked = input.cloneNode( true ).checked;
 
+	// Make sure that the options inside disabled selects aren't marked as disabled
+	// (WebKit marks them as disabled)
 	select.disabled = true;
 	support.optDisabled = !opt.disabled;
 
+	// Check if an input maintains its value after becoming a radio
+	// Support: IE9, IE10
 	input = document.createElement("input");
 	input.value = "t";
 	input.type = "radio";
 	support.radioValue = input.value === "t";
 
-	
+	// #11217 - WebKit loses check when the name is after the checked attribute
 	input.setAttribute( "checked", "t" );
 	input.setAttribute( "name", "t" );
 
 	fragment.appendChild( input );
 
+	// Support: Safari 5.1, Android 4.x, Android 2.3
+	// old WebKit doesn't clone checked state correctly in fragments
 	support.checkClone = fragment.cloneNode( true ).cloneNode( true ).lastChild.checked;
 
+	// Support: Firefox, Chrome, Safari
+	// Beware of CSP restrictions (https://developer.mozilla.org/en/Security/CSP)
 	support.focusinBubbles = "onfocusin" in window;
 
 	div.style.backgroundClip = "content-box";
 	div.cloneNode( true ).style.backgroundClip = "";
 	support.clearCloneStyle = div.style.backgroundClip === "content-box";
 
+	// Run tests that need a body at doc ready
 	jQuery(function() {
 		var container, marginDiv,
-			
+			// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
 			divReset = "padding:0;margin:0;border:0;display:block;-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box",
 			body = document.getElementsByTagName("body")[ 0 ];
 
 		if ( !body ) {
-			
+			// Return for frameset docs that don't have a body
 			return;
 		}
 
 		container = document.createElement("div");
 		container.style.cssText = "border:0;width:0;height:0;position:absolute;top:0;left:-9999px;margin-top:1px";
 
-		
+		// Check box-sizing and margin behavior.
 		body.appendChild( container ).appendChild( div );
 		div.innerHTML = "";
-		
+		// Support: Firefox, Android 2.3 (Prefixed box-sizing versions).
 		div.style.cssText = "-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;padding:1px;border:1px;display:block;width:4px;margin-top:1%;position:absolute;top:1%";
 
+		// Workaround failing boxSizing test due to offsetWidth returning wrong value
+		// with some non-1 values of body zoom, ticket #13543
 		jQuery.swap( body, body.style.zoom != null ? { zoom: 1 } : {}, function() {
 			support.boxSizing = div.offsetWidth === 4;
 		});
 
-		
+		// Use window.getComputedStyle because jsdom on node.js will break without it.
 		if ( window.getComputedStyle ) {
 			support.pixelPosition = ( window.getComputedStyle( div, null ) || {} ).top !== "1%";
 			support.boxSizingReliable = ( window.getComputedStyle( div, null ) || { width: "4px" } ).width === "4px";
 
+			// Support: Android 2.3
+			// Check if div with explicit width and no margin-right incorrectly
+			// gets computed margin-right based on width of container. (#3333)
+			// WebKit Bug 13343 - getComputedStyle returns wrong value for margin-right
 			marginDiv = div.appendChild( document.createElement("div") );
 			marginDiv.style.cssText = div.style.cssText = divReset;
 			marginDiv.style.marginRight = marginDiv.style.width = "0";
@@ -3458,6 +3484,10 @@ jQuery.support = (function( support ) {
 	return support;
 })( {} );
 
+/* 
+	taoNote:
+		data() 数据缓存
+ */
 /*
 	Implementation Summary
 
@@ -3651,7 +3681,6 @@ jQuery.fn.extend({
 			i = 0,
 			data = null;
 
-		
 		if ( key === undefined ) {
 			if ( this.length ) {
 				data = data_user.get( elem );
@@ -3669,10 +3698,8 @@ jQuery.fn.extend({
 					data_priv.set( elem, "hasDataAttrs", true );
 				}
 			}
-
 			return data;
 		}
-
 		
 		if ( typeof key === "object" ) {
 			return this.each(function() {
@@ -3684,50 +3711,30 @@ jQuery.fn.extend({
 			var data,
 				camelKey = jQuery.camelCase( key );
 
-			
-			
-			
-			
-			
 			if ( elem && value === undefined ) {
-				
-				
+		
 				data = data_user.get( elem, key );
 				if ( data !== undefined ) {
 					return data;
 				}
 
-				
-				
 				data = data_user.get( elem, camelKey );
 				if ( data !== undefined ) {
 					return data;
 				}
 
-				
-				
 				data = dataAttr( elem, camelKey, undefined );
 				if ( data !== undefined ) {
 					return data;
 				}
 
-				
 				return;
 			}
 
-			
 			this.each(function() {
-				
-				
+
 				var data = data_user.get( this, camelKey );
-
-				
-				
-				
 				data_user.set( this, camelKey, value );
-
-				
-				
 				
 				if ( key.indexOf("-") !== -1 && data !== undefined ) {
 					data_user.set( this, key, value );
@@ -3745,9 +3752,6 @@ jQuery.fn.extend({
 
 function dataAttr( elem, key, data ) {
 	var name;
-
-	
-	
 	if ( data === undefined && elem.nodeType === 1 ) {
 		name = "data-" + key.replace( rmultiDash, "-$1" ).toLowerCase();
 		data = elem.getAttribute( name );
@@ -3762,8 +3766,6 @@ function dataAttr( elem, key, data ) {
 					rbrace.test( data ) ? JSON.parse( data ) :
 					data;
 			} catch( e ) {}
-
-			
 			data_user.set( elem, key, data );
 		} else {
 			data = undefined;
@@ -3771,6 +3773,36 @@ function dataAttr( elem, key, data ) {
 	}
 	return data;
 }
+/* 
+taoNote:
+
+一、静态入队
+	1. 设置指定名字的queue
+		function cb1() {alert(1)}
+		function cb2() {alert(2)}
+
+		var arr = [cb1, cb2];
+		 
+		$.queue(el, 'mx', cb1); // 第三个参数为function
+		$.queue(el, 'mx', cb2); // 第三个参数为function
+		$.queue(el, 'xm', arr); // 第三个参数为数组
+
+	2. 这时可以取到存入的callbacks
+		var cbs1 = $.queue(el, 'mx'); // [cb1, cb2]
+		var cbs2 = $.queue(el, 'xm'); // [cb1, cb2]
+	3.出队
+	$.dequeue(document, 'mx'); //alert(1);
+	$.dequeue(document, 'mx'); //alert(2);
+二、对象入队
+	$(document).queue('q1',cb1);
+	$(document).queue('q1',cb2);
+
+	console.log($(document).queue('q1')); // [cb1, cb2]
+
+	出队
+	$(document).dequeue('q1'); //alert(1);
+	$(document).dequeue('q1'); //alert(2);
+ */
 jQuery.extend({
 	queue: function( elem, type, data ) {
 		var queue;
@@ -3778,8 +3810,7 @@ jQuery.extend({
 		if ( elem ) {
 			type = ( type || "fx" ) + "queue";
 			queue = data_priv.get( elem, type );
-
-			
+	
 			if ( data ) {
 				if ( !queue || jQuery.isArray( data ) ) {
 					queue = data_priv.access( elem, type, jQuery.makeArray(data) );
@@ -3802,7 +3833,6 @@ jQuery.extend({
 				jQuery.dequeue( elem, type );
 			};
 
-		
 		if ( fn === "inprogress" ) {
 			fn = queue.shift();
 			startLength--;
@@ -3810,13 +3840,10 @@ jQuery.extend({
 
 		if ( fn ) {
 
-			
-			
 			if ( type === "fx" ) {
 				queue.unshift( "inprogress" );
 			}
 
-			
 			delete hooks.stop;
 			fn.call( elem, next, hooks );
 		}
@@ -3826,7 +3853,6 @@ jQuery.extend({
 		}
 	},
 
-	
 	_queueHooks: function( elem, type ) {
 		var key = type + "queueHooks";
 		return data_priv.get( elem, key ) || data_priv.access( elem, key, {

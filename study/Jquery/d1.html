@@ -53,7 +53,7 @@ $(function(){
 	}
 	//tao(1,2,3);
 
-	xue={length:0};
+	/*xue={length:0};
 	xue.jiao=123;
 	xue.tt=function(){alert("aaa和bbb都fire了,才执行");};
 
@@ -70,7 +70,16 @@ $(function(){
 	xue.length+=1;
 
 	console.log(xue);
-	console.log(Array.prototype.slice.call(xue));
+	console.log(Array.prototype.slice.call(xue));*/
+	function aa(){alert(11);}
+	function bb(){alert(22);}
+	function cc(){alert(33);}
+	var cb=$.Callbacks("memory");
+	cb.fire();
+	cb.add(aa);
+	cb.add(bb);
+	cb.fire();
+	cb.add(cc);
 });
 
 </script>

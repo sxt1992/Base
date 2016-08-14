@@ -3802,6 +3802,12 @@ taoNote:
 	出队
 	$(document).dequeue('q1'); //alert(1);
 	$(document).dequeue('q1'); //alert(2);
+三、使用
+animate相当入队+出队
+$(elem).animate({width:300},2000).queue(function(next){
+	//$(this).dequeue();
+	//next();和上面作用一样
+});
  */
 jQuery.extend({
 	queue: function( elem, type, data ) {

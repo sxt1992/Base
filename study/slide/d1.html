@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,7 +13,7 @@
     </style>
 </head>
 <body>
-<div id="content"> 
+<div id="content" style="background:rgba(89,15,162,0.6);"> 
     <div class="myContent"> 
         <ul> 
             <li>item1 -- item1 -- item1</li> 
@@ -24,6 +23,11 @@
             <li>item5 -- item5 -- item5</li> 
             <li>item6 -- item6 -- item6</li> 
             <li>item7 -- item7 -- item7</li> 
+            <li>item8 -- item8 -- item8</li> 
+            <li>item9 -- item9 -- item9</li> 
+            <li>item10 -- item10 -- item10</li> 
+            <li>item11 -- item11 -- item11</li> 
+            <li>item12 -- item12 -- item12</li> 
         </ul> 
     </div>
 </div>
@@ -34,11 +38,23 @@ var rAF = window.requestAnimationFrame	||
 	window.oRequestAnimationFrame		||
 	window.msRequestAnimationFrame		||
 	function (callback) { window.setTimeout(callback, 1000 / 60); };
+function setStyle(elem,key,val){
+	var prefix=['','webkit','Moz','ms','O'];
+	var FirstCss=key.replace(/^([\da-z])/,function(all,letter){return letter.toUpperCase();});
+	elem.style[key]=val;
+	for(var i=1;i<prefix.length;i++){
+		elem.style[prefix[i]+key]=val;
+	}
+}
+//$("body")[0].style.webkitTransform="translate(10px,-20px)";
+//setStyle($("body")[0],"transform","translate(30px,-20px)");
+//setStyle($("body")[0],"transform","translate(0,"+(10)+"px)");
 	
 var taoUD=function(elem,udType){
 	var sLoc=0,eLoc=0,tDown=null,tUp=null,isFirst=true,flushing=false;
 	var taoUDStep1=function(){
 		//拖拉过程
+		$("li:eq(6)").html("7:"+(eLoc-sLoc));
 		if(isFirst){
 			isFirst=false;
 			tDown=$("<div class='taoSlideD'><div class='taoSlideD1'><p>松开刷新</p></div><div class='taoSlideD2'><p>正在刷新...</p></div></div>");
@@ -52,9 +68,13 @@ var taoUD=function(elem,udType){
 		}
 		if(sLoc<eLoc){
 			//下滑
-			tDown.children(".taoSlideD1")[0].style.paddingTop=eLoc-sLoc+"px";
+			$("li:eq(11)").html("12:"+(eLoc-sLoc));
 			tDown.show();
 			tDown.children(".taoSlideD1").show();
+
+			//setStyle(tDown.children(".taoSlideD1")[0],"transform","translate(0,"+(eLoc-sLoc)+"px)");
+			setStyle(tDown.children(".taoSlideD1")[0],"paddingTop",(eLoc-sLoc)+"px");
+			//tDown.children(".taoSlideD1")[0].style.paddingTop=eLoc-sLoc+"px";
 		}
 	};
 	var taoUDStep2=function(){
@@ -67,7 +87,7 @@ var taoUD=function(elem,udType){
 			//下滑
 			tDown.children().hide();
 			tDown.children(".taoSlideD2").show();
-			setTimeout(taoUDStep3,8000);
+			setTimeout(taoUDStep3,4000);
 		}
 	};
 	var taoUDStep3=function(){
@@ -101,6 +121,7 @@ var taoUD=function(elem,udType){
 		sLoc=touch.pageY;
 	},false); 
     elem[0].addEventListener("touchmove",function(event){
+    	event.preventDefault();
     	if(flushing){return;}
 		var touch=event.targetTouches[0];
 		eLoc=touch.pageY;
@@ -112,7 +133,7 @@ var taoUD=function(elem,udType){
 	},false);
 };
 taoUD($("#content"),["u","d"]);
-
+//rAF(function(){alert(123456);});
 </script>
 </body>
 </html>

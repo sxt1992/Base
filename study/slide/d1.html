@@ -11,8 +11,64 @@
       .taoSlideD1{background:blue;}
       .taoSlideD2{background:red;}
     </style>
+    <style> 
+.taoDiv{
+width:100px;
+height:100px;
+background:red;
+animation:myfirst 5s;
+-moz-animation:myfirst 5s; /* Firefox */
+-webkit-animation:myfirst 5s; /* Safari and Chrome */
+-o-animation:myfirst 5s; /* Opera */
+}
+
+@keyframes myfirst{
+from {background:red;}
+to {background:yellow;}
+}
+
+@-moz-keyframes myfirst /* Firefox */
+{
+from {background:red;}
+to {background:yellow;}
+}
+
+@-webkit-keyframes myfirst /* Safari and Chrome */
+{
+from {background:red;}
+to {background:yellow;}
+}
+
+@-o-keyframes myfirst /* Opera */
+{
+from {background:red;}
+to {background:yellow;}
+}
+</style>
+<style> 
+.taoDiv2 div
+{
+width:100px;
+height:75px;
+background-color:yellow;
+border:1px solid black;
+}
+.taoDiv2 div#div2
+{
+transform:translate(50px,100px);
+-ms-transform:translate(50px,100px); /* IE 9 */
+-moz-transform:translate(50px,100px); /* Firefox */
+-webkit-transform:translate(50px,100px); /* Safari and Chrome */
+-o-transform:translate(50px,100px); /* Opera */
+}
+</style>
 </head>
 <body>
+<div class="taoDiv"></div>
+<div class="taoDiv2">
+	<div>你好。这是一个 div 元素。</div>
+	<div id="div2">你好。这是一个 div 元素。</div>
+</div>
 <div id="content" style="background:rgba(89,15,162,0.6);"> 
     <div class="myContent"> 
         <ul> 
@@ -39,7 +95,9 @@ var rAF = window.requestAnimationFrame	||
 	window.msRequestAnimationFrame		||
 	function (callback) { window.setTimeout(callback, 1000 / 60); };
 function setStyle(elem,key,val){
-	var prefix=['','webkit','Moz','ms','O'];
+	$("li:eq(1)").html($(elem.parentNode).html().replace(/</g,"[").replace(/>/g,"]"));
+	//var prefix=['','webkit','Moz','ms','O'];
+	var prefix=['','Webkit','Moz','ms','O'];
 	var FirstCss=key.replace(/^([\da-z])/,function(all,letter){return letter.toUpperCase();});
 	elem.style[key]=val;
 	for(var i=1;i<prefix.length;i++){
@@ -72,8 +130,10 @@ var taoUD=function(elem,udType){
 			tDown.show();
 			tDown.children(".taoSlideD1").show();
 
-			//setStyle(tDown.children(".taoSlideD1")[0],"transform","translate(0,"+(eLoc-sLoc)+"px)");
-			setStyle(tDown.children(".taoSlideD1")[0],"paddingTop",(eLoc-sLoc)+"px");
+			setStyle(tDown.children(".taoSlideD1")[0],"transform","translate(0,"+(eLoc-sLoc)+"px)");
+			var str=tDown.html().replace(/</g,"[").replace(/>/g,"]");
+			$("li:eq(8)").html(str);
+			//setStyle(tDown.children(".taoSlideD1")[0],"paddingTop",(eLoc-sLoc)+"px");
 			//tDown.children(".taoSlideD1")[0].style.paddingTop=eLoc-sLoc+"px";
 		}
 	};

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="taoApp">
+<head>
+	<meta charset="UTF-8">
+	<title>a1</title>
+</head>
+<body>
+<div id="wrapper" ng-controller="MyCtrl">
+	<hello><br><br>
+		<h3 style="background:green">时尚时间~</h3><br><br>
+		<p style="background:blue">你真是帅呀,哈哈~~~!</p>
+	</hello>
+</div>
+<script type="text/javascript" src="./angularLib/angular.js"></script>
+<script type="text/javascript">
+	var myModule = angular.module("taoApp",[]);
+	myModule.controller("MyCtrl",["$scope",function($scope){
+	    $scope.sayHi=function(){
+	       console.log("hello every!");
+	    };
+	}]);
+	myModule.directive('hello', function() {
+		return {
+			restrict:'EACM',
+			replace:true,
+			transclude:true,
+			template:'<div tao="xuejiao" style="background:red"> hel<br><br><br><br>lo nihao <p ng-transclude></p></div>',
+			link:function(scope,element,attr,parentCtrl){
+				//scope 作用域,element 当前元素,attr 当前元素属性,parentCtrl 父类控制器
+				console.log(element);
+				console.log(attr);
+				console.log(parentCtrl);
+				element.bind("click",function(){
+					scope.sayHi(); //hello every!
+					scope.$apply("sayHi()"); //同上面,不同的写法而已,hello every!
+				});
+			}
+		};
+	});
+</script>
+</body>
+</html>

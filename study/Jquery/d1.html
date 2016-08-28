@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>D1</title>
-	<script type="text/javascript">!function(){var tim=["16:28","14:11","20:44","24:50","13:19","20:07","10:30","12:55","16:04","10:14"];var fz=0;var mz=0;for(var i=0;i<tim.length;i++){var sj=tim[i].split(":");fz+=parseFloat(sj[0]);mz+=parseFloat(sj[1]);}fz+=mz/60;var sz=fz/60;console.log("还剩"+tim.length+"个,从第 "+(58-tim.length+1)+" 个开始\n"+sz.toFixed(3));}();</script>
+	<script type="text/javascript">!function(){var tim=["14:11","20:44","24:50","13:19","20:07","10:30","12:55","16:04","10:14"];var fz=0;var mz=0;for(var i=0;i<tim.length;i++){var sj=tim[i].split(":");fz+=parseFloat(sj[0]);mz+=parseFloat(sj[1]);}fz+=mz/60;var sz=fz/60;console.log("还剩"+tim.length+"个,从第 "+(58-tim.length+1)+" 个开始\n"+sz.toFixed(3));}();</script>
 	<script type="text/javascript" src="taoStujq2.0.3.js"></script>
 </head>
 <body>
@@ -32,7 +32,29 @@ $(function(){
 	$.dequeue(document, 'mx');
 	$.dequeue(document, 'mx');
 	var tao=12456;*/
-	$("#tao");
+	//$("#tao");
+	window.dd={};
+	/*Object.defineProperty(dd,"info",{
+		get: function() {
+			return "taoxuejiaoGET";
+		}
+	});
+
+	console.log("00000");
+	dd.info="taoxj";
+	console.log(222+":"+dd.info);*/
+	Object.defineProperties(dd,{
+		info:{
+			/*get:function(){
+				return "jiaojiao"
+			},
+			set:function(n){
+				console.log("set: "+n);
+			}*/
+			value:"789123456"
+		}
+	});
+	console.log(dd.info);
 });
 
 </script>

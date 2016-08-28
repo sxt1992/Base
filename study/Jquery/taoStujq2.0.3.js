@@ -3918,7 +3918,6 @@ jQuery.fn.extend({
 		return this.queue( type || "fx", [] );
 	},
 	
-	
 	promise: function( type, obj ) {
 		var tmp,
 			count = 1,

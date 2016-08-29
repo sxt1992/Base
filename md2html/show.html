@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>show</title>
+	<script type="text/javascript" src="./statics/markdown.js"></script>
+	<link rel="stylesheet" href="./statics/bootstrap.min.css">
+</head>
+<body>
+<input type="file" id="putFile"/>
+<div id="preview"></div>
+<script>
+function readSingleFile(){
+	if(this.files && this.files[0]){
+		var reader = new FileReader();
+		reader.onload = function(e){
+			document.getElementById("preview").innerHTML=markdown.toHTML(e.target.result);
+		}  
+		reader.readAsText(this.files[0]);
+	}
+}
+document.getElementById('putFile').addEventListener('change',readSingleFile,false);
+</script>
+</body>
+</html>

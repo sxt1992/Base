@@ -1,0 +1,65 @@
+$color:#788;
+$width: 1em 2em 3em 4em 5em 6em;
+$map:(tao:1rem,xue:#890);
+body{
+  width:nth($width,1);
+	height:nth($width,length($width)-1);
+  line-height:map-get($map,tao);
+  color:map-get($map,xue);
+  border:{
+    width:nth($width,3);
+    style:solid;
+    color:map-get($map,xue);
+  }
+	background:$color;
+}
+#top_nav{
+  line-height: 40px;
+  text-transform: capitalize;
+  background-color:#333;
+  $tao:&;
+  li{
+    float:left;
+    a{
+      content: $tao;
+    }
+  }
+
+  content:&;
+  a{
+    display: block;
+    padding: 0 10px;
+    color: #fff;
+    &:hover{
+      color:#ddd;
+    }
+  }
+}
+
+.parent-2 {
+  color:#f00;
+  @at-root .child {
+    width:200px;
+  }
+}
+
+//box-shadow可以有多组值，所以在变量参数后面添加...
+@mixin box-shadow($shadow...) {
+  -webkit-box-shadow:$shadow;
+  box-shadow:$shadow;
+}
+.box{
+  border:1px solid #ccc;
+  @include box-shadow(0 2px 2px rgba(0,0,0,.3),0 3px 3px rgba(0,0,0,.3),0 4px 4px rgba(0,0,0,.3));
+}
+
+//fdsafdsafds
+@mixin max-screen($res){
+  @media only screen and ( max-width: $res )
+  {
+    @content;
+  }
+}
+@include max-screen(480px) {
+  body { color: red }
+}

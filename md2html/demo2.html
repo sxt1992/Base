@@ -1,14 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>MarkdownToHtml</title><script type="text/javascript" src="./statics/markdown.js"></script><link rel="stylesheet" href="./statics/bootstrap.min.css"></head><body><script type="text/template" id="mdText">
-
-
-#这个练习#
-这个练习
-=============
-
-This is an H2
--------------
-
-
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>MarkdownToHtml</title><script type="text/javascript" src="./statics/showdown.min.js"></script><link rel="stylesheet" href="./statics/bootstrap.min.css"></head><body><script type="text/template" id="mdText">
 
 
 >taoxuejiao
@@ -19,7 +9,24 @@ This is an H2
         <td>Foo</td>
     </tr>
 </table>
-*斜体*，_斜体_ **粗体**，__粗体__
+
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
+
+*斜体
+*斜体*
+_斜体
+_斜体_
+
+**粗体
+**粗体**
+__粗体
+__粗体__
 
 这是另一个普通段落。
 *wqfdsaf*
@@ -28,11 +35,19 @@ This is an H2
 <br>
 [younghz的Markdown库](https:://github.com/younghz/Markdown "Markdown")。
 
+`nihaokcg ?`
+`var tao=3432;`
+
+
+hello[^hello]
+
+敖德萨左
+魂牵 *** 梦萦城
+
+***
+
+魂牵梦萦地
 
 
 
-
-
-
-
-</script><div id="preview"></div><script>document.getElementById("preview").innerHTML=markdown.toHTML(document.getElementById("mdText").innerHTML);</script></body></html>
+</script><div id="preview"></div><script>document.getElementById("preview").innerHTML=new showdown.Converter().makeHtml(document.getElementById("mdText").innerHTML);</script></body></html>

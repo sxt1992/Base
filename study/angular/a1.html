@@ -7,27 +7,45 @@
 	<link rel="stylesheet" href="./angularLib/bootstrap.min.css">
 </head>
 <body>
+{{19920929|date:"yyyy年MM月dd日 hh时mm分ss秒"}}
 <div ng-controller="MyCtrl">
-		Ctrl:
-		<br>
-	<input type="text" ng-model="ctrlFlavor">
-		<br>
-		Directive:
-		<br>
-	<drink flavor="ctrlFlavor"></drink>
+	<label>用户名</label>
+	<input type="text" ng-model="username" placeholder="请输入用户名" />
+	<pre ng-show="username">{{users}}</pre>
 </div>
 <script type="text/javascript">
 	var myModule = angular.module("taoApp",[]);
-	myModule.controller('MyCtrl', ['$scope', function($scope){
-		$scope.ctrlFlavor="百威";
-	}])
-	myModule.directive("drink", function() {
-	    return {
-	    	restrict:'AE',
-	        scope:{flavor:'='},
-	        template:'<input type="text" ng-model="flavor"/>'
+	myModule.factory('userListService', ['$http',function($http) {
+	        var doRequest = function(username, path) {
+	            return $http({
+	                method: 'GET',
+	                url: 'data.json'
+	            });
+	        };
+	        return {
+	            userList: function(username) {
+	                return doRequest(username, 'userList');
+	            }
+	        };
 	    }
-	});
+	]);
+	myModule.controller('MyCtrl', ['$scope', '$timeout', 'userListService',
+	    function($scope, $timeout, userListService) {
+	        var timeout;
+	        $scope.$watch('username', function(newUserName) {
+	            if (newUserName) {
+	                if (timeout) {
+	                    $timeout.cancel(timeout);
+	                }
+	                timeout = $timeout(function() {
+	                    userListService.userList(newUserName).success(function(data, status) {
+	                            $scope.users = data;
+	                        });
+	                }, 350);
+	            }
+	        });
+	    }
+	]);
 </script>
 </body>
 </html>

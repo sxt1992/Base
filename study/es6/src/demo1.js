@@ -4,4 +4,4 @@ var str=`
   <li>second</li>
 </ul>
 `;
-console.log(str);
+console.log(str)

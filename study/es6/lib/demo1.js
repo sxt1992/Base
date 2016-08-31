@@ -1,11 +1,4 @@
 "use strict";
 
-input.map(function (item) {
-  return item + 1;
-});
-{
-  var _a = 10;
-  var b = 1;
-}
-a;
-b;
+var str = "\n<ul>\n  <li>first</li>\n  <li>second</li>\n</ul>\n";
+console.log(str);

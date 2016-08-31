@@ -31,5 +31,7 @@
 		"build": "babel src -d lib"
 	}
 }
-转码的时候，就执行下面的命令。
+转码 的时候，执行下面的命令。
   `npm run build`
+运行 的时候，执行下面的命令。
+  `babel-node --harmony xx.js`

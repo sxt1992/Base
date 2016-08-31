@@ -12,6 +12,7 @@ var htmlmin = require('gulp-htmlmin'), //html压缩
     concat = require('gulp-concat'),//文件合并
     rename = require('gulp-rename'),//文件更名
     notify = require('gulp-notify');//提示信息
+    babel = require('gulp-babel');//引入babel es6转换器(下面没有转换es6)
  
 // 压缩html
 gulp.task('html', function() {

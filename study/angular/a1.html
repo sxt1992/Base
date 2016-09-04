@@ -7,7 +7,6 @@
 	<link rel="stylesheet" href="./angularLib/bootstrap.min.css">
 </head>
 <body>
-{{19920929|date:"yyyy年MM月dd日 hh时mm分ss秒"}}
 <div ng-controller="MyCtrl">
 	<label>用户名</label>
 	<input type="text" ng-model="username" placeholder="请输入用户名" />
@@ -15,6 +14,14 @@
 </div>
 <script type="text/javascript">
 	var myModule = angular.module("taoApp",[]);
+	var hasNgInjector = angular.injector(['taoApp','ng']);  
+	console.log("has $rootScope=" + hasNgInjector.has("$rootScope"));//true
+	/*myModule.run(function($rootScope, $state, $stateParams) {
+	    alert($rootScope);
+	    alert($state);
+	    alert($stateParams);
+	});*/
+	//console.log(myModule);
 	myModule.factory('userListService', ['$http',function($http) {
 	        var doRequest = function(username, path) {
 	            return $http({
@@ -29,8 +36,10 @@
 	        };
 	    }
 	]);
-	myModule.controller('MyCtrl', ['$scope', '$timeout', 'userListService',
-	    function($scope, $timeout, userListService) {
+	myModule.controller('MyCtrl', ['$scope', '$timeout','$rootScope', 'userListService',
+	    function($scope, $timeout,$rootScope, userListService) {
+	    	console.log($scope);
+	    	console.log($rootScope);
 	        var timeout;
 	        $scope.$watch('username', function(newUserName) {
 	            if (newUserName) {

@@ -31,6 +31,9 @@
 		"build": "babel src -d lib"
 	}
 }
+安装 babel-polyfill 
+Babel 默认只转换新的 JavaScript 句法（syntax），而不转换新的 API ，比如 Iterator、Generator、Set、Maps、Proxy、Reflect、Symbol、Promise 等全局对象，以及一些定义在全局对象上的方法（比如 Object.assign）都不会转码。
+
 转码 的时候，执行下面的命令。
   `npm run build`
 运行 的时候，执行下面的命令。

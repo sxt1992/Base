@@ -1,14 +1,6 @@
-if(![].filter){
-	Array.prototype.filter=function(callback){
-		var arr=[];
-		for(var i=0;i<this.length;i++){
-			if(callback.call(this,this[i],i,this)){
-				arr.push(this[i]);
-			}
-		}
-		return arr;
-	};
-}
+(function(window,undefined){
+"use strict";
+// Array
 if(![].filter){
 	Array.prototype.filter=function(callback){
 		var arr=[];
@@ -56,8 +48,12 @@ if(![].map){
 		return arr;
 	};
 }
+
+// String
 if(!"".trim){
 	String.prototype.trim=function(){
 		return this.replace(/^\s+|\s+$/g,"");
 	};
 }
+
+})(window);

@@ -1,16 +1,20 @@
 const webpack = require('webpack');
 module.exports = {
-    entry: './src',
+    entry: './src/',
     output: {
-        path: __dirname + '/dist/',
-        filename: 'app.bundle.js'
+        /*path: __dirname + '/dist/',
+        filename: 'app.bundle.js'*/
+        path:     './dist',
+        filename: 'bundle.js',
+        chunkFilename: '[name].bundle.js',
+        publicPath: '../dist/'
     },
     module: {
         loaders: [
             {
                 test: /\.js/,
                 loader: 'babel',
-                include: /src/,
+                query: { compact: false }
             },
             {
                 test: /\.scss/,
@@ -32,6 +36,14 @@ module.exports = {
             output: {
                 comments:false
             }
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            // Move dependencies to our main file
+            name: 'main',
+            // Look for common dependencies in all children,
+            children: true,
+            // How many times a dependency must come up before being extracted
+            minChunks: 2
         })
     ]
 };

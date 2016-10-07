@@ -2,8 +2,7 @@ import $ from 'jquery';
 import template from './Button.html';
 import Mustache from 'mustache';
 import './Button.scss';
- 
-console.log("tao:button.js");
+
 export default class Button {
         constructor(link) {
             this.link = link;
@@ -16,7 +15,7 @@ export default class Button {
  
         render(node) {
             const text = $(node).text();
- 
+
             // Render our button
             $(node).html(Mustache.render(template, {
                 text

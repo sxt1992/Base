@@ -1,13 +1,16 @@
 const webpack = require('webpack');
+var HtmlwebpackPlugin = require('html-webpack-plugin');
+var OpenBrowserPlugin = require('open-browser-webpack-plugin');
+
 module.exports = {
-    entry: './src/',
+    entry: {
+        bundle: './src/main.jsx'
+    },
     output: {
         /*path: __dirname + '/dist/',
-        filename: 'app.bundle.js'*/
-        path:     './dist',
-        filename: 'bundle.js',
-        chunkFilename: '[name].bundle.js',
-        publicPath: '../dist/'
+        filename: 'app.bundle.js', */
+        filename: '[name].js',
+        path:'./src/'
     },
     module: {
         loaders: [
@@ -15,6 +18,14 @@ module.exports = {
                 test: /\.js/,
                 loader: 'babel',
                 query: { compact: false }
+            },
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                loader: 'babel',
+                query: {
+                    presets: ['es2015', 'react']
+                }
             },
             {
                 test: /\.scss/,
@@ -29,21 +40,20 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({
+        /*new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings:false
             },
             output: {
                 comments:false
             }
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            // Move dependencies to our main file
-            name: 'main',
-            // Look for common dependencies in all children,
-            children: true,
-            // How many times a dependency must come up before being extracted
-            minChunks: 2
+        })*/
+        /*new HtmlwebpackPlugin({
+            title: 'Webpack-demos',
+            filename: 'index.html'
+        }),*/
+        new OpenBrowserPlugin({
+            url: 'http://localhost:8080/src/'
         })
     ]
 };

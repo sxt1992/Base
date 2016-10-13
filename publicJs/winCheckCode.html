@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Win7&amp;8&amp;10校验码</title>
+	<style type="text/css">
+body{margin:0;padding:0;}
+span,i,b,em,p{display:block;margin:0;padding:0;font-weight:normal;font-style:normal;color:gray;}
+em{display:inline;margin:0 10px;color:#000;}
+input{width:330px;}
+#win-ver-list dl{}
+	#win-ver-list dt{}
+	#win-ver-list dd{margin-top:10px;}
+	</style>
+</head>
+<body>
+<div id="show-res"></div>
+<input type="text" id="find-sha1">
+<button onclick="findSHA1()">查找SHA1</button>
+<button onclick="clearSHA1()">清除SHA1</button>
+<div id="win-ver-list">
+	<dl>
+		<dt></dt>
+		<dd>
+			<em></em>
+			<b></b>
+			<i></i>
+		</dd>
+	</dl>
+</div>
+<script type="text/javascript">
+var winCodeJson = [
+    {
+        "win": "Windows 7",
+        "verNo": "7",
+        "details": [
+            {
+                "title": "Windows 7 Ultimate (x86) - DVD (Chinese-Simplified)",    
+                "fileName": "cn_windows_7_ultimate_x86_dvd_x15-65907.iso",
+                "sha1": "B589336602E3B7E134E222ED47FC94938B04354F",
+                "href": "ed2k://|file|cn_windows_7_ultimate_x86_dvd_x15-65907.iso|2604238848|D6F139D7A45E81B76199DDCCDDC4B509|/"
+            },
+            {
+                "title": "Windows 7 Ultimate (x64) - DVD (Chinese-Simplified)",    
+                "fileName": "cn_windows_7_ultimate_x64_dvd_x15-66043.iso",
+                "sha1": "4A98A2F1ED794425674D04A37B70B9763522B0D4",
+                "href": "ed2k://|file|cn_windows_7_ultimate_x64_dvd_x15-66043.iso|3341268992|7DD7FA757CE6D2DB78B6901F81A6907A|/"
+            },
+            {
+                "title": "Windows 7 Ultimate with Service Pack 1 (x86) - DVD (Chinese-Simplified)",    
+                "fileName": "cn_windows_7_ultimate_with_sp1_x86_dvd_u_677486.iso",
+                "sha1": "B92119F5B732ECE1C0850EDA30134536E18CCCE7",
+                "href": "ed2k://|file|cn_windows_7_ultimate_with_sp1_x86_dvd_u_677486.iso|2653276160|7503E4B9B8738DFCB95872445C72AEFB|/"
+            },
+            {
+                "title": "Windows 7 Ultimate with Service Pack 1 (x64) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_7_ultimate_with_sp1_x64_dvd_u_677408.iso",
+                "sha1": "2CE0B2DB34D76ED3F697CE148CB7594432405E23",
+                "href": "ed2k://|file|cn_windows_7_ultimate_with_sp1_x64_dvd_u_677408.iso|3420557312|B58548681854236C7939003B583A8078|/"
+            }
+        ]
+    },
+    {
+        "win": "Windows 8",
+        "verNo": "8",
+        "details": [
+            {
+                "title": "Windows 8 (multiple editions) (x86) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_8_x86_dvd_915414.iso",
+                "sha1": "0C4A168E37E38EFB59E8844353B2535017CBC587",
+                "href": "ed2k://|file|cn_windows_8_x86_dvd_915414.iso|2679801856|9AF10141BFD61BC66D9D6459758D7749|/"
+            },
+            {
+                "title": "Windows 8 (multiple editions) (x64) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_8_x64_dvd_915407.iso",
+                "sha1": "A87C4AA85D55CD83BAE9160560D1CB3319DD675C",
+                "href": "ed2k://|file|cn_windows_8_x64_dvd_915407.iso|3652950016|5C7F8C212BD3A1827866563773A431C2|/"
+            },
+            {
+                "title": "Windows 8.1 (multiple editions) (x86) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_8_1_x86_dvd_2707405.iso",
+                "sha1": "D07E7CA99B455FFC0B58BE96333D1F554FE83D8A",
+                "href": "ed2k://|file|cn_windows_8_1_x86_dvd_2707405.iso|3055904768|B296A943F16FADFC5FFA2F1D583DCC49|/"
+            },
+            {
+                "title": "Windows 8.1 (multiple editions) (x64) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_8_1_x64_dvd_2707237.iso",
+                "sha1": "F79E0093DDEDD488F40D4AE6B6F0FA3C529051E1",
+                "href": "ed2k://|file|cn_windows_8_1_x64_dvd_2707237.iso|4076017664|839CBE17F3CE8411E8206B92658A91FA|/"
+            },
+            {
+                "title": "Windows 8.1 with Update (multiple editions) (x86) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_8.1_with_update_x86_dvd_6051523.iso",
+                "sha1": "ABBF814846C425C88910B011BC9D3D3C77932056",
+                "href": "ed2k://|file|cn_windows_8.1_with_update_x86_dvd_6051523.iso|3349960704|C1B8A61BD8F1300825BF03C4D31B35A0|/"
+            },
+            {
+                "title": "Windows 8.1 with Update (multiple editions) (x64) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_8.1_with_update_x64_dvd_6051473.iso",
+                "sha1": "9A85EAC2D20446E3E086BF57A7DFC8832FB3BA56",
+                "href": "ed2k://|file|cn_windows_8.1_with_update_x64_dvd_6051473.iso|4504475648|D66BEF759548656EDA981D902A957545|/"
+            }
+        ]
+    },
+    {
+        "win": "Windows 10",
+        "verNo": "10",
+        "details": [
+            {
+                "title": "Windows 10 (Multiple Editions) (x86) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_10_multiple_editions_x86_dvd_6846431.iso",
+                "sha1": "21B824F402927E76C65160B62EB8A4EBBABE9C6E",
+                "href": "ed2k://|file|cn_windows_10_multiple_editions_x86_dvd_6846431.iso|3233482752|B5C706594F5DC697B2A098420C801112|/"
+            },
+            {
+                "title": "Windows 10 (Multiple Editions) (x64) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_10_multiple_editions_x64_dvd_6848463.iso",
+                "sha1": "C71D49A6144772F352806201EF564951BE55EDD5",
+                "href": "ed2k://|file|cn_windows_10_multiple_editions_x64_dvd_6848463.iso|4303300608|94FD861E82458005A9CA8E617379856A|/"
+            },
+            {
+                "title": "Windows 10 (Multiple Editions), Version 1511 (Updated Apr 2016) (x86) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_10_multiple_editions_version_1511_updated_apr_2016_x86_dvd_8712808.iso",
+                "sha1": "D070DEE253512267ED8F0F1039DBA121531725DA",
+                "href": "ed2k://|file|cn_windows_10_multiple_editions_version_1511_updated_apr_2016_x86_dvd_8712808.iso|3540477952|9F5C03A7B60E8292FA50A80F5FE57D34|/"
+            },
+            {
+                "title": "Windows 10 (Multiple Editions), Version 1511 (Updated Apr 2016) (x64) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_10_multiple_editions_version_1511_updated_apr_2016_x64_dvd_8712460.iso",
+                "sha1": "BBED33CC7BA79F94DF330F331BB76A610AD7C133",
+                "href": "ed2k://|file|cn_windows_10_multiple_editions_version_1511_updated_apr_2016_x64_dvd_8712460.iso|4668538880|C24CABC107DAB4956A947BA336A10DD9|/"
+            },
+            {
+                "title": "Windows 10 (Multiple Editions), Version 1607 (Updated Jul 2016) (x86) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_10_multiple_editions_version_1607_updated_jul_2016_x86_dvd_9060050.iso",
+                "sha1": "EAF7394A25A69E94AD2D3D1D9FBC0007D1DFF720",
+                "href": "ed2k://|file|cn_windows_10_multiple_editions_version_1607_updated_jul_2016_x86_dvd_9060050.iso|3275581440|006F76229DB61ADA1D8E49DD4A6A0A5D|/"
+            },
+            {
+                "title": "Windows 10 (Multiple Editions), Version 1607 (Updated Jul 2016) (x64) - DVD (Chinese-Simplified)",
+                "fileName": "cn_windows_10_multiple_editions_version_1607_updated_jul_2016_x64_dvd_9056935.iso",
+                "sha1": "A2DDAA7BE3BB73FD87C29D6EF8E1EDF4C764DCD9",
+                "href": "ed2k://|file|cn_windows_10_multiple_editions_version_1607_updated_jul_2016_x64_dvd_9056935.iso|4347183104|35EA5DB0F3BB714F5CE0740FB89D82D1|/"
+            }
+        ]
+    }
+];
+
+var winSHAs={};
+var str="";
+for(var i=0;i<winCodeJson.length;i++){
+	str+="<dl><dt>"+winCodeJson[i].win+"</dt>";
+	for(var j=0;j<winCodeJson[i].details.length;j++){
+		var item=winCodeJson[i].details[j];
+        winSHAs[item.sha1.toUpperCase()]=item;
+		str+="<dd><span><em>\u6807\u9898:</em>"+item.title+"</span><b><em>\u6587\u4ef6\u540d:</em>"+item.fileName+"</b><i><em>SHA1:</em>"+item.sha1+"</i><p><em>\u94fe\u63a5:</em>"+item.href+"</p></dd>";
+	}
+	str+="</dl>";
+}
+document.getElementById("win-ver-list").innerHTML=str;
+function findSHA1(){
+    var findStr=document.getElementById("find-sha1").value.replace(/^\s*|\s*$/g,"");
+    document.getElementById("find-sha1").value=findStr;
+    var showRes=document.getElementById("show-res");
+    if(findStr!="" && winSHAs[findStr.toUpperCase()]){
+    	var item=winSHAs[findStr.toUpperCase()];
+        showRes.innerHTML="<span><em>\u6807\u9898:</em>"+item.title+"</span><b><em>\u6587\u4ef6\u540d:</em>"+item.fileName+"</b><i><em>SHA1:</em>"+item.sha1+"</i><p><em>\u94fe\u63a5:</em>"+item.href+"</p>";
+    }else{
+        showRes.innerHTML="";
+        return;
+    }
+}
+function clearSHA1(){
+    document.getElementById("find-sha1").value="";
+    document.getElementById("show-res").innerHTML="";
+}
+</script>
+</body>
+</html>

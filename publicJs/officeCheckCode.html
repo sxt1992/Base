@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Office校验码</title>
+	<style type="text/css">
+body{margin:0;padding:0;}
+span,i,b,em,p{display:block;margin:0;padding:0;font-weight:normal;font-style:normal;color:gray;}
+em{display:inline;margin:0 10px;color:#000;}
+input{width:330px;}
+#win-ver-list dl{}
+	#win-ver-list dt{}
+	#win-ver-list dd{margin-top:10px;}
+	</style>
+</head>
+<body>
+<div id="show-res"></div>
+<input type="text" id="find-sha1">
+<button onclick="findSHA1()">查找SHA1</button>
+<button onclick="clearSHA1()">清除SHA1</button>
+<div id="win-ver-list">
+	<dl>
+		<dt></dt>
+		<dd>
+			<em></em>
+			<b></b>
+			<i></i>
+		</dd>
+	</dl>
+</div>
+<script type="text/javascript">
+var officeCodeJson = [
+    {
+        "office": "Office 2010",
+        "officeNo": "2010",
+        "details": [
+            {
+                "title": "Office Standard 2010 (x86) - (Chinese-Simplified)",
+                "fileName": "cn_office_standard_2010_x86_515537.exe",
+                "sha1": "59476B50BEF62B7BFDB1B3D1DDA68E2041E85F20",
+                "href": "ed2k://|file|cn_office_standard_2010_x86_515537.exe|704002416|D3759579E166672714CA592849D8389D|/"
+            },
+            {
+                "title": "Office Standard 2010 (x64) - (Chinese-Simplified)",
+                "fileName": "cn_office_standard_2010_x64_515542.exe",
+                "sha1": "F111170136CC11DC8F3C777688578A206D0C6304",
+                "href": "ed2k://|file|cn_office_standard_2010_x64_515542.exe|758664616|1934B47BE5AE7672212320AED7304222|/"
+            },
+            {
+                "title": "Office Professional Plus 2010 (x86) - (Chinese-Simplified)",
+                "fileName": "cn_office_professional_plus_2010_x86_515501.exe",
+                "sha1": "AD9F7E48EBAF648169E34833E2E218D62B69FB84",
+                "href": "ed2k://|file|cn_office_professional_plus_2010_x86_515501.exe|841530616|8DC55422EB5AE6B24BFF1BDE43C7F555|/"
+            },
+            {
+                "title": "Office Professional Plus 2010 (x64) - (Chinese-Simplified)",
+                "fileName": "cn_office_professional_plus_2010_x64_515528.exe",
+                "sha1": "E8AB0CA8C1BC44B62445E0B9E37A0DFD13933DDB",
+                "href": "ed2k://|file|cn_office_professional_plus_2010_x64_515528.exe|912825496|B4F9B4635A6D440DD619592330D246B6|/"
+            }
+        ]
+    }
+];
+
+var officeSHAs={};
+var str="";
+for(var i=0;i<officeCodeJson.length;i++){
+	str+="<dl><dt>"+officeCodeJson[i].office+"</dt>";
+	for(var j=0;j<officeCodeJson[i].details.length;j++){
+		var item=officeCodeJson[i].details[j];
+        officeSHAs[item.sha1.toUpperCase()]=item;
+		str+="<dd><span><em>\u6807\u9898:</em>"+item.title+"</span><b><em>\u6587\u4ef6\u540d:</em>"+item.fileName+"</b><i><em>SHA1:</em>"+item.sha1+"</i><p><em>\u94fe\u63a5:</em>"+item.href+"</p></dd>";
+	}
+	str+="</dl>";
+}
+document.getElementById("win-ver-list").innerHTML=str;
+function findSHA1(){
+    var findStr=document.getElementById("find-sha1").value.replace(/^\s*|\s*$/g,"");
+    document.getElementById("find-sha1").value=findStr;
+    var showRes=document.getElementById("show-res");
+    if(findStr!="" && officeSHAs[findStr.toUpperCase()]){
+    	var item=officeSHAs[findStr.toUpperCase()];
+        showRes.innerHTML="<span><em>\u6807\u9898:</em>"+item.title+"</span><b><em>\u6587\u4ef6\u540d:</em>"+item.fileName+"</b><i><em>SHA1:</em>"+item.sha1+"</i><p><em>\u94fe\u63a5:</em>"+item.href+"</p>";
+    }else{
+        showRes.innerHTML="";
+        return;
+    }
+}
+function clearSHA1(){
+    document.getElementById("find-sha1").value="";
+    document.getElementById("show-res").innerHTML="";
+}
+</script>
+</body>
+</html>

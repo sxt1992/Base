@@ -1,0 +1,3 @@
+var taox = {
+    nihao: "taoxxx"
+};

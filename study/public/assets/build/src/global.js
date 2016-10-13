@@ -34,7 +34,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "/assets/build/";
 
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
@@ -42,11 +42,10 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	(function webpackMissingModule() { throw new Error("Cannot find module \"./main1.js\""); }());
-	(function webpackMissingModule() { throw new Error("Cannot find module \"./main2.js\""); }());
-
+	var ttt = "我是全局.js,哈哈";
+	console.log(ttt);
 
 /***/ }
 /******/ ]);

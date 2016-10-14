@@ -13,13 +13,9 @@ function entries(globPath) {
         entry = files[i];
         dirname = path.dirname(entry);
         basename = path.basename(entry, '.js');
-        console.log(entry+"&T&"+dirname+"&T&"+basename);
         entries[path.join(dirname, basename)] = './' + entry;
     }
 
-    console.log("-----entries-----");      
-    console.log(entries);
-    console.log("-----End entries-----");
     return entries;
 }
 

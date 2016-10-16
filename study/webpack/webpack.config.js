@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+//console.log(webpack);
 var fs = require('fs');
 var path = require('path');
 var glob = require('glob');
@@ -28,7 +29,11 @@ module.exports = {
         chunkFilename: '[id]' + (debug ? '' : '-[chunkhash]') + '.js'
     },
     plugins: [
+        new webpack.optimize.CommonsChunkPlugin('common.js'),
         function () {
+            console.log("--------start-------");            
+            console.log(this);
+            console.log("---------end------");
             this.plugin('done', function (stats) {
                 stats = stats.compilation.getStats().toJson({
                     hash: true,

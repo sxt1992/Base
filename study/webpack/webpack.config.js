@@ -1,8 +1,7 @@
-var webpack = require('webpack');
-//console.log(webpack);
-var fs = require('fs');
-var path = require('path');
-var glob = require('glob');
+var webpack = require('webpack'),
+    fs = require('fs'),
+    path = require('path'),
+    glob = require('glob');
 
 const debug = process.env.NODE_ENV !== 'production';
 
@@ -28,37 +27,10 @@ module.exports = {
         filename: '[name]' + (debug ? '' : '-[chunkhash]') + '.js',
         chunkFilename: '[id]' + (debug ? '' : '-[chunkhash]') + '.js'
     },
-    plugins: [
-        new webpack.optimize.CommonsChunkPlugin('common.js'),
-        function () {
-            console.log("--------start-------");            
-            console.log(this);
-            console.log("---------end------");
-            this.plugin('done', function (stats) {
-                stats = stats.compilation.getStats().toJson({
-                    hash: true,
-                    publicPath: true,
-                    assets: true,
-                    chunks: false,
-                    modules: false,
-                    source: false,
-                    errorDetails: false,
-                    timings: false
-                });
-
-                var json = {}, chunk;
-                for (var key in stats.assetsByChunkName) {
-                    if (stats.assetsByChunkName.hasOwnProperty(key)) {
-                        chunk = stats.assetsByChunkName[key];
-                        json[key + '.js'] = chunk[0];
-                    }
-                }
-
-                fs.writeFileSync(
-                    path.join(__dirname, '..', 'public', 'assets', 'build', 'rev-manifest.json'),
-                    JSON.stringify(json, null, 2)
-                );
-            });
-        }
-    ]
+    module: {
+        loaders: [
+            {}
+        ]
+    },
+    plugins: []
 };

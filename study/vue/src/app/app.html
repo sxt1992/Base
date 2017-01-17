@@ -17,12 +17,6 @@
     <button @click="show=!show">checkout</button>
     <br>
     <transition name="fade">
-        <!--<button v-if="show" key="save">-->
-            <!--Save-->
-        <!--</button>-->
-        <!--<button v-else key="edit">-->
-            <!--Edit-->
-        <!--</button>-->
         <button v-bind:key="show">
             {{ show ? 'Save' : 'Edit' }}
         </button>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity .5s
+        }
+        .fade-enter, .fade-leave-active {
+            opacity: 0
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <button @click="show=!show">checkout</button>
+    <br>
+    <transition name="fade">
+        <!--<button v-if="show" key="save">-->
+            <!--Save-->
+        <!--</button>-->
+        <!--<button v-else key="edit">-->
+            <!--Edit-->
+        <!--</button>-->
+        <button v-bind:key="show">
+            {{ show ? 'Save' : 'Edit' }}
+        </button>
+    </transition>
+</div>
+<script type="text/javascript" src="../js/vue.js"></script>
+<script type="text/javascript">
+    var app=new Vue({
+        el:'#app',
+        data:{
+            show:true
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>iScroll demo: simple</title>
+<script type="text/javascript" src="http://cdn.bootcss.com/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="../../lib/iscroll.js"></script>
+<script type="text/javascript">
+
+var myScroll,
+	pullDownEl, pullDownOffset,
+	pullUpEl, pullUpOffset,
+	generatedCount = 0;
+
+function pullDownAction () {
+	setTimeout(function () {	// <-- Simulate network congestion, remove setTimeout from production!
+		var el = document.getElementById('showDiv'),elem;
+
+		for (i=0; i<1; i++) {
+			elem = $('<div><span style="color:blue;">pullUpAction&nbsp;&nbsp;'+(++generatedCount)+'</span><br><br></div>');
+			el.insertBefore(elem[0], el.childNodes[0]);
+		}
+		
+		myScroll.refresh();		// Remember to refresh when contents are loaded (ie: on ajax completion)
+	}, 1000);	// <-- Simulate network congestion, remove setTimeout from production!
+}
+
+function pullUpAction () {
+	setTimeout(function () {	// <-- Simulate network congestion, remove setTimeout from production!
+		var el = document.getElementById('showDiv'),elem;
+
+		for (i=0; i<1; i++) {
+			elem = $('<div><span style="color:red;">pullUpAction&nbsp;&nbsp;'+(++generatedCount)+'</span><br><br></div>');
+			el.appendChild(elem[0]);
+		}
+		myScroll.refresh();		// Remember to refresh when contents are loaded (ie: on ajax completion)
+	}, 1000);	// <-- Simulate network congestion, remove setTimeout from production!
+}
+
+function loaded() {// return;
+	pullDownEl = $('#pullDown');
+	pullDownOffset = pullDownEl[0].offsetHeight;
+	pullUpEl = $('#pullUp');
+	
+	myScroll = new iScroll('wrapper', {
+		useTransition: true,
+		topOffset: pullDownOffset,
+		onRefresh: function () {
+			if (pullDownEl.hasClass('loading')) {
+				pullDownEl.removeClass('loading').find('.pullDownLabel').html('下拉刷新');
+			}
+			if (pullUpEl.hasClass('loading')) {
+				pullUpEl.hide();
+				pullUpEl.removeClass('loading').find('.pullUpLabel').html('上拉加载更多');
+			}
+		},
+		onScrollMove: function () {
+			if(!pullDownEl.hasClass('loading')){
+				if (this.y > 5 && !pullDownEl.hasClass('flip')) {
+					pullDownEl.addClass('flip').find('.pullDownLabel').html('释放刷新');
+					this.minScrollY = 0;
+				} else if (this.y < 5 && pullDownEl.hasClass('flip')) {
+					pullDownEl.removeClass('flip').find('.pullDownLabel').html('下拉刷新');
+					this.minScrollY = -pullDownOffset;
+				}
+			}
+			if(!pullUpEl.hasClass('loading')){
+				if((this.maxScrollY>this.minScrollY && this.y<this.minScrollY ) || this.maxScrollY<this.minScrollY){
+					if (this.y < (this.maxScrollY - 5) && !pullUpEl.hasClass('flip')) {
+						pullUpEl.show();
+						pullUpEl.addClass('flip').find('.pullUpLabel').html('释放加载');
+					} else if (this.y > (this.maxScrollY + 5) && pullUpEl.hasClass('flip')) {
+						pullUpEl.hide();
+						pullUpEl.removeClass('flip').find('.pullUpLabel').html('上拉加载更多');
+					}
+				}
+			}
+		},
+		onScrollEnd: function () {
+			if (pullDownEl.hasClass('flip')) {
+				pullDownEl.removeClass().addClass('loading').find('.pullDownLabel').html('刷新中...');
+				pullDownAction();	// Execute custom function (ajax call?)
+			}
+			if (pullUpEl.hasClass('flip')) {
+				pullUpEl.removeClass().addClass('loading').find('.pullUpLabel').html('加载中...');			
+				pullUpAction();	// Execute custom function (ajax call?)
+			}
+		}
+	});
+	
+	setTimeout(function () { document.getElementById('wrapper').style.left = '0'; }, 800);
+}
+
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 200); }, false);
+</script>
+
+<style type="text/css" media="all">
+body,ul,li {
+	padding:0;
+	margin:0;
+	border:0;
+}
+
+body {
+	font-size:12px;
+	-webkit-user-select:none;
+    -webkit-text-size-adjust:none;
+	font-family:helvetica;
+}
+
+#wrapper {
+	/* position:absolute; z-index:1;
+	top:0; bottom:0; left:-9999px;
+	width:100%;
+	background:#aaa;
+	overflow:auto; */
+}
+#showDiv{
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+	width:100%;
+	padding:0;
+	background:#fff;
+}
+/**
+ *
+ * Pull down styles
+ *
+ */
+#pullUp {
+	display:none;
+}
+#pullDown, #pullUp {
+	background:#fff;
+	height:40px;
+	line-height:40px;
+	padding:5px 10px;
+	font-weight:bold;
+	font-size:14px;
+	color:#888;
+}
+#pullDown .pullDownIcon, #pullUp .pullUpIcon  {
+	display:block; float:left;
+	width:40px; height:40px;
+	background:url(pull-icon@2x.png) 0 0 no-repeat;
+	background-size:40px 80px; background-size:40px 80px;
+	transition-property:transform;
+	transition-duration:250ms;	
+}
+#pullDown .pullDownIcon {
+	transform:rotate(0deg) translateZ(0);
+}
+#pullUp .pullUpIcon  {
+	transform:rotate(-180deg) translateZ(0);
+}
+
+#pullDown.flip .pullDownIcon {
+	transform:rotate(-180deg) translateZ(0);
+}
+
+#pullUp.flip .pullUpIcon {
+	transform:rotate(0deg) translateZ(0);
+}
+
+#pullDown.loading .pullDownIcon, #pullUp.loading .pullUpIcon {
+	background-position:0 100%;
+	transform:rotate(0deg) translateZ(0);
+	transition-duration:0ms;
+
+	animation-name:loading;
+	animation-duration:2s;
+	animation-iteration-count:infinite;
+	animation-timing-function:linear;
+}
+
+@keyframes loading {
+	from { transform:rotate(0deg) translateZ(0); }
+	to { transform:rotate(360deg) translateZ(0); }
+}
+
+</style>
+</head>
+<body>
+
+<div id="wrapper">
+	<div id="scroller">
+		<div id="pullDown">
+			<span class="pullDownIcon"></span><span class="pullDownLabel">下拉刷新</span>
+		</div>
+		<div id="showDiv">
+			fdsafdsafds
+		</div>
+		<div id="pullUp">
+			<span class="pullUpIcon"></span><span class="pullUpLabel">上拉加载更多</span>
+		</div>
+	</div>
+</div>
+<div id="tasd" style="background:#87ab0a;">fdsfds87777777777777777</div>
+<button>fdsf</button>
+</body>
+</html>

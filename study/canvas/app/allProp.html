@@ -1,0 +1,92 @@
+createLinearGradient()	创建线性渐变（用在画布内容上）
+createPattern()	在指定的方向上重复指定的元素
+createRadialGradient()	创建放射状/环形的渐变（用在画布内容上）
+addColorStop()	规定渐变对象中的颜色和停止位置
+
+clip()	从原始画布剪切任意形状和尺寸的区域
+quadraticCurveTo()	创建二次贝塞尔曲线
+bezierCurveTo()	创建三次方贝塞尔曲线
+
+isPointInPath()	如果指定的点位于当前路径中，则返回 true，否则返回 false
+
+scale()	缩放当前绘图至更大或更小
+rotate()	旋转当前绘图
+translate()	重新映射画布上的 (0,0) 位置
+transform()	替换绘图的当前转换矩阵
+setTransform()	将当前转换重置为单位矩阵。然后运行 transform()
+
+
+[
+	[
+		canvas, // 指向其canvas元素
+		font,
+		strokeStyle,
+		fillStyle,
+		textAlign,
+		textBaseline,
+		lineWidth,
+		lineCap,
+		lineJoin,
+		miterLimit,
+		shadowOffsetX,
+		shadowOffsetY,
+		shadowBlur,
+		shadowColor,
+
+		globalAlpha,
+		globalCompositeOperation,
+		filter,
+		imageSmoothingEnabled,
+		imageSmoothingQuality,
+		"lineDashOffset"
+	],
+	[
+beginPath(), // 开始新路径
+closePath(), // 从当前点-起始点,将路径闭合
+save(),
+restore(),
+fill(), // 填充
+stroke(), // 描边
+clearRect(x,y,width,height), // 清除
+fillRect(x,y,width,height), //填充矩形
+strokeRect(x,y,width,height), // 描边矩形
+rect(x,y,width,height), // 矩形路径
+moveTo(x,y), // 移动画笔到(x,y)
+lineTo(x,y), // 从画笔点到(x,y)的直线
+
+arc(x,y,r,sAngle,eAngle,clockwise); // 弧度值,逆时针为true;三点钟为0,六点钟为π/2;画弧形路径
+		scale,
+		rotate,
+		translate,
+		transform,
+		setTransform,
+		resetTransform,
+		createLinearGradient,
+		createRadialGradient,
+		createPattern,
+		
+		
+		
+		drawFocusIfNeeded,
+		clip,
+		isPointInPath,
+		isPointInStroke,
+		fillText,
+		strokeText,
+		measureText,
+		drawImage,
+		createImageData,
+		getImageData,
+		putImageData,
+		getContextAttributes,
+		setLineDash,
+		getLineDash,
+		
+		quadraticCurveTo,
+		bezierCurveTo,
+		arcTo,
+		
+	
+		ellipse
+	]
+]

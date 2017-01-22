@@ -4,27 +4,27 @@
   <meta charset="UTF-8" />
   <style type="text/css">
 body{margin:0;padding:0;}
-.cal-box{width:240px;padding:8px;background:#f5f5f5;border:1px solid #ccc;box-shadow: 0px 5px 15px -5px rgba(0, 0, 0, 0.5);}
-.cal-box .cal-head{height:35px;}
-.cal-box .cal-head .cal-month{float:left;width:81px;height:30px;margin-left:20px;background:red;overflow:hidden;}
-.cal-box .cal-head select{width:100px;height:30px;font:normal bold 14px/20px 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#333;border:none;outline:none;}
-.cal-box .cal-head option{font:normal normal 12px/12px 'Helvetica Neue',Helvetica,Arial,sans-serif;}
-.cal-box .cal-head .cal-year{float:left;width:37px;height:30px;margin-left:20px;background:blue;overflow:hidden;}
-.cal-box .cal-head .cal-year select{width:57px;}
-.cal-box .cal-head .leftlogo{display:block;float:left;width:20px;height:30px;opacity:0.5;cursor:pointer;background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAUklEQVR42u3VMQoAIBADQf8Pgj+OD9hG2CtONJB2ymQkKe0HbwAP0xucDiQWARITIDEBEnMgMQ8S8+AqBIl6kKgHiXqQqAeJepBo/z38J/U0uAHlaBkBl9I4GwAAAABJRU5ErkJggg==');}
-.cal-box .cal-head .leftlogo:hover{opacity:1;}
-.cal-box .cal-head .rightlogo{display:block;float:right;width:20px;height:30px;opacity:0.5;cursor:pointer;background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAU0lEQVR42u3VOwoAMAgE0dwfAnNjU26bYkBCFGwfiL9VVWoO+BJ4Gf3gtsEKKoFBNTCoCAYVwaAiGNQGMUHMkjGbgjk2mIONuXo0nC8XnCf1JXgArVIZAQh5TKYAAAAASUVORK5CYII=');}
-.cal-box .cal-head .rightlogo:hover{opacity:1;}
-.cal-box .cal-table{width:238px;margin:auto;}
-.cal-box .cal-table table{width:238px;border-collapse:collapse;border-spacing:0;}
-.cal-box .cal-table tr:first-child{height:25px;}
-.cal-box .cal-table th{width:34px;height:25px;margin:0;padding:0;text-align:center;color:#999;font:normal bold 12px/25px 'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:default;}
-.cal-box .cal-table tr{width:238px;height:27px;}
-.cal-box .cal-table td{width:26px;height:27px;margin:0;padding:0 8px 0 0;font:normal normal 12px/27px 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#666;text-align: right;border:none;cursor: pointer;}
-.cal-box .cal-table td:hover{color:#fff;background:#ff8000;box-shadow:none;border-radius:3px;}
-.cal-box .cal-table td.is-select{display:block;color:#fff;font-weight:bold;background:#3af;border-radius:3px;box-shadow:0px 1px 3px #178fe5 inset;}
-.cal-box .cal-table td.is-empty{background:none;border-radius:0;box-shadow:none;cursor:default;}
-.cal-foot{font-size:0;margin-top:14px;}
+.cal-box{width:240px;padding:8px;background:#f5f5f5;border:1px solid #ccc;box-shadow:0px 5px 15px -5px rgba(0, 0, 0, 0.5);}
+  .cal-head{height:35px;}
+  .cal-head .cal-month{float:left;width:81px;height:30px;margin-left:20px;overflow:hidden;}
+  .cal-head select{width:100px;height:30px;font:normal bold 14px/20px 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#333;border:none;outline:none;}
+  .cal-head option{font:normal normal 12px/12px 'Helvetica Neue',Helvetica,Arial,sans-serif;}
+  .cal-head .cal-year{float:left;width:37px;height:30px;margin-left:20px;overflow:hidden;}
+  .cal-head .cal-year select{width:57px;}
+  .cal-head .leftlogo{display:block;float:left;width:20px;height:30px;opacity:0.5;cursor:pointer;background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAUklEQVR42u3VMQoAIBADQf8Pgj+OD9hG2CtONJB2ymQkKe0HbwAP0xucDiQWARITIDEBEnMgMQ8S8+AqBIl6kKgHiXqQqAeJepBo/z38J/U0uAHlaBkBl9I4GwAAAABJRU5ErkJggg==');}
+  .cal-head .leftlogo:hover{opacity:1;}
+  .cal-head .rightlogo{display:block;float:right;width:20px;height:30px;opacity:0.5;cursor:pointer;background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAeCAYAAAAsEj5rAAAAU0lEQVR42u3VOwoAMAgE0dwfAnNjU26bYkBCFGwfiL9VVWoO+BJ4Gf3gtsEKKoFBNTCoCAYVwaAiGNQGMUHMkjGbgjk2mIONuXo0nC8XnCf1JXgArVIZAQh5TKYAAAAASUVORK5CYII=');}
+  .cal-head .rightlogo:hover{opacity:1;}
+  #cal-table{width:238px;margin:auto;}
+  #cal-table table{width:238px;border-collapse:collapse;border-spacing:0;}
+  #cal-table tr:first-child{height:25px;}
+  #cal-table th{width:34px;height:25px;margin:0;padding:0;text-align:center;color:#999;font:normal bold 12px/25px 'Helvetica Neue',Helvetica,Arial,sans-serif;cursor:default;}
+  #cal-table tr{width:238px;height:27px;}
+  #cal-table td{width:34px;height:27px;margin:0;padding:0;font:normal normal 12px/27px 'Helvetica Neue',Helvetica,Arial,sans-serif;color:#666;text-align:center;vertical-align:middle;border:none;cursor:pointer;}
+  #cal-table td:hover{color:#fff;background:#ff8000;box-shadow:none;border-radius:3px;}
+  #cal-table td.is-select{display:block;color:#fff;font-weight:bold;background:#3af;border-radius:3px;box-shadow:0px 1px 3px #178fe5 inset;}
+  #cal-table td.is-empty{background:none;border-radius:0;box-shadow:none;cursor:default;}
+.cal-foot{font-size:0;margin-top:6px;}
 .cal-foot span{display:inline-block;width:50px;height:20px;font:normal normal 12px/20px 'microsoft yahei',arial;color:#fff;text-align:center;background:#5349c5;border-radius:3px;cursor:pointer;}
 .cal-foot span:hover{color:#c6c633;background:#873687;}
 .cal-foot span:active{color:#ff8000;background:#30b17a;}
@@ -45,7 +45,7 @@ body{margin:0;padding:0;}
     </div> 
     <em class="rightlogo" id="rightlogo"></em>
    </div>
-   <div id="cal-table" class="cal-table">
+   <div id="cal-table">
     <table>
       <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
       <tr><td class="is-empty"></td><td class="is-empty"></td><td class="is-empty"></td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td></tr><tr><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td class="is-select">17</td><td>18</td></tr><tr><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr><tr><td>26</td><td>27</td><td>28</td><td class="is-empty"></td><td class="is-empty"></td><td class="is-empty"></td><td class="is-empty"></td></tr>
@@ -77,7 +77,13 @@ body{margin:0;padding:0;}
   for(var i=config.fromYear;i<config.toYear;i++){
     yearStr+='<option value="'+i+'">'+i+'</option>';
   }
-  config.yElem.innerHTML=yearStr;
+  var tmp=document.createElement("div");
+  tmp.innerHTML="<select>"+yearStr+"</select>";
+  var tmp=tmp.getElementsByTagName("option");
+  for(var i=0;i<tmp.length;i++){
+    config.yElem.appendChild(tmp[i]);
+  }
+  // config.yElem.innerHTML=yearStr;
 
   updatePageTime(showTime);
 
@@ -150,7 +156,7 @@ body{margin:0;padding:0;}
     
   });
   // 关闭
-  addHandler(config.closeBtn,"click",function(event){
+  addHandler(config.closeBtn,"click",function(e){
     console.log("关闭");
   });
   // 上月

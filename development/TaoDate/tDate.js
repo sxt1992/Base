@@ -10,10 +10,6 @@
 /**   
  *
  * Date tDate.js
- * @param   obj  The input object want to contain date.
- * @param   dateFormatStyle  Default Date Formatter is "yyyy-MM-dd".
- * @param   beginDate Default value is 1990-01-01
- * @param   toDate   Default value is 2020-01-01
  *
 */
 (function(window){

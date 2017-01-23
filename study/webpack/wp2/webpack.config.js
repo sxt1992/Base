@@ -29,6 +29,10 @@ module.exports = {
             {
                 test: /\.scss$/,
                 loader: 'style!css!sass?sourceMap'
+            },
+            {
+                test: /\.(png|jpg)$/,
+                loader: 'url-loader?limit=8192'
             }
         ]
     },

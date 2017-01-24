@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>a2</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <style>
+  body{margin:0;padding:0;}
+  </style>
+  </head>
+<body>
+	<input type="text" id="srf">
+	<div id="show"></div>
+<script>
+    var show=document.getElementById('show');
+    document.getElementById('srf').onkeydown=function(e){
+    	this.value="";
+    };
+    document.getElementById('srf').onkeyup=function(e){
+    	var keyName;
+		switch(e.keyCode){
+			case 8:keyName = e.keyCode+"[退格]";break;
+			case 9:keyName = e.keyCode+"[Tab]";break;
+			case 13:keyName = e.keyCode+"[Enter]";break;
+			case 16:keyName = e.keyCode+"[Shift]";break;
+			case 17:keyName = e.keyCode+"[Ctrl]";break;
+			case 18:keyName = e.keyCode+"[Alt]";break;
+			case 19:keyName = e.keyCode+"[PauseBreak]";break;
+			case 20:keyName = e.keyCode+"[Caps Lock]";break;
+			case 27:keyName = e.keyCode+"[Esc]";break;
+			case 32:keyName = e.keyCode+"[空格]";break;
+			case 33:keyName = e.keyCode+"[PageUp]";break;
+			case 34:keyName = e.keyCode+"[PageDown]";break;
+			case 35:keyName = e.keyCode+"[End]";break;
+			case 36:keyName = e.keyCode+"[Home]";break;
+			case 37:keyName = e.keyCode+"[方向键左]";break;
+			case 38:keyName = e.keyCode+"[方向键上]";break;
+			case 39:keyName = e.keyCode+"[方向键右]";break;
+			case 40:keyName = e.keyCode+"[方向键下]";break;
+			case 45:keyName = e.keyCode+"[Insert]";break;
+			case 46:keyName = e.keyCode+"[Delete]";break;
+			case 91:keyName = e.keyCode+"[左Win]";break;
+			case 92:keyName = e.keyCode+"[右Win]";break;
+			case 93:keyName = e.keyCode+"[快捷菜单键]";break;
+			case 95:keyName = e.keyCode+"[Sleep]";break;
+			case 96:keyName = e.keyCode+"[小键盘区0]";break;
+			case 97:keyName = e.keyCode+"[小键盘区1]";break;
+			case 98:keyName = e.keyCode+"[小键盘区2]";break;
+			case 99:keyName = e.keyCode+"[小键盘区3]";break;
+			case 100:keyName = e.keyCode+"[小键盘区4]";break;
+			case 101:keyName = e.keyCode+"[小键盘区5]";break;
+			case 102:keyName = e.keyCode+"[小键盘区6]";break;
+			case 103:keyName = e.keyCode+"[小键盘区7]";break;
+			case 104:keyName = e.keyCode+"[小键盘区8]";break;
+			case 105:keyName = e.keyCode+"[小键盘区9]";break;
+			case 106:keyName = e.keyCode+"[*]";break;
+			case 107:keyName = e.keyCode+"[+]";break;
+			case 109:keyName = e.keyCode+"[-]";break;
+			case 110:keyName = e.keyCode+"[.]";break;
+			case 111:keyName = e.keyCode+"[/]";break;
+			case 112:keyName = e.keyCode+"[F1]";break;
+			case 113:keyName = e.keyCode+"[F2]";break;
+			case 114:keyName = e.keyCode+"[F3]";break;
+			case 115:keyName = e.keyCode+"[F4]";break;
+			case 116:keyName = e.keyCode+"[F5]";break;
+			case 117:keyName = e.keyCode+"[F6]";break;
+			case 118:keyName = e.keyCode+"[F7]";break;
+			case 119:keyName = e.keyCode+"[F8]";break;
+			case 120:keyName = e.keyCode+"[F9]";break;
+			case 121:keyName = e.keyCode+"[F10]";break;
+			case 122:keyName = e.keyCode+"[F11]";break;
+			case 123:keyName = e.keyCode+"[F12]";break;
+			case 144:keyName = e.keyCode+"[NumLock]";break;
+			case 145:keyName = e.keyCode+"[ScrollLock]";break;
+			case 186:keyName = e.keyCode+"[;]";break;
+			case 187:keyName = e.keyCode+"[=]";break;
+			case 188:keyName = e.keyCode+"[,]";break;
+			case 189:keyName = e.keyCode+"[-]";break;
+			case 190:keyName = e.keyCode+"[.]";break;
+			case 191:keyName = e.keyCode+"[/]";break;
+			case 192:keyName = e.keyCode+"[`]";break;
+			case 219:keyName = e.keyCode+"[[]";break;
+			case 220:keyName = e.keyCode+"[\\]";break;
+			case 221:keyName = e.keyCode+"[]]";break;
+			case 222:keyName = e.keyCode+"[']";break;
+			case 255:keyName = e.keyCode+"[Wake]";break;
+			default:keyName = e.keyCode+"[" + String.fromCharCode(e.keyCode) +"|&|"+e.key+ "]";break;
+		}
+		if((e.shiftKey)&&(e.keyCode!=16)){keyName = e.keyCode+"[Shift] + " + keyName;}
+		if((e.altKey)&&(e.keyCode!=18)){keyName = e.keyCode+"[Alt] + " + keyName;}
+		if((e.ctrlKey)&&(e.keyCode!=17)){keyName = e.keyCode+"[Ctrl] + " + keyName;}
+		show.innerHTML=keyName;
+    }
+</script>
+</body>
+</html>

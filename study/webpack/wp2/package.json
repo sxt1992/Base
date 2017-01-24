@@ -4,12 +4,9 @@
   "description": "webpack study",
   "author": "marktao",
   "scripts": {
-    "start": "webpack",
-    "web": "webpack-dev-server --inline --hot",
-    "test": "webpack-dev-server --progress --colors",
-    "build": "NODE_ENV=production webpack --config ./webpack.config.js --progress --colors",
-    "publish":"set NODE_ENV=production&&webpack -p --progress --colors",
-    "dev":"set NODE_ENV=development&&webpack -p --progress --colors"
+    "start": "webpack-dev-server --inline --hot",
+    "publish": "set NODE_ENV=production&&webpack --config ./webpack.config.js -p --progress --colors",
+    "dev":"set NODE_ENV=development&&webpack --progress --colors"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.0",

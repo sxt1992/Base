@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --inline --hot",
     "publish": "set NODE_ENV=production&&webpack --config ./webpack.config.js -p --progress --colors",
-    "dev":"set NODE_ENV=development&&webpack --progress --colors"
+    "dev": "set NODE_ENV=development&&webpack --progress --colors"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.0",

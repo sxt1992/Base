@@ -41,9 +41,10 @@ function initialize(params) {
 
     if (__DEV__) {
         console.log(params);
+        console.log("hrmhrmtxj");
     }
 
-    getServer();
+    // getServer();
 }
 
 

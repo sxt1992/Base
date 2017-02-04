@@ -4,6 +4,7 @@ var webpack = require('webpack');
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var validate = require('webpack-validator');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 const debug = process.env.NODE_ENV !== 'production';
 var pathAll = {
     path: path.resolve(__dirname, 'dist'),
@@ -40,7 +41,9 @@ var config = {
             },
             {
                 test: /\.css$/,
-                loader: 'style!css!postcss'
+                loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader", {
+                    publicPath: '../'
+                })
             },
             {
                 test: /\.scss$/,
@@ -102,6 +105,7 @@ var config = {
             "window.jQuery": "jquery",
             "_": "underscore"
         }),
+        new ExtractTextPlugin("css/[name]-[chunkhash:8].css", {allChunks: true}),
          /*
             * gloabal flag
             * （全局标识）
@@ -112,6 +116,7 @@ var config = {
         new HtmlWebpackPlugin({
             template: path.join(pathAll.srcPath, './index.html'),
             inject: 'true',
+            chunks: ['common', 'index', 'webpackAssets'],
             // 根据依赖自动排序
             chunksSortMode: 'dependency'
         }),

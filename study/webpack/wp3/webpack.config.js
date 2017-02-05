@@ -16,7 +16,11 @@ var pathAll = {
 
 var config = {
     entry: {
-        app: path.join(pathAll.srcPath, './app.js')
+        app: path.join(pathAll.srcPath, './app.js'),
+        common: [
+            path.join(pathAll.libsPath, "js/jquery/jquery.js"),
+            path.join(pathAll.libsPath, "js/underscore/underscore.js")
+        ]
     },
     output: {
         filename: "js/[name].js",
@@ -87,7 +91,7 @@ var config = {
             underscore: path.join(pathAll.libsPath, 'js/underscore/underscore.js'),
             // css
             bootstrapcss: path.join(pathAll.libsPath, 'css/bootstrap/bootstrap-3.3.5.css'),
-            indexcss: path.join(pathAll.srcPath, 'css/index.css')
+            indexcss: path.join(pathAll.srcPath, 'css/index.scss')
         }
     },
     devServer:{
@@ -105,7 +109,13 @@ var config = {
             "window.jQuery": "jquery",
             "_": "underscore"
         }),
-        new ExtractTextPlugin("css/[name]-[chunkhash:8].css", {allChunks: true}),
+        new ExtractTextPlugin("css/[name].css", { allChunks: true }),
+        new webpack.optimize.CommonsChunkPlugin(
+            {
+                name: "common",
+                filename: "js/common.js"
+            }
+        ),
          /*
             * gloabal flag
             * （全局标识）
@@ -115,10 +125,10 @@ var config = {
         }),
         new HtmlWebpackPlugin({
             template: path.join(pathAll.srcPath, './index.html'),
-            inject: 'true',
-            chunks: ['common', 'index', 'webpackAssets'],
+            /*inject: 'true',
+            chunks: ['common', 'app'],
             // 根据依赖自动排序
-            chunksSortMode: 'dependency'
+            chunksSortMode: 'dependency'*/
         }),
         new HtmlWebpackPlugin({
             filename: 'html/hrm.html',

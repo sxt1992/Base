@@ -47,66 +47,54 @@ function loadHtml(modName) {
         $("#container").html(res);
         loadJs(modName);
     });
-
-   /* var curMod;
-    var curHtml;
-    require.ensure([], function (require) {
-        curMod = require(jsPath);
-        curHtml = require(htmlPath);
-        $("#container").html(curHtml);
-    },modName);  */  
-    /*$.get(htmlPath, [], function (html) {
-        $("#container").html(html);
-        loadJs(jsPath);
-    });*/
 }
 
 function loadJs(modName) {
     pageDatas.params = {};
     var curMod;
-    var routerArr=["home","menu1","menu2","menu3","menu5","menu6","hrm"];
+    var routerArr = ["home", "menu1", "menu2", "menu3", "menu5", "menu6", "hrm"];
     switch(modName){
-        case routerArr[1]:
+        case 'menu1':
             require.ensure([], function (require) {
-                curMod = require('./menu1');
+                curMod = require('./js/menu1');
                 curMod.init(pageDatas.params);
-            },modName);
+            },'menu1');
             break;
-        case routerArr[2]:
+        case 'menu2':
             require.ensure([], function (require) {
-                curMod = require('./menu2');
+                curMod = require('./js/menu2');
                 curMod.init(pageDatas.params);
-            },modName);
+            },'menu2');
             break;
-        case routerArr[3]:
+        case 'menu3':
             require.ensure([], function (require) {
-                curMod = require('./menu3');
+                curMod = require('./js/menu3');
                 curMod.init(pageDatas.params);
-            },modName);
+            },'menu3');
             break;
-        case routerArr[4]: // menu5
+        case 'menu5':
             require.ensure([], function (require) {
-                curMod = require('./menu5');
+                curMod = require('./js/menu5');
                 curMod.init(pageDatas.params);
-            },modName);
+            },'menu5');
             break;
-        case routerArr[5]: // menu6
+        case 'menu6':
             require.ensure([], function (require) {
-                curMod = require('./menu6');
+                curMod = require('./js/menu6');
                 curMod.init(pageDatas.params);
-            },modName);
+            },'menu6');
             break;
-        case routerArr[6]: // hrm
+        case 'hrm': // hrm
             require.ensure([], function (require) {
-                curMod = require('./hrm');
+                curMod = require('./js/hrm');
                 curMod.init(pageDatas.params);
-            },modName);
+            },'hrm');
             break;
         default: // 默认 home
             require.ensure([], function (require) {
-                curMod = require('./home');
+                curMod = require('./js/home');
                 curMod.init(pageDatas.params);
-            },modName);
+            },'home');
     }
 }
 

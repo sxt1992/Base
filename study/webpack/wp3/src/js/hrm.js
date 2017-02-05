@@ -2,7 +2,7 @@ function getServer() {
     /// <summary>
     /// get backend server
     /// </summary>
-    if (__DEVAPI__ !==''){
+    /*if (__DEVAPI__ !==''){
 
         $.ajax({
             url: __DEVAPI__ + 'http://localhost:8888/',
@@ -32,7 +32,7 @@ function getServer() {
         text +=' <pre>$ npm run dev-hrm</pre>'
 
         $("#serverData").html(text);
-    }
+    }*/
 
 }
 

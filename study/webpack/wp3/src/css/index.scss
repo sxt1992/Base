@@ -1,5 +1,8 @@
 @import url(../font/iconfont.css);
-
+$test:#845615;
+.taoxj{
+    color:$test;
+}
 ul {
     margin: 0;
     padding: 0;
@@ -28,7 +31,7 @@ img {
     overflow: hidden;
     clear: both;
 }
-
+$tao:#f0f0f0;
 .wrapper {
     position: relative;
     width: 1200px;
@@ -36,7 +39,7 @@ img {
     height: auto;
     margin: 0 auto;
     overflow: hidden;
-    background: #f0f0f0;
+    background: $tao;
 }
 
 .sidebar {

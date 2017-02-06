@@ -5,10 +5,12 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var validate = require('webpack-validator');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var CleanWebpackPlugin = require('clean-webpack-plugin');
+var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 const debug = process.env.NODE_ENV !== 'production';
 var pathAll = {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: './',
+    publicPath: 'http://localhost:3000/',
     srcPath: path.resolve(__dirname, './src'),
     libsPath: path.resolve(__dirname, './libs'),
     nodeModPath: path.resolve(__dirname, './node_modules')
@@ -23,8 +25,8 @@ var config = {
         ]
     },
     output: {
-        filename: "js/[name].js",
-        chunkFilename: 'js/[name].js',
+        filename: "js/[name]-[chunkhash:8].js",
+        chunkFilename: 'js/[name]-[chunkhash:8].js',
         path: pathAll.path,
         publicPath: pathAll.publicPath,
     },
@@ -44,14 +46,14 @@ var config = {
                 loader: 'babel'
             },
             {
+                test: /\.scss$/,
+                loader: ExtractTextPlugin.extract('style', 'css!sass')
+            },
+            {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract("style-loader", "css-loader!postcss-loader", {
                     publicPath: '../'
                 })
-            },
-            {
-                test: /\.scss$/,
-                loader: 'style!css!sass?sourceMap'
             },
             {
                 test: /\.(png|gif|jpe?g)$/,
@@ -80,7 +82,7 @@ var config = {
 
     },
     postcss: [
-        require('autoprefixer')//调用autoprefixer插件
+        require('precss'),require('autoprefixer')//调用autoprefixer插件
     ],
     resolve: {
         root: pathAll.nodeModPath,
@@ -95,21 +97,31 @@ var config = {
         }
     },
     devServer:{
-        contentBase:"./dist",
+        contentBase:"./",
         port:3000,
         historyApiFallback:true,
         inline:true,
         hot:true
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(), //热加载插件
+        new webpack.HotModuleReplacementPlugin({
+                    multiStep: true
+        }), //热加载插件
+        new OpenBrowserPlugin({ url: pathAll.publicPath + 'index.html' }),
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
             "window.jQuery": "jquery",
             "_": "underscore"
         }),
-        new ExtractTextPlugin("css/[name].css", { allChunks: true }),
+        /*new CleanWebpackPlugin(['dist'], {
+            root: '', // An absolute path for the root  of webpack.config.js
+            verbose: true,// Write logs to console.
+            dry: false // Do not delete anything, good for testing.
+        }),*/
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new ExtractTextPlugin("css/[name]-[chunkhash:8].css", { allChunks: true }),
         new webpack.optimize.CommonsChunkPlugin(
             {
                 name: "common",
@@ -125,10 +137,10 @@ var config = {
         }),
         new HtmlWebpackPlugin({
             template: path.join(pathAll.srcPath, './index.html'),
-            /*inject: 'true',
+            inject: 'true',
             chunks: ['common', 'app'],
             // 根据依赖自动排序
-            chunksSortMode: 'dependency'*/
+            chunksSortMode: 'dependency'
         }),
         new HtmlWebpackPlugin({
             filename: 'html/hrm.html',

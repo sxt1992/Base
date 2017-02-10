@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>倒计时</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <style>
+  body{margin:0;padding:0;}
+  </style>
+  </head>
+<body></body>
+<script>
+var targetTime=new Date("2017/03/09 21:00:00");
+		setInterval(function(){
+  var str="";
+  var s=Math.floor((targetTime-new Date())/1000);
+  var d=0;
+  if(s>86400){
+    d=Math.floor(s/86400);
+    str+=d+" 天 ";
+  }
+  s-=d*86400;
+  d=0;
+  if(s>3600){
+    d=Math.floor(s/3600);
+    str+=d+" 小时 ";
+  }
+  s-=d*3600;
+  d=0;
+  if(s>60){
+    d=Math.floor(s/60);
+    str+=d+" 分 ";
+  }
+  str+=(s-d*60)+" 秒";
+  document.body.innerHTML=str;
+},1000);
+	</script>
+</html>

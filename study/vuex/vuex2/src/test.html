@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>vue-router</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+<div id="app">
+  <h1>Hello App!</h1>
+  <div>
+    <p><router-link to="/user/aaa/path1">path1</router-link></p>
+    <p><router-link to="/user/bbb/path2">path2</router-link></p>
+    <p><router-link to="/user/ccc/path3">path3</router-link></p>
+  </div>
+  <router-view></router-view>
+</div>
+<script>
+var User = {
+  template: `
+    <div class="user">
+      <h2>User {{ $route.params.id }}</h2>
+      <router-view></router-view>
+    </div>
+  `
+}
+var path1 = {
+  template: `
+    <div>
+      我是path1111111111111
+    </div>
+  `
+}
+var path2 = {
+  template: `
+    <div>
+      我是path2222222222222
+    </div>
+  `
+}
+var path3 = {
+  template: `
+    <div>
+      我是path3333333333333
+    </div>
+  `
+}
+var router= new VueRouter({
+  routes:[
+    {
+      path:"/user/:id",
+      component:User,
+      children:[
+        {
+          path:"path1",
+          component:path1
+        },
+        {
+          path:"path2",
+          component:path2
+        },
+        {
+          path:"path3",
+          component:path3
+        }
+      ]
+    }
+  ]
+});
+
+new Vue({
+  router:router
+}).$mount('#app');
+
+</script>
+</body>
+</html>

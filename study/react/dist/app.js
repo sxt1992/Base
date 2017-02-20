@@ -80,19 +80,10 @@
 
 	_reactDom2.default.render(_react2.default.createElement(
 		_reactRouter.Router,
-		{ history: _reactRouter.browserHistory },
-		_react2.default.createElement(
-			_reactRouter.Route,
-			{ path: '/', component: _App2.default },
-			_react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default }),
-			_react2.default.createElement(_reactRouter.Route, { path: 'boys', component: _Boys2.default }),
-			_react2.default.createElement(_reactRouter.Route, { path: 'girls', component: _Girls2.default })
-		),
-		_react2.default.createElement(
-			_reactRouter.Route,
-			{ path: '/inbox', component: _Inbox2.default },
-			_react2.default.createElement(_reactRouter.Redirect, { from: 'messages/:id', to: '/messages/:id' })
-		)
+		{ history: _reactRouter.hashHistory },
+		_react2.default.createElement(_reactRouter.Route, { path: '/', component: _App2.default }),
+		_react2.default.createElement(_reactRouter.Route, { path: '/Boys', component: _Boys2.default }),
+		_react2.default.createElement(_reactRouter.Route, { path: '/Girls', component: _Girls2.default })
 	), document.getElementById("app"));
 
 /***/ },

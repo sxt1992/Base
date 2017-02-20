@@ -29,19 +29,16 @@ var todoReducer = function (state, action) {
     }
     switch (action.type) {
         case 'add_todo':
-            return Object.assign({}, state,{
+            return state.slice(0).concat({
                 text: action.text,
                 completed: false
             });
-            break;
         default:
             return state;
     }
 };
 
 var store = Redux.createStore(todoReducer);
-window.t = store;
-window.x = Redux;
 // -----------------
 var App = React.createClass({
     getInitialState: function () {

@@ -1,0 +1,42 @@
+body{margin:0;padding:0;}
+img{margin:0;padding:0;border:none;}
+$tao:rgba(255,152,0,0.5);
+.wrap{width:100px;height:100px;background:$tao;box-shadow:10px 20px 0 10px #f00 inset;}
+.img1{width:150px;}
+.t1{
+	width:150px;
+	padding:30px 20px;
+	border:40px solid transparent;
+	border-image:url('../images/sucai/25.jpg') 0 14 0 14 stretch;
+}
+
+@mixin opacity($opacity:0.5) {
+  opacity: $opacity;
+  filter: alpha(opacity=$opacity*100);
+}
+.opacity-08{
+  @include opacity(0.8); //传递参数
+}
+
+@mixin box-shadow($shadow...) {
+  -webkit-box-shadow:$shadow;
+  box-shadow:$shadow;
+}
+.box{
+  border:2px solid #ccc;
+  @include box-shadow(0 2px 2px rgba(0,0,0,.3),0 3px 89px rgba(125,56,0,.3),0 4px 48px rgba(0,0,0,.3));
+}
+
+.box2{
+  @include box-shadow(0 32px 11px rgba(255,0,0,.3),0 3px 3px rgba(0,255,0,.3),0 9px 4px rgba(0,0,255,.7));
+}
+
+@mixin max-screen($res){
+  @media only screen and ( max-width: $res )
+  {
+    @content;
+  }
+}
+@include max-screen(640px) {
+  body { color: red }
+}

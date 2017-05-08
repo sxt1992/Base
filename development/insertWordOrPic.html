@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>支持到所有浏览器(IE7+)的,文字图片插入</title>
+</head>
+<body>
+	<input type="text" id="input1" style="display:block;width:300px;" value="这是input输入框,只支持文字"><br>
+	<div id="input2" contenteditable="true" style="border:1px solid red;">这是可编辑DIV,可以插入图片</div><br>
+	<button id="btn1">按钮1</button>&nbsp;&nbsp;&nbsp;<button id="btn2">按钮2</button>
+<script>
+	function getCursorPosition(elem){ // 获取 光标位置
+	    var pos=0;
+	    if (document.selection){
+	    	elem.focus();
+	    	var range=document.selection.createRange();
+	    	range.moveStart('character',-elem.value.length);
+	    	pos=range.text.length;
+
+	    	elem.setAttribute('fnum',1);
+	    	elem.blur();
+	    }else if(elem.selectionStart||elem.selectionStart==0){
+	    	pos=elem.selectionStart;
+	    }
+	    return pos;
+	}
+	function setCaretPosition(elem,pos){ // 插入 光标位置
+		if(elem.setSelectionRange){
+			elem.focus();
+			elem.setSelectionRange(pos,pos);
+		}else if(elem.createTextRange){
+			var range=elem.createTextRange();
+			range.collapse(true);
+			range.moveEnd('character',pos);
+			range.moveStart('character',pos);
+			range.select();
+		}
+	}
+	function insertHtmlAtCaret(html){
+		if(window.getSelection){
+			var range,selection=window.getSelection();
+			if(selection.getRangeAt && selection.rangeCount){
+				range=selection.getRangeAt(0);
+				range.deleteContents();
+				var el=document.createElement("div");
+				el.innerHTML=html;
+				var node,lastNode,frag=document.createDocumentFragment();
+				while(node=el.firstChild){
+					lastNode=frag.appendChild(node);
+				}
+				range.insertNode(frag);
+				if(lastNode){
+					range=range.cloneRange();
+					range.setStartAfter(lastNode);
+					range.collapse(true);
+					selection.removeAllRanges();
+					selection.addRange(range);
+				}
+			}
+		}else if(document.selection && !/Control/i.test(document.selection.type+"")){
+			document.selection.createRange().pasteHTML(html);
+		}
+	}
+
+
+	window.onload=function(){
+		var input1=document.getElementById('input1');
+		var input2=document.getElementById('input2');
+		var btn1=document.getElementById('btn1');
+		var btn2=document.getElementById('btn2');
+		var imgBase64='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAAgACADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDyL9o79njTPhPr5vvDnibT/E0LsziwkKf2vbGRNpLRxKBKO/IRhzwa8buJk8OWssWo6VcW14+2TbNBK0zDPGxIwd2D1KhsdxX0o3g7xHdxGO20nQ/DFoT/AMvM32iYD18qHCZ+slc943+BFh4r8P3FnrPiHV7t5BlWtlito4HHIdVCk5H+0xr8AocZKhZYm1vvf4aH9W5p4AU845q2XUnh5tabcl/8L1V/KyXY8mfTJrPTNR1NM2p0hI283UE2WzyTYzIHSQNhEBUq+0/PnC92WGiyeJtJtdegttPuNPuCJdlrc/aEihL7VdiuNqfKduQPx61HZfavhv4rj0fVNaXxN9qaQw3O9JJnl6xpLCgBXGCd539O9a409PAnjnSTLNb6oNvnxxXjuwuFb78ajgAZ+7yNx6L1r7ahi6WIoqvQd4vY/lfiThfMuH8fLLs1pOnVj0dnddGmrpp90fbOn/sMfFnxHYDUfFms+CPhXorctcareiaVV78uY4wf++qztU+HX7JXwVi+0/ED4peLfi1fpybLRlZLFz6b/wBzbkfVm/Hv4j4e/Zg+M37TmuC5tdB8beIrmdsi9vw1jHknr5s5a4I+leq2X/BHv/hXNsmqfGP4tfDr4U2rDe8LXUc2osPRWnYyMf8Adi/xr9myrwYjhJLnpYbBv++3i6//AIAvcT/wyP1bPPHJYlOOIzHFYv8Au4eMcHR9PaS5qrXrFHzv+3T+0R8Kvi7488Ax/DD4dzeAdB8MLdwpbh1eTUnmMf8ApDFIwoZVjxgM/HeuU0fSJrmd5bN1SIpJEJGlYqRtZ2Z8cpgITggZAyOATXZ/tfeAf2evDfxb8DaN8MfGfiXxrFbQ3cmr6vczz2bS3o8o28cYmRVKNtdQyqqqXJOcCqnirxBLZ+AbaLTPD1nY3EWom4ltFjLlIlRmktgmB9oUM2wSqRw5zkrXyPH2TvKMzjhOepNuMXzVKapt30vGC2jpZX1unc/GcxzejmtZ4vD0I0Y7csakqmvVynNtuTvray2skf/Z';
+
+		input1.onblur=function(){
+			var fnum=+this.getAttribute('fnum');
+			this.setAttribute('fnum',0);
+			if(isNaN(fnum)){
+				fnum=0;
+			}
+			fnum++;
+			if(fnum%2==0){
+				return false;
+			}
+			this.setAttribute('pos',getCursorPosition(this));
+		};
+		btn1.onclick=function(){
+	    	var pos=+input1.getAttribute('pos');
+	    	var s=input1.value;
+	    	input1.value=s.substring(0,pos)+','+s.substring(pos);
+	    	input1.focus();
+	    	setCaretPosition(input1,pos+1);
+		};
+
+		btn2.onclick=function(){
+			input2.focus();
+			insertHtmlAtCaret('<img src="'+imgBase64+'" style="width:32px;height:32px;">');
+		};
+	};
+</script>
+</body>
+</html>

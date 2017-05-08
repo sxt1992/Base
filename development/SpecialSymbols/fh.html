@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>HTML unicode 实体特殊字符库</title>
+	<link rel="stylesheet" href="main.css" />
+</head>
+<body>
+<div class="main">
+	<h1>HTML实体特殊字体查询对照表</h1>
+	<div class="info">
+		<h2>使用方法：</h2>
+		<ol>
+			<li>这些字符属于unicode字符集，你的HTML文档需要声明为UTF-8；</li>
+			<li>后面有两列编号，第一行是用于HTML的，你需要在前面加上&amp;#符号；</li>
+			<li>第二行可以用于CSS文件中，但是需要用反斜杠\转义；</li>
+			<li>第二行也可以用于JavaScript用\u来转义。</li>
+		</ol>
+	</div>
+	<div class="info">
+		<h2>需要主意的是：</h2>
+		<ol>
+			<li>有的字符在不同的浏览器下表现的大小和外形不太一样；请注意测试；</li>
+			<li>98%的字符都能在所有浏览器下正常显示的；当然原因并不是字符代码的问题，而是浏览器的bug，</li>
+			<li>经测试这些字符在Android4和iOS5, ie8 等终端的识别度都还比较可以, 较低的浏览器请注意使用, 以免造成不必要的损失. </li>
+		</ol>
+	</div>
+	<div id="content">
+	</div>
+</div>
+<script type="text/javascript" src="html_unicode.js"></script>
+<div class="footer">
+	Art for web code &copy; artwc&#8482;.com &#9993; gmail.com
+</div>
+</body>
+</html>

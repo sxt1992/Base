@@ -1,3 +1,4 @@
+// redux 中间件(包含异步)
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as Redux from 'redux';

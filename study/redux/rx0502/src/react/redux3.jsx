@@ -1,8 +1,12 @@
-// React-Redux 的用法
+// React-Router 路由库
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
+import { Router, Route} from 'react-router';
+import {createHashHistory } from 'history';
+
+var hashHistory = createHashHistory();
 
 // React component
 class Counter extends Component {
@@ -56,7 +60,9 @@ const App = connect(
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+      <Router history={hashHistory}>
+        <Route path="/" component={App}/>
+      </Router>
     </Provider>,
     document.getElementById('wrapper')
 );

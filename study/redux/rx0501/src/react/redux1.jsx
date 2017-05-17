@@ -24,8 +24,13 @@ var addTodoActions = function(text){
 
 // reducers
 var todoReducer = function (state, action) {
+console.log(22222);
+console.log(state);
     if (typeof state === 'undefined') {
-        return [];
+        return [{
+                text: "taoxuejiao",
+                completed: false
+            }];
     }
     switch (action.type) {
         case 'add_todo':
@@ -37,8 +42,10 @@ var todoReducer = function (state, action) {
             return state;
     }
 };
-
+console.log(11111);
 var store = Redux.createStore(todoReducer);
+console.log(33333);
+
 // -----------------
 var App = React.createClass({
     getInitialState: function () {

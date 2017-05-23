@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="taoApp">
+<head>
+	<meta charset="UTF-8">
+	<title>a2</title>
+	<script type="text/javascript" src="./angularLib/angular.js"></script>
+	<link rel="stylesheet" href="./angularLib/bootstrap.min.css">
+	<style>
+		.aaa{color:blueviolet;}
+		.bbb{background:#f8a;}
+	</style>
+</head>
+<body>
+<div ng-controller="MyCtrl">
+	<label>用户名</label>
+	<input type="text" ng-model="username" placeholder="请输入用户名" />
+	<pre ng-show="username">{{users}}</pre>
+	<div>
+		<p ng-class="ys">{{x}}</p>
+	</div>
+	<span>
+		<ul>
+			<li ng-repeat="x in names | filter:test | orderBy:'country'">
+				{{ (x.name | uppercase) + ', ' + x.country }}
+			</li>
+		</ul>
+	</span>
+</div>
+<script type="text/javascript">
+	var myModule = angular.module("taoApp",[]);
+	myModule.controller("MyCtrl",["$scope",function($scope){
+		$scope.username="fdsfds";
+		$scope.users=$scope.username;
+		// $scope.records=["1a2b5",789,"123fdsa",123,456,963];
+		$scope.x="fdsfds5";
+		$scope.ys=["aaa","bbb"];
+		$scope.names=[
+			{name:'Jani',country:'Norway'},
+			{name:'Hege',country:'Sweden'},
+			{name:'Kai',country:'Denmark'}
+		];
+	}]);
+</script>
+</body>
+</html>

@@ -11,35 +11,28 @@
 	</style>
 </head>
 <body>
-<div ng-controller="MyCtrl">
-	<label>用户名</label>
-	<input type="text" ng-model="username" placeholder="请输入用户名" />
-	<pre ng-show="username">{{users}}</pre>
-	<div>
-		<p ng-class="ys">{{x}}</p>
+	<div ng-controller="MyCtrl">
+		<greeting greet="sayHello(name)"></greeting>
+		<greeting greet="sayHello(name)"></greeting>
+		<greeting greet="sayHello(name)"></greeting>
 	</div>
-	<span>
-		<ul>
-			<li ng-repeat="x in names | filter:test | orderBy:'country'">
-				{{ (x.name | uppercase) + ', ' + x.country }}
-			</li>
-		</ul>
-	</span>
-</div>
 <script type="text/javascript">
 	var myModule = angular.module("taoApp",[]);
-	myModule.controller("MyCtrl",["$scope",function($scope){
-		$scope.username="fdsfds";
-		$scope.users=$scope.username;
-		// $scope.records=["1a2b5",789,"123fdsa",123,456,963];
-		$scope.x="fdsfds5";
-		$scope.ys=["aaa","bbb"];
-		$scope.names=[
-			{name:'Jani',country:'Norway'},
-			{name:'Hege',country:'Sweden'},
-			{name:'Kai',country:'Denmark'}
-		];
-	}]);
+	myModule.controller('MyCtrl', ['$scope', function($scope){
+		$scope.sayHello=function(name){
+			console.log(arguments);
+			alert("Hello "+name);
+		}
+	}])
+	myModule.directive("greeting", function() {
+	    return {
+	    	restrict:'AE',
+	        scope:{greet:'&'},
+	        template:'<input type="text" ng-model="userName" /><br/>'+
+	        		 '<button class="btn btn-default" ng-click="greet(userName)">Greeting</button><br/>'
+	    }
+	});
 </script>
+
 </body>
 </html>

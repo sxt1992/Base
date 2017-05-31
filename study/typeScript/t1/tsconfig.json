@@ -1,0 +1,26 @@
+//第一种写法，将file一一列出  
+{
+    "compilerOptions": {
+        // "module": "commonjs",//可不写  
+        "sourceMap": true
+    },
+    "files": [
+        "./src/ts/index.ts"
+    ]
+}
+/*
+//第二种写法，用include包含所有ts文件，同时可写不包含文件  
+{  
+    "compilerOptions":{
+        "module": "amd",//或system  
+        "sourceMap":true,  
+        "outFile": "./index.js"  
+    },  
+    "include": [  
+        "./index.ts"  
+    ],  
+    "exclude": [//不包括的文件  
+        "node_module"  
+    ]
+}
+*/

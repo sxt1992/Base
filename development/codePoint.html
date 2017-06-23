@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    function toUTF16(s){
+        var H = Math.floor((s-0x10000)/0x400)+0xD800; // 0xD800-0xDBFF
+        var L = (s-0x10000) % 0x400+0xDC00; // 0xDC00-0xDFFF
+        return [H,L];
+    }
+    function toRealNum(H,L){
+        return (H-0xD800)*0x400+(L-0xDC00)+0x10000;
+    }
+    String.prototype.codePointArray=function(){
+        /*
+        var i=-1;
+        var arr=[];
+        var len=this.length;
+        while(++i<len){
+            var charCode=this.charCodeAt(i);
+            if(charCode>=0xD800 && charCode<=0xDBFF){
+                arr.push(this.charAt(i)+this.charAt(++i));
+            }else{
+                arr.push(this.charAt(i));
+            }
+        }
+        return arr;
+        */
+        var i=-1;
+        var arr=[""];
+        var len=this.length;
+        while(++i<len){
+            var charCode=this.charCodeAt(i);
+            if(charCode>=0xD800 && charCode<=0xDBFF){
+                arr.push({
+                    over4f:true,
+                    char:this.charAt(i)+this.charAt(i+1),
+                    code: (charCode-0xD800)*0x400+(this.charCodeAt(i+1)-0xDC00)+0x10000
+                });
+                i++;
+            }else{
+                if(arr[arr.length-1].over4f){
+                    arr.push(this.charAt(i));
+                }else{
+                    arr[arr.length-1]+=this.charAt(i);
+                }
+            }
+        }
+        return arr;
+    };
+    
+    var str = "\ud83d\ude01";
+    document.write(str+"<br>"+str.length);
+</script>
+</body>
+</html>

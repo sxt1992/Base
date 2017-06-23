@@ -1,1 +1,2 @@
-import './sass/a.scss';
+// import './sass/a.scss';
+import './es6';

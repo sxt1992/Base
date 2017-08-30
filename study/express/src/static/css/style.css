@@ -1,0 +1,8 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+#app {
+  color: rgba(81, 209, 173, 0.73);
+  background: rgba(102, 30, 165, 0.62);
+}

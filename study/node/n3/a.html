@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo12</title>
+    <meta name="keywords" content="txj,demo1" />
+    <meta name="description" content="this is demo1" />
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+<script>
+    !function(window){
+        // rem 布局
+        var n = 10;
+        window.document.write("<meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no'>");
+        var resizeEvt='orientationchange' in window?'orientationchange':'resize';
+        var createStyle=function(event){
+            window.rem = window.innerWidth / n;
+            window.document.getElementsByTagName('html')[0].style.fontSize = rem + "px";
+            var style;
+            if(style=window.document.getElementById("forHtml")){
+                style.parentNode.removeChild(style);
+            }
+            style = window.document.createElement("style");
+            style.id="forHtml";
+            style.appendChild(window.document.createTextNode("html{font-size:"+rem+"px !important;}"));
+            window.document.head.appendChild(style);
+        };
+        window.addEventListener(resizeEvt,createStyle,false);
+        window.document.addEventListener('DOMContentLoaded',createStyle,false);
+    }(this);
+</script>
+<style type="text/css">
+    body {margin:0;padding:0;}
+    .t {overflow:hidden;}
+    .t1 {
+        float: left;
+        width: 5rem;
+        height: 1rem;
+        background: blue;
+    }
+    .t2 {
+        float: left;
+        width: 5rem;
+        height: 1rem;
+        background: green;
+    }
+</style>
+</head>
+<body>
+<div class="t">
+    <div class="t1"></div>
+    <div class="t2"></div>  
+</div>
+</body>
+</html>

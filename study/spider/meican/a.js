@@ -4,14 +4,14 @@ let urls = require('./urls');
 
 let logSuccFunc = () => {
     urls.getCalendarItemsListOneId().then( riLi => { // 获取日历
-        urls.getRestaurantsList(riLi).then((rl) => {
+        urls.getRestaurantsList(riLi.tabUniqueId).then((rl) => {
             let allRlPromise = rl.map(function(one){
-                return urls.getDishList(riLi, one.uniqueId);
+                return urls.getDishList(riLi.tabUniqueId, one.uniqueId);
             });
             Promise.all(allRlPromise).then(function(allDishList){
                 let allMenu = [];
                 for(let i = 0; i < rl.length; i += 1){
-                    allMenu.push(Object.assign(rl[i], {menu: allDishList[i]}));
+                    allMenu.push(Object.assign(rl[i], riLi, {menu: allDishList[i]}));
                 }
                 fs.writeFileSync('./menu.json', JSON.stringify(allMenu, null, 4));
             });

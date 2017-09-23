@@ -53,6 +53,7 @@ module.exports = {
             inject: true
         })
     ],
+    devtool: '#cheap-module-source-map',
     devServer: {
         contentBase: './dist',
         hot: true,

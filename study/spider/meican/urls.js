@@ -39,13 +39,28 @@ urls.getCalendarItemsListOneId = () => {
         endDate: getWeekStart(),
         noHttpGetCache: new Date().getTime(),
         withOrderDetail: false
-    }, d => d.dateList[0].calendarItemList[0].userTab.uniqueId );
+    }, d => {
+        let info = {
+            tabUniqueId: d.dateList[0].calendarItemList[0].userTab.uniqueId,
+            corpAddressUniqueId: d.dateList[0].calendarItemList[0].userTab.corp.addressList[0].uniqueId
+        };
+
+        let order = d.dateList[0].calendarItemList[0].corpOrderUser;
+        if (order && typeof order == 'object' && Array.isArray(order.restaurantItemList)) {
+            info.orderUniqueId = order.uniqueId;
+            info.dish = {
+                dishId: order.restaurantItemList[0].dishItemList[0].dish.id,
+                dishIdName: order.restaurantItemList[0].dishItemList[0].dish.name
+            };
+        }
+        return info;
+    });
 };
 
 // 获取餐馆
-urls.getRestaurantsList = (uniqueId) => {
+urls.getRestaurantsList = (tabUniqueId) => {
     return api.get('https://meican.com/preorder/api/v2.1/restaurants/list', {
-        tabUniqueId: uniqueId,
+        tabUniqueId: tabUniqueId,
         noHttpGetCache: new Date().getTime(),
         targetTime: getWeekStart() + "+16:30"
     }, d => {
@@ -61,10 +76,10 @@ urls.getRestaurantsList = (uniqueId) => {
 };
 
 // 获取餐品
-urls.getDishList = (uniqueId, restaurantUniqueId) => {
+urls.getDishList = (tabUniqueId, restaurantUniqueId) => {
     return api.get('https://meican.com/preorder/api/v2.1/restaurants/show', {
         restaurantUniqueId: restaurantUniqueId,
-        tabUniqueId: uniqueId,
+        tabUniqueId: tabUniqueId,
         noHttpGetCache: new Date().getTime(),
         targetTime: getWeekStart() + "+16:30"
     }, d => {
@@ -80,5 +95,49 @@ urls.getDishList = (uniqueId, restaurantUniqueId) => {
         return dl;
     });
 };
+
+// 点餐
+urls.orderMeal = (tabUniqueId, addressUniqueId, dishId) => {
+    return api.post('https://meican.com/preorder/api/v2.1/orders/add', {
+        corpAddressUniqueId: addressUniqueId,
+        order: JSON.stringify([{count: 1, dishId: dishId}]),
+        tabUniqueId: tabUniqueId,
+        targetTime: getWeekStart() + "+16:30",
+        userAddressUniqueId: addressUniqueId
+    }, d => {
+        if (d.status === 'SUCCESSFUL') {
+            return d.order.uniqueId;
+        }
+        return false;
+    });
+};
+
+// 展示结果
+urls.showOrder = (uniqueId, restaurantUniqueId) => {
+    return api.post('https://meican.com/preorder/api/v2.1/orders/show', {
+        uniqueId: uniqueId,
+        type: 'CORP_ORDER'
+    }, d => {
+        if (!d || typeof d.restaurantItemList != 'object' || !d.restaurantItemList[0]
+               || typeof d.restaurantItemList[0].dishItemList != 'object' || !d.restaurantItemList[0].dishItemList[0] ) {
+            return false;
+        }
+        let dish = d.restaurantItemList[0].dishItemList[0].dish;
+        return {
+            dishId: dish.id,
+            dishIdName: dish.name
+        };
+    });
+};
+
+// 取消订单
+urls.delOrder = (orderUniqueId) => {
+    return api.get('https://meican.com/preorder/api/v2.1/orders/delete', {
+        uniqueId: orderUniqueId,
+        type: "CORP_ORDER",
+        restoreCart: false
+    });
+};
+
 
 module.exports = urls;

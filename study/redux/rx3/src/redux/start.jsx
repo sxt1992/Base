@@ -1,43 +1,62 @@
+import "babel-polyfill";
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as Redux from 'redux';
+import { Provider, connect } from 'react-redux';
 
-import thunk from 'redux-thunk';
-import promise from 'redux-promise';
-import createLogger from 'redux-logger';
+import createSagaMiddleware from 'redux-saga';
 
-/*function todoReducer() {
-    console.log("---todoReducer---");
-    console.log(arguments);
+let applyMiddleware = Redux.applyMiddleware;
+
+class Counter extends React.Component {
+  render() {
+    const { value, onIncreaseClick } = this.props
+    return (
+          <div>
+            <span>{value}</span>
+            <button onClick={onIncreaseClick}>Increase</button>
+          </div>
+        )
+    }
 }
+var addFunc = function () {
+    return {
+        type: "addFunc"
+    };
+};
 
-let store=Redux.createStore(todoReducer,Redux.applyMiddleware(promise));
+var mapDispatchToProps = function (dispatch) {
+    return {
+        onIncreaseClick(event) {
+            dispatch(addFunc());
+        }
+    };
+};
+var mapStateToProps = function (state) {
+    return {
+        value:state.count
+    };
+};
 
-function fetchPosts(dispatch) {
-    return new Promise(function (resolve, reject) {
-        console.log(1234566);
-        return fetch(`http://d.10jqka.com.cn/v4/time/hs_399005/last.js`).then(function (response) {
-            console.log(6543215);
-            return dispatch({
-                type: 'FETCH_POSTS',
-                payload: response.text()
-            });
-        });
-    });
-}
+let TodoList = connect(mapStateToProps,mapDispatchToProps)(Counter);
 
-window.x=store.dispatch(fetchPosts(store.dispatch));*/
 
-import TodoList from './connect';
-import reducer from './store';
-import { Provider } from 'react-redux';
+let reducer = function (state = { count: 0 }, action) {
+    const count=state.count;
+    switch (action.type) {
+        case 'addFunc':
+            return { count: count + 1 };
+        default:
+            return state;
+    }
+};
 
-const store = Redux.createStore(reducer);
+const sagaMiddleware = createSagaMiddleware();
 
-store.subscribe(function () {
-    console.log(11111);
-    console.log(store.getState());
-});
+const store = Redux.createStore(reducer,applyMiddleware( sagaMiddleware ));
+
+sagaMiddleware.run(function*(){console.log(235)});
 
 ReactDOM.render(
     <Provider store={store}>

@@ -1,20 +1,18 @@
 import React from 'react';
-import {Component} from 'react';
-import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
-class Counter extends Component {
+class Counter extends React.Component {
   render() {
     const { value, onIncreaseClick } = this.props
     return (
-      <div>
-        <span>{value}</span>
-        <button onClick={onIncreaseClick}>Increase</button>
-      </div>
-    )
+          <div>
+            <span>{value}</span>
+            <button onClick={onIncreaseClick}>Increase</button>
+          </div>
+        )
     }
 }
-var addFunc = function (t) {
+var addFunc = function () {
     return {
         type: "addFunc"
     };

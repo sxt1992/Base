@@ -3,6 +3,7 @@ let cookieOpr = require('./cookieOpr');
 let http = require('http');
 let https = require('https');
 let url = require('url');
+let querystring = require('querystring');
 
 let rqUrl = (method, urlStr, param, succ) => new Promise(resolve => {
 
@@ -32,14 +33,14 @@ let rqUrl = (method, urlStr, param, succ) => new Promise(resolve => {
     let postData = '';
 
     if (method.toLowerCase() == 'post' && typeof param == 'object') {
-        postData = JSON.stringify(param);
+        postData = querystring.stringify(param);
         headers['Content-Length'] = postData.length;
     }
 
     let req = protocol.request({
             method: method,
             host: urlObj.host,
-            path: urlObj.pathname + (queryStr.length < 1 ? '' : '?') + queryStr,
+            path: encodeURI( urlObj.pathname + (queryStr.length < 1 ? '' : '?') + queryStr),
             rejectUnauthorized: false,
             headers: headers
         }, function(res) {

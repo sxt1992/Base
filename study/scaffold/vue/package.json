@@ -1,0 +1,57 @@
+{
+  "name": "vue_scaffold",
+  "version": "1.0.0",
+  "description": "tao vue scaffold",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node build/devServer.js",
+    "build": "node build/build.js"
+  },
+  "keywords": [
+    "tao",
+    "xue",
+    "jiao",
+    "vue",
+    "scaffold"
+  ],
+  "author": "taoxuejiao",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^7.1.4",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "css-loader": "^0.28.7",
+    "eslint": "^4.7.2",
+    "eslint-config-airbnb-base": "^12.0.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.9.0",
+    "eslint-plugin-html": "^3.2.2",
+    "eslint-plugin-import": "^2.7.0",
+    "express": "^4.15.5",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.30.1",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
+    "node-sass": "^4.5.3",
+    "opn": "^5.1.0",
+    "sass-loader": "^6.0.6",
+    "url-loader": "^0.5.9",
+    "vue-loader": "^13.0.5",
+    "vue-style-loader": "^3.0.3",
+    "vue-template-compiler": "^2.4.4",
+    "vuex": "^2.4.0",
+    "webpack": "^3.6.0",
+    "webpack-dev-middleware": "^1.12.0",
+    "webpack-hot-middleware": "^2.19.1",
+    "webpack-merge": "^4.1.0",
+    "webpack-validator": "^3.0.0"
+  },
+  "dependencies": {
+    "vue": "^2.4.4"
+  }
+}

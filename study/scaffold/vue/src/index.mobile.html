@@ -6,27 +6,27 @@
     <meta content="yes" name="apple-mobile-web-app-capable">
     <meta content="yes" name="apple-touch-fullscreen">
     <meta content="telephone=no,email=no" name="format-detection">
-    <meta name="viewport" content="initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
     <!-- <link rel="apple-touch-icon" href="./favicon.ico"> -->
     <!-- <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon"> -->
     <script>
-        !function (window) {
-            // rem 布局,就是设置html的font-size
-            var resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
-            var createStyle = function (event) {
-                window.rem = window.innerWidth / 10;
-                window.document.getElementsByTagName('html')[0].style.fontSize = rem + "px";
-                var style;
-                if (style = window.document.getElementById("htmlfontsize")) {
-                    style.parentNode.removeChild(style);
-                }
-                style = window.document.createElement("style");
-                style.id = "htmlfontsize";
-                style.appendChild(window.document.createTextNode("html{font-size:" + rem + "px !important;}"));
-                window.document.head.appendChild(style);
-            };
-            window.addEventListener(resizeEvt, createStyle, false);
-            window.document.addEventListener('DOMContentLoaded', createStyle, false);
+        !function (w) {
+            var doc = w.document,
+                resizeEvt = 'orientationchange' in w ? 'orientationchange' : 'resize',
+                styFunc = function (event) {
+                    w.rem = w.innerWidth / 10;
+                    doc.getElementsByTagName('html')[0].style.fontSize = rem + 'px';
+                    var style;
+                    if (style = doc.getElementById('htmlfontsize')) {
+                        style.parentNode.removeChild(style);
+                    }
+                    style = doc.createElement('style');
+                    style.id = 'htmlfontsize';
+                    style.appendChild(doc.createTextNode('html{font-size:' + rem + 'px !important;}'));
+                    doc.head.appendChild(style);
+                };
+            w.addEventListener(resizeEvt, styFunc, false);
+            doc.addEventListener('DOMContentLoaded', styFunc, false);
         }(window);
     </script>
     <style>

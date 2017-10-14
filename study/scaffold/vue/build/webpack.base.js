@@ -7,7 +7,7 @@ const utils = require('./utils');
 function resolve(dir) {
   return path.posix.join(__dirname, '..', dir);
 }
-const entry = { app: './src/app.js' };
+const entry = { main: './src/main.js' };
 
 module.exports = {
   entry,
@@ -57,6 +57,10 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.vue', '.css', '.scss', 'sass', 'less'],
+    extensions: ['.js', '.json', '.vue', '.css', '.scss', '.sass', '.less'],
+    alias: {
+      'vue$': 'vue/dist/vue.js',
+      '@': resolve('src')
+    }
   },
 };

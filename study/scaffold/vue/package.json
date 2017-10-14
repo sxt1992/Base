@@ -1,8 +1,8 @@
 {
-  "name": "vue_scaffold",
+  "name": "blog-tao",
   "version": "1.0.0",
-  "description": "tao vue scaffold",
-  "main": "app.js",
+  "description": "tao blog",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node build/devServer.js",
@@ -13,7 +13,7 @@
     "xue",
     "jiao",
     "vue",
-    "scaffold"
+    "blog"
   ],
   "author": "taoxuejiao",
   "license": "ISC",
@@ -44,7 +44,7 @@
     "vue-loader": "^13.0.5",
     "vue-style-loader": "^3.0.3",
     "vue-template-compiler": "^2.4.4",
-    "vuex": "^2.4.0",
+    "vuex": "^2.5.0",
     "webpack": "^3.6.0",
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.19.1",
@@ -52,6 +52,7 @@
     "webpack-validator": "^3.0.0"
   },
   "dependencies": {
-    "vue": "^2.4.4"
+    "vue": "^2.4.4",
+    "vue-router": "^3.0.1"
   }
 }

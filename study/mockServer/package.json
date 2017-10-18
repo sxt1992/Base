@@ -1,0 +1,21 @@
+{
+  "name": "mockserver",
+  "version": "1.0.0",
+  "description": "mock data",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "keywords": [
+    "mock",
+    "data"
+  ],
+  "author": "taoxuejiao",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.16.2",
+    "mockjs": "^1.0.1-beta3",
+    "nodemon": "^1.12.1"
+  }
+}

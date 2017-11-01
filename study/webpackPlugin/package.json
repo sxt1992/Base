@@ -1,0 +1,19 @@
+{
+  "name": "webpack-plugin",
+  "version": "1.0.0",
+  "description": "webpack plugin development",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webpack",
+    "plugin",
+    "development"
+  ],
+  "author": "taoxj",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^3.8.1"
+  }
+}

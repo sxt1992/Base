@@ -1,10 +1,11 @@
 export default function checkChess(matrix, r, c, data) {
-  let i, rMin = r < 6 ? 0 : r - 5,
-      rMax = r > 9 ? 10 : r + 5,
-      cMin = r < 6 ? 0 : r - 5,
-      cMax = r > 9 ? 10 : r + 5,
-      rowData = matrix[r];
-  let colData = Array.from({length: matrix[0].length}).map((_, index) => matrix[index][c]);
+  let i;
+  const rMin = r < 6 ? 0 : r - 5,
+    rMax = r > 9 ? 10 : r + 5,
+    cMin = r < 6 ? 0 : r - 5,
+    cMax = r > 9 ? 10 : r + 5,
+    rowData = matrix[r],
+    colData = Array.from({ length: matrix[0].length }).map((_, index) => matrix[index][c]);
 
   // 验证 行
   for (i = cMin; i <= cMax; i++) {
@@ -22,16 +23,16 @@ export default function checkChess(matrix, r, c, data) {
   // 验证 反斜杠 \
   let len = 1;
   i = 1;
-  while(true) {
-    if (r < i || c < i || matrix[r - i][c - i] !== data){
+  while (true) {
+    if (r < i || c < i || matrix[r - i][c - i] !== data) {
       break;
     }
     len++;
     i++;
   }
   i = 1;
-  while(true) {
-    if (r + i > 14 || c + i > 14 || matrix[r + i][c + i] !== data){
+  while (true) {
+    if (r + i > 14 || c + i > 14 || matrix[r + i][c + i] !== data) {
       break;
     }
     len++;
@@ -43,16 +44,16 @@ export default function checkChess(matrix, r, c, data) {
   // 验证 正斜杠 /
   len = 1;
   i = 1;
-  while(true) {
-    if (r < i || c + i > 14 || matrix[r - i][c + i] !== data){
+  while (true) {
+    if (r < i || c + i > 14 || matrix[r - i][c + i] !== data) {
       break;
     }
     len++;
     i++;
   }
   i = 1;
-  while(true) {
-    if (r + i > 14 || c < i || matrix[r + i][c - i] !== data){
+  while (true) {
+    if (r + i > 14 || c < i || matrix[r + i][c - i] !== data) {
       break;
     }
     len++;
@@ -63,4 +64,4 @@ export default function checkChess(matrix, r, c, data) {
   }
 
   return false;
-};
+}

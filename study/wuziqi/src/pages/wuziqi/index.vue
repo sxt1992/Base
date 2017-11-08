@@ -16,7 +16,7 @@
       </div>
       <div class="chess">
         <template v-for="rowData,row in matrix">
-          <i v-for="data,col in rowData" :class="{'white-chess': data===2, 'black-chess': data===1}" :style="{top: row*25 + 13 + 'px', left: col*25 + 13 + 'px'}" @click="playChess(row, col, data)">
+          <i v-for="data,col in rowData" :class="{'white-chess': data===1, 'black-chess': data===2}" :style="{top: row*25 + 13 + 'px', left: col*25 + 13 + 'px'}" @click="playChess(row, col, data)">
               <template v-if="data===0">
                 <b class="up-left"></b>
                 <b class="up-right"></b>
@@ -28,8 +28,8 @@
       </div>
     </div>
     <div class="scores-panel">
-      <h2>正在操作 {{activeChell === 2 ? '白棋' : '黑棋'}}</h2>
-      <i :class="{'active-white-chess': activeChell===2, 'active-black-chess': activeChell===1}"></i>
+      <h2>正在操作 {{AIplay ? '白棋' : '黑棋'}}</h2>
+      <i :class="{'active-white-chess': AIplay, 'active-black-chess': !AIplay}"></i>
     </div>
     <div class="operate"></div>
     <div class="gray-bg" v-show="AIplay">
@@ -42,6 +42,10 @@
 </template>
 
 <script>
+import comput from './AI.js';
+import checkChess from './checker.js';
+
+// AI 为 1
 const initMatrix = JSON.stringify([
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -59,13 +63,27 @@ const initMatrix = JSON.stringify([
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]);
+const initScores = (() => {
+  const scores = [];
+  for (let i = 0; i < 15; i++) {
+    for (let j = 0; j < 15; j++) {
+      scores.push({
+        r: i,
+        c: j,
+        s: 0,
+      });
+    }
+  }
+  return JSON.stringify(scores);
+})();
+
 export default {
   name: 'wuziqi',
   data() {
     return {
       matrix: JSON.parse(initMatrix),
-      activeChell: 1,
       AIplay: false,
+      scores: JSON.parse(initScores),
     };
   },
   methods: {
@@ -73,10 +91,22 @@ export default {
       if (this.AIplay || data !== 0) {
         return;
       }
+      this.matrix[r][c] = 2;
+      if (checkChess(this.matrix, r, c, 2)) {
+        window.alert('你赢了!');
+        return;
+      }
+      comput(this.matrix, this.scores, r, c);
       this.AIplay = true;
-      this.matrix[r][c] = this.activeChell;
-      this.activeChell = [0, 2, 1][this.activeChell];
-      setTimeout(() => { this.AIplay = false; }, 10000);
+      new Promise(res => res()).then(() => {
+        const res = comput(this.matrix, this.scores, r, c);
+        if (res[2] >= 100000) {
+          window.alert('你输了!');
+          return;
+        }
+        this.matrix[res[0]][res[1]] = 1;
+        this.AIplay = false;
+      });
     },
   },
 };

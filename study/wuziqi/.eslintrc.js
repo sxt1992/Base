@@ -18,6 +18,7 @@ module.exports = {
   // add your custom rules here
   'rules': {
     'no-constant-condition': 0,
+    'linebreak-style': [2, "windows"],
     'import/extensions': 0,
     'import/no-unresolved': 0,
     // allow async-await

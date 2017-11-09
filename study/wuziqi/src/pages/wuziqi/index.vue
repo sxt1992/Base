@@ -84,29 +84,52 @@ export default {
       matrix: JSON.parse(initMatrix),
       AIplay: false,
       scores: JSON.parse(initScores),
+      activeRC: [0, 0],
     };
+  },
+  updated() {
+    if (this.AIplay) {
+      if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], 1)) {
+        window.alert('AI 赢了!');
+        console.log(111);
+        return;
+      }
+      this.AIplay = false;
+    } else {
+      if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], 2)) {
+        window.alert('你 赢了!');
+        console.log(222);
+        return;
+      }
+      this.AIplay = true;
+      new Promise(res => res()).then(() => {
+        const res = comput(this.matrix, this.scores);
+        this.matrix[res[0]][res[1]] = 1;
+        this.removeScore(res[0], res[1]);
+        this.activeRC = [res[0], res[1]];
+      });
+    }
   },
   methods: {
     playChess(r, c, data) {
       if (this.AIplay || data !== 0) {
         return;
       }
-      this.matrix[r][c] = 2;
-      if (checkChess(this.matrix, r, c, 2)) {
-        window.alert('你赢了!');
-        return;
-      }
-      comput(this.matrix, this.scores, r, c);
-      this.AIplay = true;
-      new Promise(res => res()).then(() => {
-        const res = comput(this.matrix, this.scores, r, c);
-        if (res[2] >= 100000) {
-          window.alert('你输了!');
+      const v = 2;
+      this.matrix[r][c] = v;
+      this.removeScore(r, c);
+      this.activeRC = [r, c];
+    },
+    removeScore(r, c) {
+      let k = 0;
+      const len = this.scores.length;
+      while (k < len) {
+        if (this.scores[k].r === r && this.scores[k].c === c) {
+          this.scores.splice(k, 1);
           return;
         }
-        this.matrix[res[0]][res[1]] = 1;
-        this.AIplay = false;
-      });
+        k++;
+      }
     },
   },
 };

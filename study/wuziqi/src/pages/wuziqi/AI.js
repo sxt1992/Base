@@ -270,20 +270,10 @@ function getChessScore(matrix, r, c, data) {
 }
 
 // ai : 1
-export default function comput(matrix, scores, r, c) {
-  let rMin = r < 5 ? 0 : r - 4,
-    rMax = r > 10 ? 10 : r + 4,
-    cMin = c < 5 ? 0 : c - 4,
-    cMax = c > 10 ? 10 : c + 4;
+export default function comput(matrix, scores) {
   const len = scores.length;
-  if (r == null || c == null) {
-    rMin = 0;
-    rMax = 14;
-    cMin = 0;
-    cMax = 14;
-  }
-  for (let i = rMin; i <= rMax; i++) {
-    for (let j = cMin; j <= cMax; j++) {
+  for (let i = 0; i < 15; i++) {
+    for (let j = 0; j < 15; j++) {
       if (matrix[i][j] !== 0) {
         continue;
       }

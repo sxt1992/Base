@@ -17,17 +17,7 @@ module.exports = {
   ],
   // add your custom rules here
   'rules': {
-    // allow paren-less arrow functions
-    'arrow-parens': 0,
-    'linebreak-style': 0,
-    'no-plusplus': 0,
-    'no-continue': 0,
-    'no-continue': 0,
-    'one-var': 0,
-    'no-sequences': 0,
-    'no-mixed-operators': 0,
-    'no-param-reassign': 0,
-    'no-unused-expressions': 0,
+    'no-constant-condition': 0,
     'import/extensions': 0,
     'import/no-unresolved': 0,
     // allow async-await

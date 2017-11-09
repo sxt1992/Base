@@ -16,8 +16,12 @@
       </div>
       <div class="chess">
         <template v-for="rowData,row in matrix">
-          <i v-for="data,col in rowData" :class="{'white-chess': data===1, 'black-chess': data===2}" :style="{top: row*25 + 13 + 'px', left: col*25 + 13 + 'px'}" @click="playChess(row, col, data)">
-              <template v-if="data===0">
+          <i
+            v-for="data,col in rowData"
+            @click="playChess(row, col, data)"
+            :style="{top: row*25 + 13 + 'px', left: col*25 + 13 + 'px'}"
+            :class="{'white-chess': data===1, 'black-chess': data===2, 'last-chess': lastChess[0] === row && lastChess[1] === col}">
+              <template v-if="data === 0 || (lastChess[0] === row && lastChess[1] === col)">
                 <b class="up-left"></b>
                 <b class="up-right"></b>
                 <b class="down-left"></b>
@@ -25,13 +29,18 @@
               </template>
           </i>
         </template>
+        <div class="show-res" v-if="AIwin != null">
+          {{AIwin ? '对不起,你输了!' : '恭喜,你赢了!'}}
+        </div>
       </div>
     </div>
     <div class="scores-panel">
       <h2>正在操作 {{AIplay ? '白棋' : '黑棋'}}</h2>
       <i :class="{'active-white-chess': AIplay, 'active-black-chess': !AIplay}"></i>
     </div>
-    <div class="operate"></div>
+    <div class="operate">
+      <button @click="reGame">重新开始</button>
+    </div>
     <div class="gray-bg" v-show="AIplay">
       <div class="bg-cont">
         <div class="ai-playing"><i></i><i></i><i></i><i></i><i></i></div>
@@ -65,8 +74,8 @@ const initMatrix = JSON.stringify([
 ]);
 const initScores = (() => {
   const scores = [];
-  for (let i = 0; i < 15; i++) {
-    for (let j = 0; j < 15; j++) {
+  for (let i = 0; i < 15; i += 1) {
+    for (let j = 0; j < 15; j += 1) {
       scores.push({
         r: i,
         c: j,
@@ -77,6 +86,8 @@ const initScores = (() => {
   return JSON.stringify(scores);
 })();
 
+let isChessChange = false; // 只有 棋局变化才执行
+
 export default {
   name: 'wuziqi',
   data() {
@@ -85,38 +96,51 @@ export default {
       AIplay: false,
       scores: JSON.parse(initScores),
       activeRC: [0, 0],
+      lastChess: [-1, -1],
+      AIwin: null,
+      reGameIng: false, // 正在重新开始
     };
   },
+  watch: {
+    matrix() {
+      isChessChange = true;
+    },
+  },
   updated() {
-    if (this.AIplay) {
-      if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], 1)) {
-        window.alert('AI 赢了!');
-        console.log(111);
+    // 只有 棋局变化才执行
+    if (isChessChange) {
+      isChessChange = false;
+      if (this.reGameIng) {
+        this.reGameIng = false;
         return;
       }
-      this.AIplay = false;
-    } else {
-      if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], 2)) {
-        window.alert('你 赢了!');
-        console.log(222);
-        return;
-      }
-      this.AIplay = true;
-      new Promise(res => res()).then(() => {
+
+      if (this.AIplay) {
+        this.AIplay = false;
+        if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], 1)) {
+          this.AIwin = true;
+        }
+      } else {
+        if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], 2)) {
+          this.AIwin = false;
+          return;
+        }
+        this.AIplay = true;
         const res = comput(this.matrix, this.scores);
-        this.matrix[res[0]][res[1]] = 1;
+        this.lastChess = [res[0], res[1]];
+        this.$set(this.matrix[res[0]], res[1], 1);
         this.removeScore(res[0], res[1]);
         this.activeRC = [res[0], res[1]];
-      });
+      }
     }
   },
   methods: {
     playChess(r, c, data) {
-      if (this.AIplay || data !== 0) {
+      if (this.reGameIng || this.AIplay || data !== 0) {
         return;
       }
-      const v = 2;
-      this.matrix[r][c] = v;
+      this.lastChess = [r, c];
+      this.$set(this.matrix[r], c, 2);
       this.removeScore(r, c);
       this.activeRC = [r, c];
     },
@@ -128,8 +152,17 @@ export default {
           this.scores.splice(k, 1);
           return;
         }
-        k++;
+        k += 1;
       }
+    },
+    reGame() {
+      this.reGameIng = true;
+      this.AIplay = false;
+      this.scores = JSON.parse(initScores);
+      this.activeRC = [0, 0];
+      this.lastChess = [-1, -1];
+      this.AIwin = null;
+      this.matrix = JSON.parse(initMatrix);
     },
   },
 };
@@ -253,20 +286,29 @@ export default {
           cursor: default;
           box-shadow: 1px 1px 1px rgba(0,0,0,.5), -1px -1px 1px rgba(0,0,0,.5);
           background: linear-gradient(135deg, #000 -70%, #fff 80%);
-
-          b {
-            border-color: transparent;
-          }
         }
         &.black-chess {
           cursor: default;
           box-shadow: 1px 1px 1px rgba(0,0,0,.5), -1px -1px 1px rgba(0,0,0,.5);
           background: linear-gradient(135deg, #fff -70%, #000 80%);
-
+        }
+        &.last-chess {
           b {
-            border-color: transparent;
+            border-color: #f00;
           }
         }
+      }
+
+      .show-res {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        color: #fff;
+        line-height: 400px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.5);
       }
     }
   }

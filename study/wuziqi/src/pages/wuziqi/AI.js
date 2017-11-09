@@ -280,7 +280,7 @@ export default function comput(matrix, scores) {
       let k = 0;
       while (k < len) {
         if (scores[k].r === i && scores[k].c === j) {
-          scores[k].s = getChessScore(matrix, i, j, 2) * 0.3 + getChessScore(matrix, i, j, 1) * 0.7;
+          scores[k].s = getChessScore(matrix, i, j, 2) * 0.2 + getChessScore(matrix, i, j, 1) * 0.8;
           break;
         }
         k++;

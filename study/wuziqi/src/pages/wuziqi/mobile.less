@@ -1,0 +1,300 @@
+.wuziqi {
+    display: block !important;
+    h1 {
+        height: 1.25rem;
+        margin-bottom: 0.3125rem;
+        font-size: 0.5625rem;
+        line-height: 1.25rem;
+    }
+    .chessboard {
+        position: relative;
+        width: 10rem;
+        height: 10rem;
+        overflow: hidden;
+        box-shadow: 0 0 4px;
+        .board {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            font-size: 12px;
+            background: #d2b295;
+            ul {
+                width: 10rem;
+                height: 10rem;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+            .horizontal-line {
+                position: absolute;
+                top: 0;
+                left: 0;
+                padding: 0 0.625rem;
+                padding-left: 0.615rem;
+                li {
+                    width: 100%;
+                    height: 0.625rem;
+                    line-height: 1.25rem;
+                    border-bottom: 1px solid #563f27;
+                    b {
+                        position: relative;
+                        right: 19px;
+                        font-weight: normal;
+                    }
+                }
+            }
+            .vertical-line {
+                position: absolute;
+                top: 0;
+                left: 0;
+                padding: 0.616rem 0;
+                li {
+                    float: left;
+                    width: 0.625rem;
+                    height: 100%;
+                    border-right: 1px solid #563f27;
+                    b {
+                        position: relative;
+                        left: 0.5rem;
+                        bottom: 0.5rem;
+                        font-weight: normal;
+                    }
+                }
+            }
+            .board-point {
+                position: absolute;
+                width: 0.15rem;
+                height: 0.15rem;
+                border-radius: 1rem;
+                background: #000;
+                &.up-left {
+                    top: 2.4rem;
+                    left: 2.4rem;
+                }
+                &.up-right {
+                    top: 2.4rem;
+                    left: 7.4rem;
+                }
+                &.down-left {
+                    top: 7.4rem;
+                    left: 2.4rem;
+                }
+                &.down-right {
+                    top: 7.4rem;
+                    left: 7.4rem;
+                }
+                &.point-center {
+                    top: 4.9rem;
+                    left: 4.9rem;
+                }
+            }
+        }
+        .chess {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            i {
+                position: absolute;
+                width: 0.56rem;
+                height: 0.56rem;
+                border-radius: 2rem;
+                cursor: pointer;
+                b {
+                    float: left;
+                    width: 0.15rem;
+                    height: 0.15rem;
+                    border: 2px solid transparent;
+                    &.up-left {
+                        border-right: none;
+                        border-bottom: none;
+                    }
+                    &.up-right {
+                        margin-left: 0.26rem;
+                        border-left: none;
+                        border-bottom: none;
+                    }
+                    &.down-left {
+                        margin-top: 0.26rem;
+                        border-top: none;
+                        border-right: none;
+                    }
+                    &.down-right {
+                        margin-top: 0.26rem;
+                        margin-left: 0.26rem;
+                        border-left: none;
+                        border-top: none;
+                    }
+                }
+                &:hover {
+                    b {
+                        border-color: #f00;
+                    }
+                }
+                &.white-chess {
+                    cursor: default;
+                    box-shadow: 1px 1px 1px rgba(0, 0, 0, .5), -1px -1px 1px rgba(0, 0, 0, .5);
+                    background: linear-gradient(135deg, #000 -70%, #fff 80%);
+                }
+                &.black-chess {
+                    cursor: default;
+                    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5), 0 0 1px rgba(0, 0, 0, 0.5);
+                    background: linear-gradient(135deg, #fff -70%, #000 80%);
+                }
+                &.last-chess {
+                    b {
+                        border-color: #f00;
+                    }
+                }
+            }
+            .show-res {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                color: #fff;
+                line-height: 10rem;
+                text-align: center;
+                background: rgba(0, 0, 0, 0.5);
+            }
+        }
+    }
+    .scores-panel {
+        margin: 0.3125rem 0;
+        p {
+            height: 0.8rem;
+            margin: 0;
+            line-height: 0.8rem;
+            b {
+                display: inline-block;
+                margin: 0 0.6rem;
+                color: rgba(128, 76, 76, 0.78);
+                font-weight: bold;
+                font-size: 14px;
+                vertical-align: middle;
+            }
+            i {
+                color: rgba(148, 115, 69, 0.7);
+                font-style: normal;
+                font-weight: bold;
+            }
+        }
+        .scores-panel-word {
+            i {
+                height: 100%;
+                margin-left: 0.1rem;
+            }
+        }
+        .scores-panel-chess {
+            i {
+                display: inline-block;
+                width: 0.55rem;
+                height: 0.55rem;
+                border-radius: 1rem;
+                vertical-align: middle;
+                &.active-white-chess {
+                    box-shadow: 1px 1px 1px rgba(0, 0, 0, .5), -1px -1px 1px rgba(0, 0, 0, .5);
+                    background: linear-gradient(135deg, #000 -70%, #fff 80%);
+                }
+                &.active-black-chess {
+                    box-shadow: 1px 1px 1px rgba(0, 0, 0, .5), 0 0 1px rgba(0, 0, 0, .5);
+                    background: linear-gradient(135deg, #fff -70%, #000 80%);
+                }
+            }
+        }
+    }
+    .operate {
+        b {
+            position: relative;
+            float: left;
+            width: 21%;
+            height: 0.9rem;
+            margin: 0 2%;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 0.9rem;
+            text-align: center;
+            color: #fff;
+            border-radius: 3px;
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            background: #d2b295;
+            cursor: pointer;
+            user-select: none;
+            &:active {
+                font-weight: bold;
+                background: rgba(210, 178, 149, 0.9);
+                box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+            }
+            select {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                cursor: pointer;
+            }
+            &.disabled {
+                color: #b3b3b3;
+                background: #777;
+                cursor: not-allowed;
+                select {
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+    .gray-bg {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        .bg-cont {
+            .ai-playing {
+                display: flex;
+                justify-content: space-around;
+                i {
+                    width: 0.15rem;
+                    height: 1rem;
+                    background: #67cf22;
+                    animation: stretchdelay 1.2s ease-in-out infinite;
+                    &:nth-of-type(2) {
+                        animation-delay: -1.1s;
+                    }
+                    &:nth-of-type(3) {
+                        animation-delay: -1.0s;
+                    }
+                    &:nth-of-type(4) {
+                        animation-delay: -0.9s;
+                    }
+                    &:nth-of-type(5) {
+                        animation-delay: -0.8s;
+                    }
+                }
+            }
+            b {
+                display: block;
+                color: #fff;
+                font-weight: normal;
+            }
+        }
+    }
+}
+
+@keyframes stretchdelay {
+    0%,
+    40%,
+    100% {
+        transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1.0);
+    }
+}

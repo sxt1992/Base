@@ -270,7 +270,7 @@ function getChessScore(matrix, r, c, data) {
 }
 
 // ai : 1
-export default function comput(matrix, scores) {
+export default function comput(matrix, scores, data) {
   const len = scores.length;
   for (let i = 0; i < 15; i++) {
     for (let j = 0; j < 15; j++) {
@@ -280,7 +280,7 @@ export default function comput(matrix, scores) {
       let k = 0;
       while (k < len) {
         if (scores[k].r === i && scores[k].c === j) {
-          scores[k].s = getChessScore(matrix, i, j, 2) * 0.2 + getChessScore(matrix, i, j, 1) * 0.8;
+          scores[k].s = getChessScore(matrix, i, j, [0, 2, 1][data]) * 0.2 + getChessScore(matrix, i, j, data) * 0.8;
           break;
         }
         k++;

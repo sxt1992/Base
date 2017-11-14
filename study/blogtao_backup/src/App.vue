@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -10,12 +10,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 html {
     font-family: Tahoma, "Microsoft YaHei", "微软雅黑", "PingFang SC", SimHei;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
-    -webkit-tap-highlight-color: rgba(255,255,255,0);
     width: 100%;
     height: 100%;
 }

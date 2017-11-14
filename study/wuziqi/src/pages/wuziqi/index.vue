@@ -1,5 +1,5 @@
 <template>
-  <div class="wuziqi">
+  <div class="wuziqi" style="display: none">
     <h1>五子棋</h1>
     <div class="chessboard">
       <div class="board">
@@ -13,13 +13,18 @@
             <b>{{String.fromCharCode(index + 64)}}</b>
           </li>
         </ul>
+        <i class="board-point up-left"></i>
+        <i class="board-point up-right"></i>
+        <i class="board-point down-left"></i>
+        <i class="board-point down-right"></i>
+        <i class="board-point point-center"></i>
       </div>
       <div class="chess">
         <template v-for="rowData,row in matrix">
           <i
             v-for="data,col in rowData"
             @click="playChess(row, col, data)"
-            :style="{top: row*25 + 13 + 'px', left: col*25 + 13 + 'px'}"
+            :style="{top: isPc ? row*25 + 13 + 'px':row*0.625 + 0.3126 + 'rem', left: isPc ? col*25 + 13 + 'px':col*0.625 + 0.3126 + 'rem'}"
             :class="{'white-chess': data===1, 'black-chess': data===2, 'last-chess': lastChess[0] === row && lastChess[1] === col}">
               <template v-if="data === 0 || (lastChess[0] === row && lastChess[1] === col)">
                 <b class="up-left"></b>
@@ -29,17 +34,36 @@
               </template>
           </i>
         </template>
-        <div class="show-res" v-if="AIwin != null">
-          {{AIwin ? '对不起,你输了!' : '恭喜,你赢了!'}}
+        <div class="show-res" v-if="showWin != null">
+          {{showWin}}
         </div>
       </div>
     </div>
     <div class="scores-panel">
-      <h2>正在操作 {{AIplay ? '白棋' : '黑棋'}}</h2>
-      <i :class="{'active-white-chess': AIplay, 'active-black-chess': !AIplay}"></i>
+      <p class="scores-panel-word"><b>难度:</b><i>{{['', '一', '二' ,'三', '四' ,'五'][level]}}</i></p>
+      <p class="scores-panel-chess"><b>棋子:</b><i :class="{'active-white-chess': whichChess === 1, 'active-black-chess': whichChess === 2}"></i></p>
+      <p class="scores-panel-chess"><b>操作:</b><i :class="{'active-white-chess': nowChessShow, 'active-black-chess': !nowChessShow}"></i></p>
     </div>
     <div class="operate">
-      <button @click="reGame">重新开始</button>
+      <b :class="{disabled: gameIng}">
+        {{ whichChess === 2 ? '先手' : '后手'}}
+        <select v-model="whichChess" :disabled="gameIng">
+          <option :value="1">白棋</option>
+          <option :value="2">黑棋</option>
+        </select>
+      </b>
+      <b :class="{disabled: gameIng}">
+        难度
+        <select v-model="level" :disabled="gameIng">
+          <option :value="1">一</option>
+          <option :value="2">二</option>
+          <option :value="3">三</option>
+          <option :value="4">四</option>
+          <option :value="5">五</option>
+        </select>
+      </b>
+      <b @click="reGame">重来</b>
+      <b @click="lastStep" :class="{disabled: showWin != null || !gameIng}">悔棋</b>
     </div>
     <div class="gray-bg" v-show="AIplay">
       <div class="bg-cont">
@@ -54,57 +78,95 @@
 import comput from './AI.js';
 import checkChess from './checker.js';
 
+const isPc = (() => {
+  const uA = navigator.userAgent.toLowerCase();
+  const Agents = ['android', 'iphone', 'symbianos', 'windows phone', 'ipad', 'ipod'];
+  for (let v = 0; v < Agents.length; v += 1) {
+    if (uA.indexOf(Agents[v]) > 0) {
+      return false;
+    }
+  }
+  return true;
+})();
+// eslint-disable-next-line
+require.ensure([], require => require(`./${isPc ? 'pc' : 'mobile'}.less`));
+
 // AI 为 1
-const initMatrix = JSON.stringify([
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-]);
-const initScores = (() => {
+const initMatrix = (r, c, data) => {
+  const m = [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ];
+  if (r != null && c != null) {
+    m[r][c] = data != null ? data : 1;
+  }
+  return m;
+};
+const initScores = (r, c) => {
   const scores = [];
   for (let i = 0; i < 15; i += 1) {
     for (let j = 0; j < 15; j += 1) {
-      scores.push({
-        r: i,
-        c: j,
-        s: 0,
-      });
+      if (i !== r && j !== c) {
+        scores.push({
+          r: i,
+          c: j,
+          s: 0,
+        });
+      }
     }
   }
-  return JSON.stringify(scores);
-})();
+  return scores;
+};
 
 let isChessChange = false; // 只有 棋局变化才执行
+
+let scores = initScores();
+let steps = [];
+let reStep = false;
 
 export default {
   name: 'wuziqi',
   data() {
     return {
-      matrix: JSON.parse(initMatrix),
+      isPc, // 是否是pc登录
+      matrix: initMatrix(),
       AIplay: false,
-      scores: JSON.parse(initScores),
       activeRC: [0, 0],
       lastChess: [-1, -1],
-      AIwin: null,
+      showWin: null,
       reGameIng: false, // 正在重新开始
+      level: 1, // 难度
+      whichChess: 2, // 用户是什么棋
+      gameIng: false, // 正在进行中
     };
   },
   watch: {
     matrix() {
-      isChessChange = true;
+      isChessChange = !reStep;
+      reStep = false;
     },
+    whichChess() {
+      this.reGame();
+    },
+    level() {
+      this.reGame();
+    },
+  },
+  mounted() {
+    window.t = this;
   },
   updated() {
     // 只有 棋局变化才执行
@@ -115,20 +177,22 @@ export default {
         return;
       }
 
+      const AIChess = this.whichChess === 2 ? 1 : 2;
       if (this.AIplay) {
         this.AIplay = false;
-        if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], 1)) {
-          this.AIwin = true;
+        if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], AIChess)) {
+          this.showWin = '对不起,你输了!';
         }
       } else {
-        if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], 2)) {
-          this.AIwin = false;
+        if (checkChess(this.matrix, this.activeRC[0], this.activeRC[1], this.whichChess)) {
+          this.showWin = '恭喜,你赢了!';
           return;
         }
         this.AIplay = true;
-        const res = comput(this.matrix, this.scores);
+        const res = comput(this.matrix, scores, AIChess);
         this.lastChess = [res[0], res[1]];
-        this.$set(this.matrix[res[0]], res[1], 1);
+        steps.push([res[0], res[1], AIChess]);
+        this.$set(this.matrix[res[0]], res[1], AIChess);
         this.removeScore(res[0], res[1]);
         this.activeRC = [res[0], res[1]];
       }
@@ -136,248 +200,85 @@ export default {
   },
   methods: {
     playChess(r, c, data) {
+      this.gameIng = true;
       if (this.reGameIng || this.AIplay || data !== 0) {
         return;
       }
       this.lastChess = [r, c];
-      this.$set(this.matrix[r], c, 2);
+      steps.push([r, c, this.whichChess]);
+      this.$set(this.matrix[r], c, this.whichChess);
       this.removeScore(r, c);
       this.activeRC = [r, c];
     },
     removeScore(r, c) {
+      const len = scores.length;
+      if (len < 2) {
+        this.showWin = '已经下满棋盘! 和局!';
+        return;
+      }
       let k = 0;
-      const len = this.scores.length;
       while (k < len) {
-        if (this.scores[k].r === r && this.scores[k].c === c) {
-          this.scores.splice(k, 1);
+        if (scores[k].r === r && scores[k].c === c) {
+          scores.splice(k, 1);
           return;
         }
         k += 1;
       }
     },
+    lastStep() {
+      if (this.showWin != null || !this.gameIng) {
+        // eslint-disable-next-line
+        return;
+      }
+      const s1 = steps.pop();
+      const s2 = steps.pop();
+      if (s1) {
+        reStep = true;
+        this.$set(this.matrix[s1[0]], s1[1], 0);
+      }
+      if (s2) {
+        reStep = true;
+        this.$set(this.matrix[s2[0]], s2[1], 0);
+      }
+      let lastChess = [-1, -1];
+      if (steps.length > 0) {
+        lastChess = [steps[steps.length - 1][0], steps[steps.length - 1][1]];
+      }
+      this.lastChess = lastChess;
+    },
     reGame() {
+      this.gameIng = false;
       this.reGameIng = true;
       this.AIplay = false;
-      this.scores = JSON.parse(initScores);
-      this.activeRC = [0, 0];
-      this.lastChess = [-1, -1];
-      this.AIwin = null;
-      this.matrix = JSON.parse(initMatrix);
+      steps = this.whichChess === 1 ? [[7, 7, 2]] : [];
+      scores = initScores(...(this.whichChess === 1 ? [7, 7] : []));
+      this.activeRC = this.whichChess === 1 ? [7, 7] : [0, 0];
+      this.lastChess = this.whichChess === 1 ? [7, 7] : [-1, -1];
+      this.showWin = null;
+      this.matrix = initMatrix(...(this.whichChess === 1 ? [7, 7, 2] : []));
+    },
+  },
+  computed: {
+    nowChessShow() {
+      if (+this.whichChess === 2) {
+        return this.AIplay;
+      }
+      return !this.AIplay;
     },
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
+<style lang="less" scoped>
 .wuziqi {
-  .chessboard{
-    position: relative;
-    width: 400px;
-    height: 400px;
-
-    .board {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      font-size: 12px;
-      background: #d2b295;
-
-      ul {
-        width: 400px;
-        height: 400px;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-      .horizontal-line{
-        position: absolute;
-        top: 0;
-        left: 0;
-        padding: 0 25px;
-        padding-left: 24px;
-
-        li {
-          width: 100%;
-          height: 25px;
-          line-height: 50px;
-          border-bottom: 1px solid #563f27;
-
-          b {
-            position: relative;
-            right: 19px;
-            font-weight: normal;
-          }
-        }
-      }
-      .vertical-line{
-        position: absolute;
-        top:0;
-        left: 0;
-        padding: 25px 0;
-
-        li {
-          float: left;
-          width: 25px;
-          height: 100%;
-          border-right: 1px solid #563f27;
-
-          b {
-            position: relative;
-            left: 20px;
-            bottom: 20px;
-            font-weight: normal;
-          }
-        }
-      }
-    }
-
-    .chess {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-
-      i {
-        position: absolute;
-        width: 22px;
-        height: 22px;
-        border-radius: 50px;
-        cursor: pointer;
-
-        b {
-          float: left;
-          width: 6px;
-          height: 6px;
-          border: 2px solid transparent;
-
-          &.up-left {
-            border-right: none;
-            border-bottom: none;
-          }
-          &.up-right {
-            margin-left: 10px;
-
-            border-left: none;
-            border-bottom: none;
-          }
-          &.down-left {
-            margin-top: 10px;
-
-            border-top: none;
-            border-right: none;
-          }
-          &.down-right {
-            margin-top: 10px;
-            margin-left: 10px;
-
-            border-left: none;
-            border-top: none;
-          }
-        }
-
-        &:hover {
-          b {
-            border-color: #f00;
-          }
-        }
-        &.white-chess {
-          cursor: default;
-          box-shadow: 1px 1px 1px rgba(0,0,0,.5), -1px -1px 1px rgba(0,0,0,.5);
-          background: linear-gradient(135deg, #000 -70%, #fff 80%);
-        }
-        &.black-chess {
-          cursor: default;
-          box-shadow: 1px 1px 1px rgba(0,0,0,.5), -1px -1px 1px rgba(0,0,0,.5);
-          background: linear-gradient(135deg, #fff -70%, #000 80%);
-        }
-        &.last-chess {
-          b {
-            border-color: #f00;
-          }
-        }
-      }
-
-      .show-res {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        color: #fff;
-        line-height: 400px;
-        text-align: center;
-        background: rgba(0, 0, 0, 0.5);
-      }
-    }
-  }
-  .scores-panel {
-    h2 {
-      margin: 0;
-      padding: 0;
-      font-weight: normal;
-      font-size: 14px;
-    }
-    i {
-      display: block;
-      width: 22px;
-      height: 22px;
-      border-radius: 50px;
-
-      &.active-white-chess {
-        box-shadow: 1px 1px 1px rgba(0,0,0,.5), -1px -1px 1px rgba(0,0,0,.5);
-        background: linear-gradient(135deg, #000 -70%, #fff 80%);
-      }
-      &.active-black-chess {
-        box-shadow: 1px 1px 1px rgba(0,0,0,.5), -1px -1px 1px rgba(0,0,0,.5);
-        background: linear-gradient(135deg, #fff -70%, #000 80%);
-      }
-    }
-  }
-  .gray-bg {
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-
-    .bg-cont {
-      .ai-playing {
-        display: flex;
-        justify-content: space-around;
-
-        i {
-          width: 6px;
-          height: 40px;
-          background: #67cf22;
-          animation: stretchdelay 1.2s ease-in-out infinite;
-
-          &:nth-of-type(2){ animation-delay: -1.1s; }
-          &:nth-of-type(3){ animation-delay: -1.0s; }
-          &:nth-of-type(4){ animation-delay: -0.9s; }
-          &:nth-of-type(5){ animation-delay: -0.8s; }
-        }
-      }
-      b {
-        display: block;
-        color: #fff;
-        font-weight: normal;
-      }
-    }
-  }
-}
-
-@keyframes stretchdelay {
-  0%, 40%, 100% {
-    transform: scaleY(0.4);
-  }
-  20% {
-    transform: scaleY(1.0);
+  h1 {
+    margin-top: 0;
+    color: #d43a3a;
+    font-weight: normal;
+    text-align: center;
+    text-shadow: 0 0 4px;
+    box-shadow: 0 0 4px #000;
+    background: #d2b295;    
   }
 }
 </style>

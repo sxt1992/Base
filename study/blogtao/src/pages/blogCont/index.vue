@@ -1,7 +1,7 @@
 <template>
-    <div class="home">
-        看我国家哪像染病
-    </div>
+  <div class="home">
+    木兮的网络博客
+  </div>
 </template>
 <script>
 export default {
@@ -13,4 +13,5 @@ export default {
 };
 </script>
 <style scoped lang="less">
+
 </style>

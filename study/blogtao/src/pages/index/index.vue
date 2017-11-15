@@ -33,24 +33,19 @@
             </div>
           </div>
         </div>
-        fds
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+        <div class="article-main">
+          <div class="article-list">
+            <h3>热门推荐</h3>
+            <ul>
+              <li>内容1</li>
+              <li>内容2</li>
+            </ul>
+            <div class="pagination">
+              <em>﹤</em>﹥>
+            </div>
+          </div>
+          <div class="article-about">fdu76fsd</div>
+        </div>
       </main>
       <footer></footer>
     </div>
@@ -104,6 +99,7 @@ export default {
           &.active {
             color: #fff;
             text-shadow: none;
+            border-radius: 6px;
             background: rgba(95, 173, 255, 0.93);
           }
         }
@@ -211,6 +207,21 @@ export default {
             box-shadow: 0px 2px 4px #111;
           }
         }
+      }
+    }
+    .article-main {
+      width: 1200px;
+      margin: auto;
+      overflow: hidden;
+      .article-list {
+        float: left;
+        width: 800px;
+        background: red;
+      }
+      .article-about {
+        float: right;
+        width: 360px;
+        background: blue;
       }
     }
   }

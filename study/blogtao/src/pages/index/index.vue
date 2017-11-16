@@ -41,7 +41,7 @@
               <li>内容2</li>
             </ul>
             <div class="pagination">
-              <em>﹤</em>﹥>
+              <em>&gt;</em>
             </div>
           </div>
           <div class="article-about">fdu76fsd</div>

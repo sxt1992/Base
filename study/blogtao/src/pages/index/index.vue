@@ -64,6 +64,9 @@
               <b>
                 <i class="icons-page-left"></i>
               </b>
+              <b>
+                <i class="icons-page-left-gray"></i>
+              </b>
               <b>1</b>
               <b>2</b>
               <b>3</b>
@@ -86,6 +89,9 @@
               <b>8</b>
               <b>9</b>
               <b>
+                <i class="icons-page-right-gray"></i>
+              </b>
+              <b>
                 <i class="icons-page-right"></i>
               </b>
             </div>
@@ -94,13 +100,15 @@
             <div class="article-about-item">
               <h3>关于作者</h3>
               <div class="about-me">
-                <div>
-                  <img style="width: 100px;height:150px;" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=828278738,2158381752&fm=11&gp=0.jpg">
-                  <p>陶雪焦，2016年毕业于浙江理工大学，现就职于杭州大搜车，专注web前端领域。</p>
-                  <p>邮箱：taoxj1992@163.com</p>
-                  <p>关注我：<a>新浪微博</a><a>知乎</a></p>
+                <div class="me-pic">
+                  <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=828278738,2158381752&fm=11&gp=0.jpg">
+                  <div class="me-resume">
+                    <p>陶雪焦，2016年毕业于浙江理工大学，现就职于杭州大搜车，专注web前端领域。</p>
+                    <p>邮箱：<a href="mailto:taoxj1992@163.com">taoxj1992@163.com</a></p>
+                    <p>关注我：<a href="#">新浪微博</a><a href="#">知乎</a></p>
+                  </div>
                 </div>
-                <div>
+                <div class="me-say">
                   上周我做了个demo，使用SVG实现了一个彩条圆环倒计时效果，使用SVG实现的优点是兼容性非常好，不足在于学习成本比较高，于是我就琢磨有没有更简单的方法实现类似的多彩圆环渐变效果，最好纯CSS就能搞定。绞尽脑汁想出了下面三种实现
                 </div>
               </div>
@@ -108,11 +116,7 @@
             <div class="article-about-item">
               <h3>最新文章</h3>
               <ul class="new-article">
-                <li><a href="#">重新解读常见的排序算法</a></li>
-                <li><a href="#">重新解读常见的排序算法</a></li>
-                <li><a href="#">重新解读常见的排序算法</a></li>
-                <li><a href="#">重新解读常见的排序算法</a></li>
-                <li><a href="#">重新解读常见的排序算法</a></li>
+                <li v-for="index in 8"><b>{{index}}. </b><a href="#">重新解读常见的排序算法</a></li>
               </ul>
             </div>
             <div class="article-about-item">
@@ -125,12 +129,13 @@
         </div>
       </main>
       <footer>
-        <p>Designed by WoodXi</p>
-        <p>Copyright &copy;{{new Date().getFullYear()}} WoodXi. All rights reserved.</p>
+        <p>Copyright &copy;{{new Date().getFullYear()}} <a href="#">WoodXi</a>. All rights reserved.</p>
+        <p>Designed by <a href="#">WoodXi</a> | <a href="javascript:;">浙ICP备 15005679号</a></p>
         <p>
-          <em>浙ICP备15005679号</em>
-          <img ondragstart="return false" onselectstart="return false" src="../../assets/images/beian.png">
-          <em>浙公网安备 33011002012836号</em>
+          <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33011002012836">
+            <img ondragstart="return false" onselectstart="return false" src="../../assets/images/beian.png">
+            <em>浙公网安备 33011002012836号</em>
+          </a>
         </p>
       </footer>
     </div>
@@ -147,6 +152,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
+@hrefColor: #33b399;
 header {
   user-select: none;
 
@@ -300,7 +306,7 @@ header {
       overflow: hidden;
       .article-list {
         float: left;
-        width: 800px;
+        width: 790px;
 
         h3 {
           height: 54px;
@@ -365,6 +371,7 @@ header {
 
                 &:hover {
                   color: #0b657d;
+                  text-decoration: underline;
                 }
               }
               .article-pre-cont {
@@ -422,7 +429,7 @@ header {
         width: 360px;
 
         .article-about-item {
-          h3 {
+          >h3 {
             height: 54px;
             margin: 16px 0 10px;
             font-size: 18px;
@@ -430,36 +437,136 @@ header {
             color: #666;
             border-bottom: 1px solid #ccc;
           }
+          .about-me {
+            font-size: 13px;
+            .me-pic {
+              overflow: hidden;
+              img {
+                float: left;
+                width: 100px;
+                height: 120px;
+              }
+              .me-resume {
+                float: right;
+                width: 250px;
+                p {
+                  margin: 0;
+                  margin-top: 10px;
+                  a {
+                    margin-left: 6px;
+                    color: @hrefColor;
+                    text-decoration: none;
+
+                    &:hover {
+                      text-decoration: underline;
+                    }
+                  }
+                }
+              }
+            }
+            .me-say {
+              margin-top: 8px;
+            }
+          }
+          .new-article {
+            li {
+              height: 26px;
+              b {
+                font-style: italic;
+                font-weight: bold;
+                font-size: 16px;
+                font-family: 'Times New Roman';
+              }
+              a {
+                color: @hrefColor;
+                text-decoration: none;
+
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
+          }
         }
       }
     }
   }
 }
 footer {
+  margin: 20px auto;
   p {
+    height: 16px;
     margin: auto;
     padding: 0;
     font-size: 12px;
+    line-height: 16px;
     text-align: center;
+
+    a {
+      color: @hrefColor;
+      text-decoration: none;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
     em {
       font-style: normal;
       font-weight: normal;
     }
     img {
       display: inline-block;
+      width: 14px;
+      height: 14px;
+      vertical-align: bottom;
     }
   }
 }
 .pagination {
+  font-family: Arial;
+  overflow: hidden;
   em {}
   b {
+    float: left;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid #dddee1;
+    box-sizing: content-box;
+
     i {
-      &.icons-page-left{}
-      &.icons-page-double-left{}
-      &.icons-page-ellipsis{}
-      &.icons-page-ellipsis{}
-      &.icons-page-double-right{}
-      &.icons-page-right{}
+      display: block;
+      width: 16px;
+      height: 16px;
+      margin-top: 7px;
+      margin-left: 7px;
+      background-image: url(../../assets/images/icons.png);
+      background-position-y: 0;
+
+      &.icons-page-left{
+        background-position-x: -32px;
+      }
+      &.icons-page-left-gray{
+        background-position-x: -64px;
+      }
+      &.icons-page-double-left{
+        background-position-x: 0;
+      }
+      &.icons-page-ellipsis{
+        background-position-x: -96px;
+      }
+      &.icons-page-double-right{
+        background-position-x: -16px;
+      }
+      &.icons-page-right{
+        background-position-x: -48px;
+      }
+      &.icons-page-right-gray{
+        background-position-x: -80px;
+      }
     }
   }
 }

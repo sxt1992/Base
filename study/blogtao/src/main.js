@@ -8,6 +8,11 @@ import './assets/less/common.less';
 
 Vue.use(Vuex);
 
+const app = document.getElementById('app');
+if (app) {
+  app.innerHTML = '';
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

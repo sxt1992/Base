@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>获取初始化图片</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #down {
+            margin: 30px auto;
+            text-align: center;
+        }
+        a::after {
+          content: '';
+          display: block;
+        }
+        img {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="down"></div>
+    <script type="text/javascript">
+// initImage.html?w=200&h=300&color=ff0000&bg=589&text=789
+function querystringParse (s) {
+  var obj = {}
+  var index = s.indexOf('?')
+  if (index < 0) {
+    return obj
+  }
+  s = s.substring(index + 1)
+  index = s.indexOf('#')
+  if (index > -1) {
+    s = s.substring(0, index)
+  }
+  var arr = s.split('&')
+  for (var i = 0; i < arr.length; i += 1) {
+    index = arr[i].indexOf('=')
+    if (index < 0) {
+      obj[arr[i]] = true
+    } else {
+      var value = arr[i].substring(index + 1)
+      var num = parseFloat(value)
+      if (!isNaN(num) && num + '' === value) {
+        value = num
+      }
+      obj[arr[i].substring(0, index)] = value
+    }
+  }
+  return obj
+}
+        var queryObj = querystringParse(window.location.href);
+        queryObj = Object.assign({
+            w: 200,
+            h: 300,
+            bg: '808080',
+            color: 'fff'
+        }, queryObj);
+        queryObj.bg = '#' + queryObj.bg;
+        queryObj.color = '#' + queryObj.color;
+
+        !queryObj.text && (queryObj.text = queryObj.w+ '×' + queryObj.h);
+        var ctx = document.createElement('canvas').getContext('2d');
+        ctx.canvas.width = queryObj.w;
+        ctx.canvas.height = queryObj.h;
+
+        var bgCor = queryObj.bg;
+        var textCor = queryObj.color;
+
+        ctx.fillStyle = bgCor;
+        ctx.fillRect(0, 0, queryObj.w, queryObj.h);
+
+        ctx.fillStyle = textCor;
+        ctx.font = 0.12*queryObj.h + 'px SnellRoundhand';
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        ctx.fillText(queryObj.text,queryObj.w/2,queryObj.h/2,queryObj.w);
+
+        var picSrc = ctx.canvas.toDataURL('image/png', 0.92);
+
+        var a = document.createElement('a');
+        a.innerHTML = '下载图片';
+        a.setAttribute("href", picSrc);
+        a.setAttribute("download", queryObj.text);
+        document.getElementById('down').append(a);
+
+        var img = new Image();
+        img.src = picSrc;
+        document.getElementById('down').append(img);
+    </script>
+</body>
+</html>

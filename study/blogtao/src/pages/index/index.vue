@@ -59,39 +59,23 @@
                 </div>
               </li>
             </ul>
-            <div class="pagination">
-              <em>每页15条 / 共237条</em>
-              <b>
+            <div>{{curPage}}</div>
+            <Page :page-size="15" :total="totalItem"></Page>
+            <div class="pagination" :current="curPage">
+              <em>每页15条{{"\uF3D2\uF3D3\u2022\u2022\u2022"}} #2d8cf0 #666/ 共237条</em>
+              <b @click="pageUp" :class="{'not-up': curPage < 2}">
                 <i class="icons-page-left"></i>
               </b>
-              <b>
-                <i class="icons-page-left-gray"></i>
+              <b @click="pageClick(1)" :style="{color: curPage == 1? 'red': '#000'}">1</b>
+              <b v-show="curPage > 4" @click="pageSomeUp">
+                <i class="icons-page-ellipsis ellipsis-up"></i>
               </b>
-              <b>1</b>
-              <b>2</b>
-              <b>3</b>
-              <b>
-                <i class="icons-page-double-left"></i>
+              <b v-for="item in pageArr" @click="pageClick(item)" :style="{color: curPage == item? 'red': '#000'}">{{item}}</b>
+              <b v-show="curPage < Math.ceil(totalItem/15) - 3" @click="pageSomeDown">
+                <i class="icons-page-ellipsis ellipsis-down"></i>
               </b>
-              <b>
-                <i class="icons-page-ellipsis"></i>
-              </b>
-              <b>4</b>
-              <b>5</b>
-              <b>6</b>
-              <b>
-                <i class="icons-page-ellipsis"></i>
-              </b>
-              <b>
-                <i class="icons-page-double-right"></i>
-              </b>
-              <b>7</b>
-              <b>8</b>
-              <b>9</b>
-              <b>
-                <i class="icons-page-right-gray"></i>
-              </b>
-              <b>
+              <b v-show="Math.ceil(totalItem/15) > 1" @click="pageClick(Math.ceil(totalItem/15))" :style="{color: curPage == Math.ceil(totalItem/15)? 'red': '#000'}">{{Math.ceil(totalItem/15)}}</b>
+              <b @click="pageDown" :class="{'not-down': curPage > Math.ceil(totalItem/15) - 1}">
                 <i class="icons-page-right"></i>
               </b>
             </div>
@@ -147,7 +131,140 @@ export default {
     return {
       navActive: 1, // 当前对应nav
       articleNavActive: 0,
+      curPage: 1,
+      pageArr: [],
+      totalItem: 150,
     };
+  },
+  created() {
+    const pageSize = Math.ceil(this.totalItem / 15);
+    if (pageSize > 3) {
+      this.pageArr = [2, 3];
+    } else if (pageSize > 2) {
+      this.pageArr = [2];
+    }
+  },
+  methods: {
+    pageUp() {
+      if (this.curPage < 2) {
+        return;
+      }
+      const c = this.curPage - 1;
+      const arr = [];
+      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
+        arr.push(c);
+      }
+      if (c > 2) {
+        arr.unshift(c - 1);
+      }
+      if (c > 3) {
+        arr.unshift(c - 2);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 1) {
+        arr.push(c + 1);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 2) {
+        arr.push(c + 2);
+      }
+
+      this.curPage = c;
+      this.pageArr = arr;
+    },
+    pageSomeUp() {
+      let c = this.curPage - 5;
+      while (c < 1) {
+        c += 1;
+      }
+      const arr = [];
+      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
+        arr.push(c);
+      }
+      if (c > 2) {
+        arr.unshift(c - 1);
+      }
+      if (c > 3) {
+        arr.unshift(c - 2);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 1) {
+        arr.push(c + 1);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 2) {
+        arr.push(c + 2);
+      }
+      this.curPage = c;
+      this.pageArr = arr;
+    },
+    pageClick(item) {
+      const c = item;
+      const arr = [];
+      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
+        arr.push(c);
+      }
+      if (c > 2) {
+        arr.unshift(c - 1);
+      }
+      if (c > 3) {
+        arr.unshift(c - 2);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 1) {
+        arr.push(c + 1);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 2) {
+        arr.push(c + 2);
+      }
+      this.curPage = c;
+      this.pageArr = arr;
+    },
+    pageSomeDown() {
+      let c = this.curPage + 5;
+      while (c > Math.ceil(this.totalItem / 15) - 1) {
+        c -= 1;
+      }
+      const arr = [];
+      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
+        arr.push(c);
+      }
+      if (c > 2) {
+        arr.unshift(c - 1);
+      }
+      if (c > 3) {
+        arr.unshift(c - 2);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 1) {
+        arr.push(c + 1);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 2) {
+        arr.push(c + 2);
+      }
+      this.curPage = c;
+      this.pageArr = arr;
+    },
+    pageDown() {
+      if (this.curPage > Math.ceil(this.totalItem / 15) - 1) {
+        return;
+      }
+      const c = this.curPage + 1;
+      const arr = [];
+
+      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
+        arr.push(c);
+      }
+      if (c > 2) {
+        arr.unshift(c - 1);
+      }
+      if (c > 3) {
+        arr.unshift(c - 2);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 1) {
+        arr.push(c + 1);
+      }
+      if (c < Math.ceil(this.totalItem / 15) - 2) {
+        arr.push(c + 2);
+      }
+
+      this.curPage = c;
+      this.pageArr = arr;
+    },
   },
 };
 </script>
@@ -524,9 +641,15 @@ footer {
   }
 }
 .pagination {
+  height: 32px;
   font-family: Arial;
   overflow: hidden;
-  em {}
+  em {
+    float: left;
+    margin-right: 20px;
+    line-height: 32px;
+    font-family: fontIcons;
+  }
   b {
     float: left;
     width: 30px;
@@ -536,6 +659,7 @@ footer {
     border-radius: 4px;
     border: 1px solid #dddee1;
     box-sizing: content-box;
+    cursor: pointer;
 
     i {
       display: block;
@@ -549,22 +673,32 @@ footer {
       &.icons-page-left{
         background-position-x: -32px;
       }
-      &.icons-page-left-gray{
-        background-position-x: -64px;
-      }
-      &.icons-page-double-left{
-        background-position-x: 0;
-      }
       &.icons-page-ellipsis{
         background-position-x: -96px;
       }
-      &.icons-page-double-right{
-        background-position-x: -16px;
+      &.ellipsis-up {
+        &:hover {
+          background-position-x: 0;
+        }
+      }
+      &.ellipsis-down {
+        &:hover {
+          background-position-x: -16px;
+        }
       }
       &.icons-page-right{
         background-position-x: -48px;
       }
-      &.icons-page-right-gray{
+    }
+    &.not-up {
+      cursor: not-allowed;
+      .icons-page-left{
+        background-position-x: -64px;
+      }
+    }
+    &.not-down {
+      cursor: not-allowed;
+      .icons-page-right{
         background-position-x: -80px;
       }
     }

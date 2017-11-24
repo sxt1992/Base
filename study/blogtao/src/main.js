@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import iView from 'iview';
-import 'iview/dist/styles/iview.css';
+// import iView from 'iview';
+// import 'iview/dist/styles/iview.css';
 
 import App from './App';
 import router from './router';
@@ -9,7 +9,7 @@ import router from './router';
 import './assets/less/common.less';
 
 Vue.use(Vuex);
-Vue.use(iView);
+// Vue.use(iView);
 
 const app = document.getElementById('app');
 if (app) {

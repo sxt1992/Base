@@ -5,8 +5,8 @@
           <span>木兮的网站</span>
           <ul class="nav-title">
             <li v-for="item,index in ['首\t页','文\t章','游\t迹','留\t言','关\t于']"
-                @click="navActive = index"
-                :class="{active: index === navActive}">{{item.replace(/\t/g, '&nbsp;')}}</li>
+                @click="curNav = index"
+                :class="{active: index === curNav}">{{item.replace(/\t/g, '&nbsp;')}}</li>
           </ul>
           <ul class="login-about">
             <li>登&nbsp;录</li>
@@ -21,8 +21,8 @@
           <div class="article-nav-wrap">
             <ul class="article-nav">
               <li v-for="item,index in ['热\t门\t推\t荐','技\t术\t分\t享','随\t笔\t写\t意']"
-                  @click="articleNavActive = index"
-                  :class="{active: index === articleNavActive}">
+                  @click="curArticle = index"
+                  :class="{active: index === curArticle}">
                     <span>{{item.replace(/\t/g, '&nbsp;')}}</span>
                     <em></em>
               </li>
@@ -59,28 +59,38 @@
                 </div>
               </li>
             </ul>
-            <div>{{curPage}}</div>
-            <Page :page-size="15" :total="totalItem"></Page>
             <div class="pagination" :current="curPage">
-              <em>每页15条{{"\uF3D2\uF3D3\u2022\u2022\u2022"}} #2d8cf0 #666/ 共237条</em>
-              <b @click="pageUp" :class="{'not-up': curPage < 2}">
-                <i class="icons-page-left"></i>
+              <em>每页15条 / 共{{totalItem}}条</em>
+              <b @click="pageCount(-1)" :class="{'not-up-down': curPage < 2}">&#xf3d2;</b>
+              <b @click="pageCount(1)" :class="{active: curPage == 1}">1</b>
+              <b v-show="curPage > 4" @click="pageCount(-2)" class="double-arrow">
+                <i>&#x2022;&#x2022;&#x2022;</i>
+                <i>&#xf3d2;&#xf3d2;</i>
               </b>
-              <b @click="pageClick(1)" :style="{color: curPage == 1? 'red': '#000'}">1</b>
-              <b v-show="curPage > 4" @click="pageSomeUp">
-                <i class="icons-page-ellipsis ellipsis-up"></i>
+              <b v-for="item in pageArr" @click="pageCount(item)" :class="{active: curPage == item}">{{item}}</b>
+              <b v-show="curPage < totalPage - 3" @click="pageCount(-4)" class="double-arrow">
+                <i>&#x2022;&#x2022;&#x2022;</i>
+                <i>&#xf3d3;&#xf3d3;</i>
               </b>
-              <b v-for="item in pageArr" @click="pageClick(item)" :style="{color: curPage == item? 'red': '#000'}">{{item}}</b>
-              <b v-show="curPage < Math.ceil(totalItem/15) - 3" @click="pageSomeDown">
-                <i class="icons-page-ellipsis ellipsis-down"></i>
-              </b>
-              <b v-show="Math.ceil(totalItem/15) > 1" @click="pageClick(Math.ceil(totalItem/15))" :style="{color: curPage == Math.ceil(totalItem/15)? 'red': '#000'}">{{Math.ceil(totalItem/15)}}</b>
-              <b @click="pageDown" :class="{'not-down': curPage > Math.ceil(totalItem/15) - 1}">
-                <i class="icons-page-right"></i>
-              </b>
+              <b v-show="totalPage > 1" @click="pageCount(totalPage)" :class="{active: curPage == totalPage}">{{totalPage}}</b>
+              <b @click="pageCount(-3)" :class="{'not-up-down': curPage > totalPage - 1}">&#xf3d3;</b>
             </div>
           </div>
           <div class="article-about">
+            <div class="article-about-item">
+              <h3>热门标签</h3>
+              <ul class="article-hot-label">
+                <li v-for="item,index in ['javascript', 'java', 'php', 'node', 'html',   'javascript', 'java', 'php', 'node', 'html','javascript', 'java', 'php', 'node', 'html','javascript', 'java', 'php', 'node', 'html','javascript', 'java', 'php', 'node', 'html']"
+                    :class="{active: curLabel === index}"
+                    @click="curLabel = index">{{item}}</li>
+              </ul>
+            </div>
+            <div class="article-about-item">
+              <h3>最新文章</h3>
+              <ul class="new-article">
+                <li v-for="index in 8"><b>{{index}}. </b><a href="#">重新解读常见的排序算法</a></li>
+              </ul>
+            </div>
             <div class="article-about-item">
               <h3>关于作者</h3>
               <div class="about-me">
@@ -95,18 +105,6 @@
                 <div class="me-say">
                   上周我做了个demo，使用SVG实现了一个彩条圆环倒计时效果，使用SVG实现的优点是兼容性非常好，不足在于学习成本比较高，于是我就琢磨有没有更简单的方法实现类似的多彩圆环渐变效果，最好纯CSS就能搞定。绞尽脑汁想出了下面三种实现
                 </div>
-              </div>
-            </div>
-            <div class="article-about-item">
-              <h3>最新文章</h3>
-              <ul class="new-article">
-                <li v-for="index in 8"><b>{{index}}. </b><a href="#">重新解读常见的排序算法</a></li>
-              </ul>
-            </div>
-            <div class="article-about-item">
-              <h3>广告</h3>
-              <div class="article-ad">
-                这是广告
               </div>
             </div>
           </div>
@@ -129,124 +127,67 @@ export default {
   name: 'home',
   data() {
     return {
-      navActive: 1, // 当前对应nav
-      articleNavActive: 0,
-      curPage: 1,
-      pageArr: [],
-      totalItem: 150,
+      curNav: 1,  // 当前对应导航
+      curArticle: 0,
+      curLabel: -1,  // 当前选中标签
+      curPage: 1,  // 当前页数
+      pageArr: [],  // 中间显示
+      totalItem: 10000,  // 总条数
+      totalPage: 1,  // 总页数
     };
   },
+  watch: {
+    curPage(newValue) {
+      window.console.log(newValue);
+    },
+  },
   created() {
-    const pageSize = Math.ceil(this.totalItem / 15);
-    if (pageSize > 3) {
+    this.totalPage = Math.ceil(this.totalItem / 15);
+    if (this.totalPage > 3) {
       this.pageArr = [2, 3];
-    } else if (pageSize > 2) {
+    } else if (this.totalPage > 2) {
       this.pageArr = [2];
     }
   },
   methods: {
-    pageUp() {
-      if (this.curPage < 2) {
+    /**
+     * 分页处理
+     *
+     * @param {number} f
+     * -1: up
+     * -2: fiveUp
+     * -3: down
+     * -4: fiveDown
+     * > 0: 直接点击数字
+     */
+    pageCount(f) {
+      if ((f === -1 && this.curPage < 2) || (f === -3 && this.curPage > this.totalPage - 1)) {
         return;
       }
-      const c = this.curPage - 1;
-      const arr = [];
-      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
-        arr.push(c);
-      }
-      if (c > 2) {
-        arr.unshift(c - 1);
-      }
-      if (c > 3) {
-        arr.unshift(c - 2);
-      }
-      if (c < Math.ceil(this.totalItem / 15) - 1) {
-        arr.push(c + 1);
-      }
-      if (c < Math.ceil(this.totalItem / 15) - 2) {
-        arr.push(c + 2);
-      }
 
-      this.curPage = c;
-      this.pageArr = arr;
-    },
-    pageSomeUp() {
-      let c = this.curPage - 5;
-      while (c < 1) {
-        c += 1;
-      }
-      const arr = [];
-      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
-        arr.push(c);
-      }
-      if (c > 2) {
-        arr.unshift(c - 1);
-      }
-      if (c > 3) {
-        arr.unshift(c - 2);
-      }
-      if (c < Math.ceil(this.totalItem / 15) - 1) {
-        arr.push(c + 1);
-      }
-      if (c < Math.ceil(this.totalItem / 15) - 2) {
-        arr.push(c + 2);
-      }
-      this.curPage = c;
-      this.pageArr = arr;
-    },
-    pageClick(item) {
-      const c = item;
-      const arr = [];
-      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
-        arr.push(c);
-      }
-      if (c > 2) {
-        arr.unshift(c - 1);
-      }
-      if (c > 3) {
-        arr.unshift(c - 2);
-      }
-      if (c < Math.ceil(this.totalItem / 15) - 1) {
-        arr.push(c + 1);
-      }
-      if (c < Math.ceil(this.totalItem / 15) - 2) {
-        arr.push(c + 2);
-      }
-      this.curPage = c;
-      this.pageArr = arr;
-    },
-    pageSomeDown() {
-      let c = this.curPage + 5;
-      while (c > Math.ceil(this.totalItem / 15) - 1) {
-        c -= 1;
-      }
-      const arr = [];
-      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
-        arr.push(c);
-      }
-      if (c > 2) {
-        arr.unshift(c - 1);
-      }
-      if (c > 3) {
-        arr.unshift(c - 2);
-      }
-      if (c < Math.ceil(this.totalItem / 15) - 1) {
-        arr.push(c + 1);
-      }
-      if (c < Math.ceil(this.totalItem / 15) - 2) {
-        arr.push(c + 2);
-      }
-      this.curPage = c;
-      this.pageArr = arr;
-    },
-    pageDown() {
-      if (this.curPage > Math.ceil(this.totalItem / 15) - 1) {
+      let c;
+      if (f > 0) {
+        c = f;
+      } else if (f === -1) {
+        c = this.curPage - 1;
+      } else if (f === -2) {
+        c = this.curPage - 5;
+        while (c < 1) {
+          c += 1;
+        }
+      } else if (f === -3) {
+        c = this.curPage + 1;
+      } else if (f === -4) {
+        c = this.curPage + 5;
+        while (c > this.totalPage - 1) {
+          c -= 1;
+        }
+      } else {
         return;
       }
-      const c = this.curPage + 1;
       const arr = [];
 
-      if (c > 1 && c < Math.ceil(this.totalItem / 15)) {
+      if (c > 1 && c < this.totalPage) {
         arr.push(c);
       }
       if (c > 2) {
@@ -255,10 +196,10 @@ export default {
       if (c > 3) {
         arr.unshift(c - 2);
       }
-      if (c < Math.ceil(this.totalItem / 15) - 1) {
+      if (c < this.totalPage - 1) {
         arr.push(c + 1);
       }
-      if (c < Math.ceil(this.totalItem / 15) - 2) {
+      if (c < this.totalPage - 2) {
         arr.push(c + 2);
       }
 
@@ -554,6 +495,47 @@ header {
             color: #666;
             border-bottom: 1px solid #ccc;
           }
+          .article-hot-label {
+            font-size: 0;
+            li {
+              display: inline-block;
+              margin: 3px;
+              padding: 2px 8px;
+              font-size: 12px;
+              border: 1px solid #ccc;
+              border-radius: 100px;
+              cursor: pointer;
+              user-select: none;
+
+              &:hover {
+                color: #2d8cf0;
+                border-color: #2d8cf0;
+              }
+              &.active {
+                color: #fff;
+                background: #2d8cf0;
+              }
+            }
+          }
+          .new-article {
+            li {
+              height: 26px;
+              b {
+                font-style: italic;
+                font-weight: bold;
+                font-size: 16px;
+                font-family: 'Times New Roman';
+              }
+              a {
+                color: @hrefColor;
+                text-decoration: none;
+
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
+          }
           .about-me {
             font-size: 13px;
             .me-pic {
@@ -583,25 +565,6 @@ header {
             }
             .me-say {
               margin-top: 8px;
-            }
-          }
-          .new-article {
-            li {
-              height: 26px;
-              b {
-                font-style: italic;
-                font-weight: bold;
-                font-size: 16px;
-                font-family: 'Times New Roman';
-              }
-              a {
-                color: @hrefColor;
-                text-decoration: none;
-
-                &:hover {
-                  text-decoration: underline;
-                }
-              }
             }
           }
         }
@@ -642,65 +605,76 @@ footer {
 }
 .pagination {
   height: 32px;
+  margin: 20px 0;
   font-family: Arial;
   overflow: hidden;
   em {
     float: left;
-    margin-right: 20px;
+    margin-right: 12px;
     line-height: 32px;
     font-family: fontIcons;
   }
   b {
+    box-sizing: content-box;
     float: left;
     width: 30px;
     height: 30px;
+    margin-left: 8px;
     line-height: 30px;
+    font-family: fontIcons;
     text-align: center;
     border-radius: 4px;
     border: 1px solid #dddee1;
-    box-sizing: content-box;
+    background: #fff;
     cursor: pointer;
+    user-select: none;
+
+    &:nth-of-type(1) {
+      margin-left: 0;
+    }
+    &:hover {
+      color: #2d8cf0;
+      border-color: #2d8cf0;
+    }
 
     i {
       display: block;
-      width: 16px;
-      height: 16px;
-      margin-top: 7px;
-      margin-left: 7px;
-      background-image: url(../../assets/images/icons.png);
-      background-position-y: 0;
+      width: 100%;
+      height: 100%;
+      font-style: normal;
+      font-weight: 100;
+      font-family: fontIcons;
+      text-align: center;
+    }
+    &.double-arrow {
+      i {
+        display: none;
+        &:nth-of-type(1) {
+          display: block;
+          color: #ccc;
+          font-size: 12px;
+        }
+      }
+      &:hover {
+        border-color: #dddee1;
+        i {
+          display: block;
+          &:nth-of-type(1) {
+            display: none;
+          }
+        }
+      }
+    }
 
-      &.icons-page-left{
-        background-position-x: -32px;
-      }
-      &.icons-page-ellipsis{
-        background-position-x: -96px;
-      }
-      &.ellipsis-up {
-        &:hover {
-          background-position-x: 0;
-        }
-      }
-      &.ellipsis-down {
-        &:hover {
-          background-position-x: -16px;
-        }
-      }
-      &.icons-page-right{
-        background-position-x: -48px;
-      }
-    }
-    &.not-up {
+    &.not-up-down {
+      color: #ccc;
+      border-color: #dddee1;
       cursor: not-allowed;
-      .icons-page-left{
-        background-position-x: -64px;
-      }
     }
-    &.not-down {
-      cursor: not-allowed;
-      .icons-page-right{
-        background-position-x: -80px;
-      }
+    &.active {
+      color: #fff;
+      background: #2d8cf0;
+      border-color: #2d8cf0;
     }
   }
 }

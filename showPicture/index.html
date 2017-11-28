@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="htmleaf.css">
+  <style type="text/css">
+    html {
+      overflow: hidden;
+    }
+    body {
+      position: absolute;
+      margin: 0px;
+      padding: 0px;
+      background: #4f5a70;
+      width: 100%;
+      height: 100%;
+    }
+    img {
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+    ul {list-style: none;margin: 0;padding: 0;}
+    .scrnopt {
+      position: absolute;
+      left: 10%;
+      top: 10%;
+      width: 80%;
+      height: 80%;
+      background: rgba(255, 0, 0, 0.5);
+    }
+    .screen {
+      position: absolute;
+      left: 10%;
+      top: 10%;
+      width: 80%;
+      height: 80%;
+      background: #3e495d;
+      z-index: 1000;
+      overflow: hidden;
+    }
+    .screen img {
+      position: absolute;
+      cursor: pointer;
+      visibility: hidden;
+      width: 0px;
+      height: 0px;
+    }
+    .screen .tvover {
+      border: solid #876;
+      opacity: 1;
+    }
+    .screen .tvout {
+      border: solid #fff;
+      opacity: 0.7;
+    }
+    .click-back {
+      position: absolute;
+      z-index: 1001;
+      width: 5%;
+      height: 8%;
+      top: -8%;
+      left: 0;
+      cursor: pointer;
+    }
+    .click-back:hover {
+      opacity: 0.6;
+    }
+    .click-back:active {
+      margin-top: 1px;
+      margin-left: 1px;
+      opacity: 1;
+    }
+    .click-back img{
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .title-show {
+      position: absolute;
+      height: 8%;
+      top: -8%;
+      left: 6%;
+      width: 88%;
+    }
+    .title-show img {
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+    }
+    .title-show span {
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      width: 100%;
+      margin-top: -7px;
+      height: 100%;
+      vertical-align: middle;
+      font-size: 14px;
+      line-height: 100%;
+    }
+    .turn-pic {position: absolute; top: 40%; z-index: 1001; width: 6%; height: 10%; cursor: pointer}
+    #turnleft {left: 2%}
+    #turnright {right: 2%}
+        .turn-pic img {width: 100%; height: 100%}
+        .f-img {display: block; opacity: 0.4}
+        .s-img {display: none}
+
+        .turn-pic:hover .f-img {display: none}
+        .turn-pic:hover .s-img {display: block}
+        .turn-pic:active {margin-top: 1px;margin-left: 1px}
+        .turn-pic:active img {opacity: 0.5}
+    #listnav {position: absolute;bottom: 4px;z-index: 1001;width: 100%;font-size: 0;text-align: center;user-select: none;}
+        #listnav li{display: inline-block;width: 20px;height: 20px;margin: 0 4px;color: #3e495d;font-size: 12px;text-align: center;line-height: 20px;border-radius: 100px;background: #d5d6e2;cursor: pointer;opacity: 0.8}
+        #listnav li:hover{width: 22px;height: 22px;line-height: 22px;background: #929292}
+        #listnav .active {color: #565055;background: #929292}
+
+        #wrapper {
+          height: 100%;
+        }
+        #wrapper li {
+          position: relative;
+          float: left;
+          height: 100%;
+        }
+  </style>
+  <style type="text/css" id="forli"></style>
+</head>
+<body>
+  <div class="screen"><ul id="wrapper"></ul></div>
+  <div class="scrnopt">
+    <div class="click-back" id="goback">
+      <img src="./icons/backArrow.png">
+    </div>
+    <div class="title-show">
+      <img src="./icons/xg.png">
+      <span>图片图片图片图片图片图片图片图片图片图片</span>
+    </div>
+    <div class="turn-pic" id="turnleft">
+      <img class="f-img" src="./icons/left.png">
+      <img class="s-img" src="./icons/leftHover.png">
+    </div>
+    <div class="turn-pic" id="turnright">
+      <img class="f-img" src="./icons/right.png">
+      <img class="s-img" src="./icons/rightHover.png">
+    </div>
+    <ul id="listnav"></ul>
+  </div>
+<script src="3d-tv.js"></script>
+<script type="text/javascript">
+var goback = document.getElementById('goback');
+function showPic(imgElems) {
+    var turnleft = document.getElementById('turnleft');
+    var turnright = document.getElementById('turnright');
+    var listnav = document.getElementById('listnav');
+    var wrapper = document.getElementById('wrapper');
+    var forli = document.getElementById('forli');
+    var curPage = 0;
+
+    var imgs = [];
+    var i = 0;
+    var liStr = '';
+    var navStr = '';
+    while(i < imgElems.length) {imgs.push(imgElems.slice(i, i + 16));i += 16;}
+    for (i = 0;i<imgs.length;i++) {
+      liStr += '<li></li>';
+      navStr += '<li ind="'+i+'"';
+      if (i == curPage) {
+        navStr += ' class="active"';
+      }
+      navStr += '>'+ (i+1) +'</li>';
+    }
+    wrapper.innerHTML = liStr;
+    listnav.innerHTML = navStr;
+    var lis = Array.prototype.slice.call(wrapper.getElementsByTagName('li'));
+    var navs = Array.prototype.slice.call(listnav.getElementsByTagName('li'));
+
+    var styleFunc = function() {
+      wrapper.style.width = wrapper.parentNode.offsetWidth*imgs.length + 'px';
+      forli.innerHTML = '#wrapper li{width:'+wrapper.parentNode.offsetWidth+'px}';
+    };
+    window.onresize = styleFunc;
+    styleFunc();
+
+    var tv = play3d(lis[curPage], imgs[curPage]);
+
+    var turnFunc = function(oldPage, newPage) {
+      curPage = newPage;
+
+      tv && tv.stop();
+      wrapper.style.marginLeft = -newPage*100 + '%';
+      navs[oldPage].className = '';
+      navs[newPage].className = 'active';
+      lis[oldPage].innerHTML = '';
+      tv = play3d(lis[curPage], imgs[curPage]);
+      tv.play();
+    };
+
+    turnleft.onclick = function(){
+      turnFunc(curPage, (curPage + imgs.length - 1) % imgs.length);
+    };
+    turnright.onclick = function(){
+      turnFunc(curPage, (curPage + 1) % imgs.length);
+    };
+    listnav.onclick = function(event){
+      var li = event.target;
+      if (li.tagName.toLowerCase() != 'li' || li.parentNode !== this) {
+        return;
+      }
+      var ind = +li.getAttribute('ind');
+      if (ind === curPage) {
+        return;
+      }
+      turnFunc(curPage, ind);
+    };
+    tv.play();
+}
+  (function(){
+    var allPics = ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511896183155&di=68bfb5d80fd73c6657ee467a49e44723&imgtype=0&src=http%3A%2F%2Fi2.f.itc.cn%2Fupload%2Fxm%2F15320%2Fa_153197693.jpg','images/1.jpg','images/2.jpg','images/3.jpg','images/4.jpg','images/5.jpg','images/6.jpg','images/7.jpg','images/8.jpg'];
+    var allImgs = [];
+    for(var i=0;i<allPics.length;i++) {
+      var _img = new Image();
+      _img.src = allPics[i];
+      allImgs.push(_img);
+    }
+    showPic(allImgs);
+  })();
+</script>
+</body>
+</html>

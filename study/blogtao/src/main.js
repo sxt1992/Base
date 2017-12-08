@@ -5,11 +5,14 @@ import Vuex from 'vuex';
 
 import App from './App';
 import router from './router';
+import Highlight from './components/hlVue';
+import './components/animatecss';
 
 import './assets/less/common.less';
 
 Vue.use(Vuex);
 // Vue.use(iView);
+Vue.use(Highlight);
 
 const app = document.getElementById('app');
 if (app) {

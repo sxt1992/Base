@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>音频</title>
+    <style type="text/css">
+      html,body{width:100%;height:100%;margin:0;padding:0;}
+      .process {
+        width: 420px;
+        height: 3px;
+        margin-top: 10px;
+        border-radius: 10px;
+        background: #5a5a5a;
+        cursor: pointer;
+      }
+      .process i{
+        float: left;
+        width: 0%;
+        height: 100%;
+        margin-right: -6px;
+        border-radius: 10px;
+        background: #4285f4;
+      }
+      .process b{
+        float: left;
+        width: 12px;
+        height: 12px;
+        margin-top: -4px;
+        margin-left: -6px;
+        border-radius: 100px;
+        background: #4285f4;
+      }
+      .process b:hover{
+        box-shadow: 0 0 1px 1px #75a6f9;
+      }
+    </style>
+</head>
+<body>
+  <div style="width:800px;margin:20px auto;">
+    <video width="420">
+      <source src="m2.mp4" type="video/mp4">
+      <source src="m1.ogg" type="video/ogg">
+    </video>
+    <div id="app">
+      <button onclick="play(this)">播放</button>
+      <div class="process">
+        <i></i>
+        <b></b>
+      </div>
+    </div>
+  </div>
+<script type="text/javascript">
+  var app = document.getElementById('app');
+  var process = app.getElementsByTagName('div')[0];
+  var processPlay = app.getElementsByTagName('i')[0];
+  var processBoll = app.getElementsByTagName('b')[0];
+  var video = document.getElementsByTagName('video')[0];
+  function play(obj) {
+    if (video.paused) {
+      video.play();
+      obj.innerHTML = '暂停';
+    } else {
+      video.pause();
+      obj.innerHTML = '播放';
+    }
+  }
+  !function(){
+    var dragFlag = false;
+    var startWZ = 0;
+    var endWZ = 0;
+    process.addEventListener('click', function(event) {
+      var wz = (event.clientX - this.offsetLeft)/420;
+      video.currentTime = video.duration * wz;
+    }, false);
+    video.addEventListener('timeupdate', function() {
+      if (!dragFlag) {
+        processPlay.style.width = 100*video.currentTime/video.duration + '%';
+      }
+    }, false);
+    processBoll.addEventListener('mousedown', function(event) {
+      dragFlag = true;
+      startWZ=event.clientX;
+      video.pause();
+    }, false);
+    document.addEventListener('mousemove', function(event) {
+      if (!dragFlag) {
+        return;
+      }
+      endWZ = video.currentTime/video.duration + (event.clientX - startWZ) / 420;
+      if (endWZ < 0) {
+        endWZ = 0;
+      }
+      if (endWZ > 1) {
+        endWZ = 1;
+      }
+      processPlay.style.width = 100*endWZ + '%';
+    }, false);
+    document.addEventListener('mouseup', function() {
+      if (!dragFlag) {
+        return;
+      }
+      video.currentTime = video.duration * endWZ;
+      dragFlag = false;
+      video.play();
+    }, false);
+  }();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+const program = require('commander');
+
+program
+  .version(require('../package').version)
+  .command('bap <env>', 'build and publish，编译并且发布')
+  .command('build <env>', '编译项目')
+  .command('publish <env>', '发布项目')
+  .command('fix', '修复、升级发布所需要的文件')
+  .command('validate', '检查当前项目是否存在问题')
+  .parse(process.argv);

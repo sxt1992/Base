@@ -1,0 +1,55 @@
+#!/usr/bin/env node
+
+/**
+ * 发布的流程
+ *
+ *  开发环境
+ *      直接上传 dist 下的文件到服务器上
+ *
+ *  测试、预发、线上
+ *
+ *      1. 校验 dist 文件夹是否存在，是否存在 html js 文件
+ *      2. 生成 meta.json, meta.properties 文件
+ *      3. 打包成 tar.gz 包
+ *      4. 上传到 repo.souche-inc.com，打印上传的包的信息
+ */
+
+const program = require('commander');
+
+const rollingPublish = require('../lib/publish/rolling_publish.js');
+const semverPublish = require('../lib/publish/semver_publish.js');
+
+const envUtil = require('../lib/env_util.js');
+
+program.on('--help', function () {
+    console.log('  Examples:');
+    console.log('');
+    console.log('    $ sw publish dev1');
+    console.log('    $ sw publish prepub');
+    console.log('');
+    console.log('  说明：');
+    console.log('    如果发布的目录不是 dist 文件夹，可以在 config/project.conf.js 配置项目需要发布的目录');
+    console.log('    设置 publishSourceFolder 字段为需要发布的文件夹');
+});
+
+program
+    .usage('<env>')
+    .parse(process.argv);
+
+const publishEnv = program.args[0];
+
+if (!envUtil.validate(publishEnv)) {
+    console.log(`环境错误，环境可选值：${envUtil.envs}`);
+    process.exit(1);
+}
+
+// TODO: 检查一下 git 项目地址，是否属于外部项目，如果是，project.config.js 必须设置 organization 字段
+
+envUtil.setPublishEnv(publishEnv);
+
+// publish 函数内部失败，会直接 process.exit
+if (envUtil.rollingEnvs.indexOf(publishEnv) !== -1) {
+    rollingPublish.publish();
+} else {
+    semverPublish.publish();
+}

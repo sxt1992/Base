@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+const execSync = require('child_process').execSync;
+
+const program = require('commander');
+
+const globalData = require('../lib/global_data.js');
+const validateProjectConfig = require('../lib/validate/project_config.js');
+const validatePublishByUrl = require('../lib/validate/url_config.js');
+
+program.on('--help', function () {
+    console.log('  Examples:');
+    console.log('');
+    console.log('    $ sw validate --publish');
+    console.log('    $ sw validate --url http://f2e.souche.com/projects/dafengche/demo/index.html');
+    console.log('');
+});
+
+program
+    .option('--publish', '校验发布是否可用')
+    .option('--url <url>', '通过项目的 URL 校验发布是否可用')
+    .parse(process.argv);
+
+if (program.publish) {
+    if (validateProjectConfig.checkOldProjectConfig()) {
+        console.log('发布配置正常');
+    } else {
+        console.log('发布配置异常');
+    }
+
+    try {
+        execSync(`rm -rf ${globalData.GZ_FILES_FOLDER}`);
+    } catch (e) {
+
+    }
+}
+
+if (program.url) {
+    if (validatePublishByUrl.validate(program.url)) {
+        console.log('发布配置正常');
+    } else {
+        console.log('发布配置异常');
+    }
+
+    try {
+        execSync(`rm -rf ${globalData.GZ_FILES_FOLDER}`);
+    } catch (e) {
+
+    }
+}

@@ -1,4 +1,34 @@
-node_modules
+# 通用忽略
+
+node_modules/
 .idea
 .vscode
-dist
+.DS_Store
+dist/
+npm-debug.log
+yarn-error.log
+
+
+# Xcode
+study/ios/**/build
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+profile
+*.moved-aside
+DerivedData
+*.hmap
+*.xccheckout
+*.xcworkspace
+!default.xcworkspace
+
+#CocoaPods
+Pods
+!Podfile
+!Podfile.lock

@@ -10,5 +10,5 @@ export default {
     const code = block;
     hljs.highlightBlock(code);
     code.innerHTML = `<ul><li>${code.innerHTML.replace(/\n/g, '\n</li><li>')}\n</li></ul>`;
-  })),
+  }))
 };

@@ -1,0 +1,22 @@
+{
+  "name": "tcmd",
+  "version": "1.0.0",
+  "description": "taoxj's command",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "taoxj",
+    "command"
+  ],
+  "author": "taoxuejiao",
+  "license": "ISC",
+  "bin": {
+    "aa": "./app.js"
+  },
+  "dependencies": {
+    "commander": "^2.13.0"
+  },
+  "devDependencies": {}
+}

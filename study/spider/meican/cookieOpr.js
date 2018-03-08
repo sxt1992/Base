@@ -45,7 +45,7 @@ module.exports = {
                 k.forEach(function(value) {
                     value = (value + '').trim().split(';')[0].trim();
                     let index = value.indexOf('=');
-                    
+
                     let k = value.substr(0, index).trim();
                     let v = value.substr(index + 1).trim();
                     cookie[k] = v;
@@ -60,5 +60,5 @@ module.exports = {
     },
     getCookie: k => cookie[k.trim()],
     delCookie: k => delete(cookie[k.trim()]),
-    clearCookie: () => { cookie = {} }
+    clearCookie: () => { cookie = {}; fs.existsSync(cookieFile) && fs.unlinkSync(cookieFile); }
 };

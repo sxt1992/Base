@@ -5,7 +5,7 @@
           <span>木兮的网站</span>
           <ul class="nav-title">
             <li v-for="item,index in ['首 页','文 章','游 迹','留 言','关 于']"
-                @click="curNav = index"
+                @click="checkoutNav(index)"
                 :class="{active: index === curNav}">{{item}}</li>
           </ul>
           <ul class="login-about">
@@ -88,34 +88,34 @@ export default {
           tf: '',
           type: '南昌',
           color: 'rgba(73, 117, 251, 0.7)',
-          cont: 'move',
+          cont: 'move'
         }, {
           tf: '',
           type: '杭州',
           color: 'rgba(146, 77, 230, 0.7)',
-          cont: 'your',
+          cont: 'your'
         }, {
           tf: '',
           type: '成都',
           color: 'rgba(239, 82, 82, 0.7)',
-          cont: 'cursor',
+          cont: 'cursor'
         }, {
           tf: '',
           type: '重庆',
           color: 'rgba(245, 149, 0, 0.7)',
-          cont: 'over',
+          cont: 'over'
         }, {
           tf: '',
           type: '三星堆',
           color: 'rgba(82, 167, 99, 0.7)',
-          cont: 'move2',
+          cont: 'move2'
         }, {
           tf: '',
           type: '横店',
           color: 'rgba(203, 212, 12, 0.7)',
-          cont: 'your2',
-        },
-      ],
+          cont: 'your2'
+        }
+      ]
     };
   },
   mounted() {
@@ -125,6 +125,24 @@ export default {
     // skrollr.init();
   },
   methods: {
+    checkoutNav(index) {
+      this.curNav = index;
+      if (index === 1) {
+        this.$router.push({ path: '/' });
+      } else if (index === 2) {
+        this.$router.push({ path: '/Travel' });
+      } else if (index === 4) {
+        let href = window.location.href;
+        let ind = href.indexOf('#');
+
+        if (ind < 0) {
+          href = href.substring(0, ind);
+        }
+        ind = href.indexOf('/');
+        href = href.substring(0, ind + 1);
+        window.location.href = `${href}aboutMe.html`;
+      }
+    },
     seeDetail(item) {
       window.console.log(item);
     },
@@ -141,8 +159,8 @@ export default {
       const x = (1 - (e.offsetY - h * 0.5)) / h * 45;
       // eslint-disable-next-line
       item.tf = `perspective(300px) rotateX(${x}deg) rotateY(${y}deg)`;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less">

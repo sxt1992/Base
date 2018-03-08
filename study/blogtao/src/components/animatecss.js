@@ -69,5 +69,5 @@ Vue.directive('animate', {
     handler(el, binding.value);
   },
   unbind() {
-  },
+  }
 });

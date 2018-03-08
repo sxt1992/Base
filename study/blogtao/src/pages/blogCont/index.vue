@@ -155,8 +155,8 @@ export default {
         }
       };
       interVal();
-    },
-  },
+    }
+  }
 };
 </script>
 

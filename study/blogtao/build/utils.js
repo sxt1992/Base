@@ -1,99 +1,153 @@
-'use strict'
-const path = require('path')
-const config = require('../config')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const pkg = require('../package.json')
+var path = require('path');
+var config = require('../config');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 exports.assetsPath = function (_path) {
-  const assetsSubDirectory = process.env.NODE_ENV === 'production'
-    ? config.build.assetsSubDirectory
-    : config.dev.assetsSubDirectory
-  return path.posix.join(assetsSubDirectory, _path)
-}
+    return path.posix.join(config.assetsSubDirectory, _path)
+};
 
 exports.cssLoaders = function (options) {
   options = options || {}
 
-  const cssLoader = {
+  var cssLoader = {
     loader: 'css-loader',
     options: {
-      minimize: process.env.NODE_ENV === 'production',
-      sourceMap: options.sourceMap
-    }
-  }
-
-  var postcssLoader = {
-    loader: 'postcss-loader',
-    options: {
-      sourceMap: options.sourceMap
+        minimize: process.env.NODE_ENV === 'production',
+        sourceMap: options.sourceMap
     }
   }
 
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
-    const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
+    var loaders = [cssLoader]
     if (loader) {
-      loaders.push({
-        loader: loader + '-loader',
-        options: Object.assign({}, loaderOptions, {
-          sourceMap: options.sourceMap
+        loaders.push({
+            loader: loader + '-loader',
+            options: Object.assign({}, loaderOptions, {sourceMap: options.sourceMap})
         })
-      })
     }
 
     // Extract CSS when that option is specified
     // (which is the case during production build)
     if (options.extract) {
-      return ExtractTextPlugin.extract({
-        use: loaders,
-        fallback: 'vue-style-loader'
-      })
+        return ExtractTextPlugin.extract({
+            use: loaders,
+            fallback: 'vue-style-loader'
+        })
     } else {
-      return ['vue-style-loader'].concat(loaders)
+        return ['vue-style-loader'].concat(loaders)
     }
   }
 
-  // https://vue-loader.vuejs.org/en/configurations/extract-css.html
-  return {
-    css: generateLoaders(),
-    postcss: generateLoaders(),
-    less: generateLoaders('less'),
-    sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: generateLoaders('sass'),
-    stylus: generateLoaders('stylus'),
-    styl: generateLoaders('stylus')
-  }
+   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
+   return {
+        css: generateLoaders(),
+        postcss: generateLoaders(),
+        less: generateLoaders('less'),
+        sass: generateLoaders('sass', { indentedSyntax: true }),
+        scss: generateLoaders('sass'),
+        stylus: generateLoaders('stylus'),
+        styl: generateLoaders('stylus')
+   }
 }
 
 // Generate loaders for standalone style files (outside of .vue)
 exports.styleLoaders = function (options) {
-  const output = []
-  const loaders = exports.cssLoaders(options)
-  for (const extension in loaders) {
-    const loader = loaders[extension]
-    output.push({
-      test: new RegExp('\\.' + extension + '$'),
-      use: loader
-    })
-  }
-  return output
+    var output = []
+    var loaders = exports.cssLoaders(options)
+    for (var extension in loaders) {
+        var loader = loaders[extension];
+        // 解决非 .vue 文件的 css 没有 autoprefixer 的情况
+        // "postcss-loader": "^2.0.5",
+        // loader.slice(2, 0, {
+        //     loader: 'postcss-loader',
+        //     options : {
+        //         sourceMap: options.sourceMap
+        //     }
+        // });
+        output.push({
+            test: new RegExp('\\.' + extension + '$'),
+            use: loader
+        })
+    }
+    return output
 }
 
-exports.createNotifierCallback = function () {
-  const notifier = require('node-notifier')
+// 生成 webpack entry
+exports.generateMultiEntry = function (nameList) {
+    var entry = {};
+    nameList.forEach(function (name) {
+        let src = '';
+        if (name.charAt(0) === '@') {
+          src = './src/' + name.substr(2) + '.js';
+        } else {
+          src = './src/pages/' + name + '/index.js';
+        }
+        entry[name] = [ 'babel-polyfill', src ];
+    });
 
-  return (severity, errors) => {
-    if (severity !== 'error') {
-      return
+    return entry;
+}
+
+// 为 dev 配置 HtmlWebpackPlugin 生成多页面 html
+exports.generateDevHtmls = function (isSingle, nameList) {
+    if (isSingle) {
+        return [{
+            filename: 'index.html',
+            template: 'index.html',
+            inject: true
+        }];
     }
-    const error = errors[0]
 
-    const filename = error.file.split('!').pop()
-    notifier.notify({
-      title: pkg.name,
-      message: severity + ': ' + error.name,
-      subtitle: filename || '',
-      icon: path.join(__dirname, 'logo.png')
-    })
-  }
+    return nameList.map(function (name) {
+        let filename = name;
+        if (name.charAt(0) === '@') {
+          filename = 'index';
+        }
+        return {
+            filename: filename + '.html',
+            template: 'index.html',
+            chunks: [ name ],
+            inject: true
+        }
+    });
+}
+
+// 为 build 配置 HtmlWebpackPlugin 生成多页面 html
+exports.generateBuildHtmls = function (isSingle, nameList) {
+    if (isSingle) {
+        return [{
+            filename: config.index,
+            template: 'index.html',
+            inject: true,
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true
+                // more options:
+                // https://github.com/kangax/html-minifier#options-quick-reference
+            },
+            // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+            chunksSortMode: 'dependency'
+        }];
+    }
+
+    return nameList.map(function (name) {
+        let filename = name;
+        if (name.charAt(0) === '@') {
+          filename = 'index';
+        }
+        return {
+            filename: path.resolve(__dirname, '../dist/' + filename + '.html'),
+            template: 'index.html',
+            inject: true,
+            chunks: [ name, 'vendor', 'manifest' ],
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true
+            },
+            chunksSortMode: 'dependency'
+        };
+    });
 }

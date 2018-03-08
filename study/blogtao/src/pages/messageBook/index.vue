@@ -33,7 +33,7 @@ export default {
   updated() {
   },
   methods: {
-  },
+  }
 };
 </script>
 <style lang="less">

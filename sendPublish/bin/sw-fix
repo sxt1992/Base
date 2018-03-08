@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+const execSync = require('child_process').execSync;
+
+const async = require('async');
+const program = require('commander');
+
+const checkVersion = require('../lib/check_version.js');
+const globalData = require('../lib/global_data.js');
+const publishFix = require('../lib/fix/publish.js');
+const chunyanFix = require('../lib/fix/chunyan.js');
+
+program.on('--help', function () {
+    console.log('  Examples:');
+    console.log('');
+    console.log('    $ sw fix --publish');
+    console.log('');
+});
+
+program
+    .option('--publish', '自动修复发布相关内容')
+    .option('--chunyan', '修复春岩老的项目发布方式')
+    .parse(process.argv);
+
+
+async.waterfall([
+    function (next) {
+        checkVersion.run(next);
+    },
+    function (next) {
+        if (program.publish) {
+            try {
+                publishFix.fix();
+                next();
+            } catch (e) {
+                next(e);
+            }
+        }
+
+        if (program.chunyan) {
+            try {
+                chunyanFix.fix();
+                next();
+            } catch (e) {
+                next(e);
+            }
+        }
+    }
+], function (err) {
+    if (err) {
+        console.log(err.stack, '\n');
+
+        process.exit(1);
+    }
+
+    try {
+        execSync(`rm -rf ${globalData.GZ_FILES_FOLDER}`);
+    } catch (e) {
+
+    }
+
+    console.log('🗂  修改完成\n');
+});

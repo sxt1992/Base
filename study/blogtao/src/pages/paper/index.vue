@@ -5,7 +5,7 @@
           <span>木兮的网站</span>
           <ul class="nav-title">
             <li v-for="item,index in ['首 页','文 章','游 迹','留 言','关 于']"
-                @click="curNav = index"
+                @click="checkoutNav(index)"
                 :class="{active: index === curNav}">{{item}}</li>
           </ul>
           <ul class="login-about">
@@ -49,8 +49,8 @@
                   </p>
                 </div>
                 <div class="article-pre">
-                  <b>正儿八经得思考有点怪{{index}}</b>
-                  <div class="article-pre-cont">博客更新的断断续续，126邮箱也收到很多网友的来信，很感谢大家对叶子博客的关注。其实，入行五年了，我觉得自己进步不是那么大。偶尔看看书，也是静不下心来。有的人说了，或许年龄越大，功利性太强了，走着走着似乎忘记了自己的初心。</div>
+                  <b>vue about{{index}}</b>
+                  <div class="article-pre-cont">Vue (读音 /vjuː/，类似于 view) 是一套用于构建用户界面的渐进式框架。与其它大型框架不同的是，Vue 被设计为可以自底向上逐层应用。Vue 的核心库只关注视图层，不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与现代化的工具链以及各种支持类库结合使用时，Vue 也完全能够为复杂的单页应用提供驱动。如果你想在深入学习 Vue 之前对它有更多了解，我们制作了一个视频，带您了解其核心概念和一个示例工程。</div>
                   <p class="article-opr">
                     <span><i>&#xf11a;</i><em>评论(100)</em></span>
                     <span><i>&#xf133;</i><em>浏览(100)</em></span>
@@ -103,7 +103,7 @@
                   </div>
                 </div>
                 <div class="me-say">
-                  上周我做了个demo，使用SVG实现了一个彩条圆环倒计时效果，使用SVG实现的优点是兼容性非常好，不足在于学习成本比较高，于是我就琢磨有没有更简单的方法实现类似的多彩圆环渐变效果，最好纯CSS就能搞定。绞尽脑汁想出了下面三种实现
+                  Vue (读音 /vjuː/，类似于 view) 是一套用于构建用户界面的渐进式框架。与其它大型框架不同的是，Vue 被设计为可以自底向上逐层应用。Vue 的核心库只关注视图层，不仅易于上手，还便于与第三方库或既有项目整合。另一方面，当与现代化的工具链以及各种支持类库结合使用时，Vue 也完全能够为复杂的单页应用提供驱动。如果你想在深入学习 Vue 之前对它有更多了解，我们制作了一个视频，带您了解其核心概念和一个示例工程。
                 </div>
               </div>
             </div>
@@ -133,13 +133,13 @@ export default {
       curPage: 1,  // 当前页数
       pageArr: [],  // 中间显示
       totalItem: 1000,  // 总条数
-      totalPage: 1,  // 总页数
+      totalPage: 1  // 总页数
     };
   },
   watch: {
     curPage(newValue) {
       window.console.log(newValue);
-    },
+    }
   },
   created() {
     this.totalPage = Math.ceil(this.totalItem / 15);
@@ -150,6 +150,24 @@ export default {
     }
   },
   methods: {
+    checkoutNav(index) {
+      this.curNav = index;
+      if (index === 1) {
+        this.$router.push({ path: '/' });
+      } else if (index === 2) {
+        this.$router.push({ path: '/Travel' });
+      } else if (index === 4) {
+        let href = window.location.href;
+        let ind = href.indexOf('#');
+
+        if (ind < 0) {
+          href = href.substring(0, ind);
+        }
+        ind = href.indexOf('/');
+        href = href.substring(0, ind + 1);
+        window.location.href = `${href}aboutMe.html`;
+      }
+    },
     /**
      * 分页处理
      *
@@ -207,8 +225,8 @@ export default {
 
       this.curPage = c;
       this.pageArr = arr;
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped lang="less">

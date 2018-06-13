@@ -1,0 +1,27 @@
+<!--index.wxml-->
+<view class="container">
+    <view class="lotto-wrapper">
+        <image class="lotto-panel" mode="scaleToFill" src="../../images/panel.png"></image>
+        <view
+            wx:for="{{imgList}}"
+            wx:key="{{item.key}}"
+            class="award"
+            style="transform:rotate({{item.rotate}}deg)">
+            <image
+                wx:if="{{item.src.length > 0}}"
+                mode="scaleToFill"
+                src="{{item.src}}"></image>
+            <text style="{{item.src.length > 0 ? '' : 'margin-top:50rpx;'}}">{{item.text}}</text>
+        </view>
+        <image
+            animation="{{arrowAnimation}}"
+            class="lotto-arrow"
+            mode="scaleToFill"
+            src="../../images/arrow.png"></image>
+        <image
+            class="lotto-ljcj"
+            bindtap="drawAward"
+            mode="scaleToFill"
+            src="../../images/ljcj.png"></image>
+    </view>
+</view>

@@ -1,0 +1,47 @@
+.lotto-wrapper {
+  position: relative;
+  width: 672rpx;
+}
+.lotto-wrapper .lotto-panel {
+  width: 672rpx;
+  height: 712rpx;
+}
+.lotto-wrapper .lotto-arrow {
+  position: absolute;
+  top: 312rpx;
+  left: 416rpx;
+  width: 54rpx;
+  height: 48rpx;
+  transform-origin: -80rpx 50%;
+}
+.lotto-wrapper .lotto-ljcj {
+  position: absolute;
+  top: 250rpx;
+  left: 250rpx;
+  width: 172rpx;
+  height: 172rpx;
+}
+.lotto-wrapper .lotto-ljcj:active {
+  opacity: 0.8;
+  transform: translate(1px, 1px);
+}
+.lotto-wrapper .award {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 440rpx;
+  left: 256rpx;
+  width: 160rpx;
+  height: 140rpx;
+  transform-origin: 50% -104rpx;
+}
+.lotto-wrapper .award image {
+  width: 60rpx;
+  height: 80rpx;
+  margin: 10rpx 0 10rpx;
+}
+.lotto-wrapper .award text {
+  color: #a14422;
+  font-size: 20rpx;
+}

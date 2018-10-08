@@ -1,7 +1,7 @@
 /**
  * 绘制单像素直线
 */
-const globalData = getApp().globalData;
+const optData = require('../optData');
 
 /**
  *
@@ -13,7 +13,7 @@ const globalData = getApp().globalData;
  * @param color 线条颜色,不传,就是坐标系的颜色
  * @param lineWidth 线条宽度,不传,就是最细宽度
  */
-module.exports = function (ctx, fromX, fromY, toX, toY, color = globalData.colors.axis, lineWidth = globalData.hairlineWidth) {
+module.exports = function (ctx, fromX, fromY, toX, toY, color = optData.colors.axis, lineWidth = optData.hairlineWidth) {
     ctx.beginPath();
     ctx.moveTo(fromX, fromY);
     ctx.lineTo(toX, toY);

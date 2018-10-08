@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "time-share-chart": "/components/time-share-chart/index",
+        "kline": "/components/kline/index"
+    }
+}

@@ -4,12 +4,12 @@
  * @author txj
 */
 const onePixelLine = require('./onePixelLine');
-const globalData = getApp().globalData;
+const optData = require('../optData');
 
 class Axis {
     constructor(ctx, maxVal, height) {
         this.ctx = ctx;
-        this.width = globalData.gw;
+        this.width = optData.gw;
         this.height = height;
 
         this.minVal = 0;
@@ -30,7 +30,7 @@ class Axis {
     }
 
     numLineToBottom(num, Xaxis, color) {
-        onePixelLine(this.ctx, Xaxis, this.numToYaxis(num), Xaxis, this.height, color, globalData.bw * 0.7);
+        onePixelLine(this.ctx, Xaxis, this.numToYaxis(num), Xaxis, this.height, color, optData.bw * 0.7);
     }
 
     numToYaxis(num) {

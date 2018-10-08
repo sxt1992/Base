@@ -4,12 +4,12 @@
  * @author txj
 */
 const onePixelLine = require('./onePixelLine');
-const globalData = getApp().globalData;
+const optData = require('../optData');
 
 class Axis {
     constructor(ctx, maxVal, minVal, height) {
         this.ctx = ctx;
-        this.width = globalData.gw;
+        this.width = optData.gw;
         this.height = height;
 
         this.minVal = minVal;
@@ -48,7 +48,7 @@ class Axis {
         this.yAxisLabel(ctx, this.minVal.toFixed(2), 3, -1 + this.height);
     }
     yAxisLabel(ctx, text, x, y, verticalAlign = 'bottom', align = 'left') {
-        ctx.setFillStyle(globalData.colors.generalChar);
+        ctx.setFillStyle(optData.colors.generalChar);
         ctx.setFontSize(10);
         ctx.setTextAlign(align);
         ctx.setTextBaseline(verticalAlign);
@@ -56,7 +56,7 @@ class Axis {
     }
 
     numLineToZero(num, Xaxis, color) {
-        onePixelLine(this.ctx, Xaxis, this.numToYaxis(num), Xaxis, this.zero, color, globalData.bw * 0.7);
+        onePixelLine(this.ctx, Xaxis, this.numToYaxis(num), Xaxis, this.zero, color, optData.bw * 0.7);
     }
 
     numToYaxis(num) {

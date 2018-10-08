@@ -1,0 +1,79 @@
+<!-- 这是自定义组件的内部WXML结构 -->
+<view class="time-share">
+    <view
+        class="time-share-chart"
+        bindtouchstart="canvasTouchstart"
+        bindtouchmove="canvasTouchmove"
+        bindtouchend="canvasTouchend">
+        <view class="chart-wrap">
+            <canvas canvas-id="time-share-canvas" class="time-share-canvas"></canvas>
+            <cover-view class="one-pixel-vert-line" style="left:50%;background: #d4d4d4;"></cover-view>
+            <block wx:if="{{showCrosshair}}">
+                <cover-view class="one-pixel-vert-line" style="left:{{crossXaxis}}"></cover-view>
+                <cover-view class="one-pixel-hori-line" style="top:{{crossYaxis}}"></cover-view>
+                <cover-view class="time-share-words {{timeShareWordsIsRed && 'time-share-words-red'}}">
+                    <cover-view class="time-share-words-one">
+                        <cover-view class="t-s-key">价:</cover-view>
+                        <cover-view class="t-s-value">{{timeSharePrice}}</cover-view>
+                        <cover-view class="t-s-key">值:</cover-view>
+                        <cover-view class="t-s-value">{{timeShareValue}}</cover-view>
+                    </cover-view>
+                    <cover-view class="time-share-words-one">
+                        <cover-view class="t-s-key">均:</cover-view>
+                        <cover-view class="t-s-value t-s-value-orange">{{timeShareAvg}}</cover-view>
+                        <cover-view class="t-s-key">幅:</cover-view>
+                        <cover-view class="t-s-value">{{timeShareZf}}</cover-view>
+                    </cover-view>
+                </cover-view>
+            </block>
+        </view>
+        <view class="time-scale">
+            <text>09:30</text>
+            <text>11:30</text>
+            <text>15:00</text>
+            <text wx:if="{{showCrosshair}}" class="crosshair-text" style="left:{{crossXaxis}}">{{crosshairText}}</text>
+        </view>
+        <view class="quantum-wrap">
+            <canvas canvas-id="quantum-canvas" class="quantum-canvas"></canvas>
+            <view class="quantum-wrap-words">
+                <view class="quantum-wrap-words-gray">
+                    {{maxVolume}}
+                    <view class="quantum-num-main" wx:if="{{showCrosshair}}">
+                        <text>量:</text>
+                        <text class="quantum-num {{quantumWrapWordsIsRed && 'quantum-num-red'}}">{{oneVolume}}</text>
+                    </view>
+                </view>
+                <view class="quantum-wrap-words-gray">分时量</view>
+            </view>
+            <block wx:if="{{showCrosshair}}">
+                <view class="one-pixel-vert-line" style="left:{{crossXaxis}}"></view>
+            </block>
+        </view>
+    </view>
+    <view class="time-share-level">
+        <view class="level-tab-wrap">
+            <view bindtap="changeIsFiveLevel" data-param="{{true}}"  class="{{isFiveLevel && 'level-tab-active'}}">五档</view>
+            <view bindtap="changeIsFiveLevel" data-param="{{false}}" class="{{!isFiveLevel && 'level-tab-active'}}">明细</view>
+        </view>
+        <view class="level-main-wrap" wx:if="{{isFiveLevel}}">
+            <view wx:for="{{fiveData.sale}}" wx:key="{{index}}" class="five-level-item">
+                <text class="five-level-item-five">卖{{5 - index}}</text>
+                <text class="five-level-item-price">{{item[0]}}</text>
+                <text class="five-level-item-volume">{{item[1]}}</text>
+            </view>
+            <view class="five-level-item-line"></view>
+            <view wx:for="{{fiveData.buy}}" wx:key="{{index}}" class="five-level-item">
+                <text class="five-level-item-five">买{{index + 1}}</text>
+                <text class="five-level-item-price">{{item[0]}}</text>
+                <text class="five-level-item-volume">{{item[1]}}</text>
+            </view>
+        </view>
+        <view class="level-main-wrap" wx:else>
+            <view wx:for="{{detailData}}" wx:key="{{index}}" class="level-detail">
+                <text class="level-detail-time">{{item.time}}</text>
+                <text class="level-detail-price">{{item.price}}</text>
+                <text class="level-detail-volume {{item.volumeIsRed ? 'level-detail-volume-red' : ''}}">{{item.volume}}</text>
+            </view>
+        </view>
+    </view>
+</view>

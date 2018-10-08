@@ -5,7 +5,7 @@
 */
 const AxisKLine = require('./axis-k-line');
 const onePixelLine = require('./onePixelLine');
-const globalData = getApp().globalData;
+const optData = require('../optData');
 
 class KLine {
     /**
@@ -120,10 +120,10 @@ class KLine {
     candle({ date, open, close, high, low }, index) {
         const ctx = this.ctx;
         // 开盘价 < 收盘价, 显示红色, 十字线,也显示 红色
-        let color = globalData.colors.redK;
+        let color = optData.colors.redK;
         // 开盘价 > 收盘价, 显示绿色
         if (open > close) {
-            color = globalData.colors.greenK;
+            color = optData.colors.greenK;
         }
 
         // 价格 转化为 当前坐标系高度
@@ -133,28 +133,28 @@ class KLine {
         low = this.axis.numToYaxis(low);
 
         // 横坐标位置
-        const Xaxis = globalData.mw + globalData.bw * (index + 1);
+        const Xaxis = optData.mw + optData.bw * (index + 1);
         // 绘制 最高点 -> 最低点
         onePixelLine(ctx, Xaxis, high, Xaxis, low, color);
 
         // 绘制开盘收盘价
-        onePixelLine(ctx, Xaxis, open, Xaxis, close, color, globalData.bw * 0.7);
+        onePixelLine(ctx, Xaxis, open, Xaxis, close, color, optData.bw * 0.7);
     }
     // 5日均线
     drawMA5() {
-        this.drawMA(this.MA5Data, globalData.colors.MA5);
+        this.drawMA(this.MA5Data, optData.colors.MA5);
     }
     // 10日均线
     drawMA10() {
-        this.drawMA(this.MA10Data, globalData.colors.MA10);
+        this.drawMA(this.MA10Data, optData.colors.MA10);
     }
     // 20日均线
     drawMA20() {
-        this.drawMA(this.MA20Data, globalData.colors.MA20);
+        this.drawMA(this.MA20Data, optData.colors.MA20);
     }
     // 30日均线
     drawMA30() {
-        this.drawMA(this.MA30Data, globalData.colors.MA30);
+        this.drawMA(this.MA30Data, optData.colors.MA30);
     }
     // 均线
     drawMA(maData, color) {
@@ -162,11 +162,11 @@ class KLine {
             return;
         }
         // 最右边 的 第一个 均线 点
-        let lastXaxis = globalData.mw + globalData.bw * (maData[0].candleIndex + 1);
+        let lastXaxis = optData.mw + optData.bw * (maData[0].candleIndex + 1);
         let lastYaxis = this.axis.numToYaxis(maData[0].val);
         for (let i = 1; i < maData.length; i++) {
             // 横坐标位置
-            let curXaxis = globalData.mw + globalData.bw * (maData[i].candleIndex + 1);
+            let curXaxis = optData.mw + optData.bw * (maData[i].candleIndex + 1);
             let curYaxis = this.axis.numToYaxis(maData[i].val);
             onePixelLine(this.ctx, lastXaxis, lastYaxis, curXaxis, curYaxis, color);
             lastXaxis = curXaxis;

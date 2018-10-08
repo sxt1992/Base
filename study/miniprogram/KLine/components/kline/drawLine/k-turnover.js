@@ -5,7 +5,7 @@
 */
 const AxisKTurnover = require('./axis-k-turnover');
 const onePixelLine = require('./onePixelLine');
-const globalData = getApp().globalData;
+const optData = require('../optData');
 
 class KTurnover {
     /**
@@ -76,17 +76,17 @@ class KTurnover {
      */
     histogram(vol, isRedK, index) {
         // 横坐标位置
-        const Xaxis = globalData.mw + globalData.bw * (index + 1);
-        const color = isRedK ? globalData.colors.redK : globalData.colors.greenK;
+        const Xaxis = optData.mw + optData.bw * (index + 1);
+        const color = isRedK ? optData.colors.redK : optData.colors.greenK;
         this.axis.numLineToBottom(vol, Xaxis, color);
     }
     // 5日均线
     drawMA5() {
-        this.drawMA(this.MA5Data, globalData.colors.MA5);
+        this.drawMA(this.MA5Data, optData.colors.MA5);
     }
     // 10日均线
     drawMA10() {
-        this.drawMA(this.MA10Data, globalData.colors.MA10);
+        this.drawMA(this.MA10Data, optData.colors.MA10);
     }
     // 均线
     drawMA(maData, color) {
@@ -94,11 +94,11 @@ class KTurnover {
             return;
         }
         // 最右边 的 第一个 均线 点
-        let lastXaxis = globalData.mw + globalData.bw * (maData[0].histogramIndex + 1);
+        let lastXaxis = optData.mw + optData.bw * (maData[0].histogramIndex + 1);
         let lastYaxis = this.axis.numToYaxis(maData[0].val);
         for (let i = 1; i < maData.length; i++) {
             // 横坐标位置
-            let curXaxis = globalData.mw + globalData.bw * (maData[i].histogramIndex + 1);
+            let curXaxis = optData.mw + optData.bw * (maData[i].histogramIndex + 1);
             let curYaxis = this.axis.numToYaxis(maData[i].val);
             onePixelLine(this.ctx, lastXaxis, lastYaxis, curXaxis, curYaxis, color);
             lastXaxis = curXaxis;

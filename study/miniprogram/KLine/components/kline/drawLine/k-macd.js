@@ -5,7 +5,7 @@
 */
 const AxisKMacd = require('./axis-k-macd');
 const onePixelLine = require('./onePixelLine');
-const globalData = getApp().globalData;
+const optData = require('../optData');
 
 /**
 
@@ -70,12 +70,12 @@ class KMacd {
             return;
         }
         // 横坐标位置
-        const Xaxis = globalData.mw + globalData.bw * (index + 1);
+        const Xaxis = optData.mw + optData.bw * (index + 1);
         // macd > 0, 显示红色
-        let color = globalData.colors.redK;
+        let color = optData.colors.redK;
         // macd < 0, 显示绿色
         if (val < 0) {
-            color = globalData.colors.greenK;
+            color = optData.colors.greenK;
         }
 
         // 绘制 macd
@@ -83,11 +83,11 @@ class KMacd {
     }
     // 5日均线
     drawDIFF() {
-        this.drawCurveLine(this.DIFFData, globalData.colors.DIFF);
+        this.drawCurveLine(this.DIFFData, optData.colors.DIFF);
     }
     // 30日均线
     drawDEA() {
-        this.drawCurveLine(this.DEAData, globalData.colors.DEA);
+        this.drawCurveLine(this.DEAData, optData.colors.DEA);
     }
     // 均线
     drawCurveLine(maData, color) {
@@ -95,11 +95,11 @@ class KMacd {
             return;
         }
         // 最右边 的 第一个 均线 点
-        let lastXaxis = globalData.mw + globalData.bw * (maData[0].macdIndex + 1);
+        let lastXaxis = optData.mw + optData.bw * (maData[0].macdIndex + 1);
         let lastYaxis = this.axis.numToYaxis(maData[0].val);
         for (let i = 1; i < maData.length; i++) {
             // 横坐标位置
-            let curXaxis = globalData.mw + globalData.bw * (maData[i].macdIndex + 1);
+            let curXaxis = optData.mw + optData.bw * (maData[i].macdIndex + 1);
             let curYaxis = this.axis.numToYaxis(maData[i].val);
             onePixelLine(this.ctx, lastXaxis, lastYaxis, curXaxis, curYaxis, color);
             lastXaxis = curXaxis;

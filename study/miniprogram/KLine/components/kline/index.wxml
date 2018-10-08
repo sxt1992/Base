@@ -1,0 +1,114 @@
+<!--index.wxml-->
+<view class="container">
+    <!-- 搜索相关 - start -->
+    <view class="search-about">
+        <text>启用搜索:</text>
+        <switch class="search-switch" bindchange="searchSwitchChange" />
+        <input
+            class="search-input"
+            placeholder="格式: 2015-10-13,65"
+            bindinput="getSearchWord"
+            confirm-type="search"
+            disabled="{{disabledSearch}}"
+            />
+        <button
+            type="primary"
+            size="mini"
+            bindtap="search"
+            disabled="{{disabledSearch}}">搜索</button>
+    </view>
+    <!-- 搜索相关 - end -->
+    <view class="canvas-wraper"
+            bindtouchstart="canvasTouchstart"
+            bindtouchmove="canvasTouchmove"
+            bindtouchend="canvasTouchend">
+        <view class="k-line-wraper">
+            <canvas canvas-id="k-line" class="k-line"></canvas>
+            <view class="k-line-word" >
+                <text class="k-line-word-title">日K 前复权</text>
+                <view class="canvas-line-title" wx:if="{{!showCrosshair}}">
+                    <text class="k-line-ma MA5-color">MA5</text>
+                    <text class="k-line-ma MA10-color">MA10</text>
+                    <text class="k-line-ma MA20-color">MA20</text>
+                    <text class="k-line-ma MA30-color">MA30</text>
+                </view>
+                <block wx:if="{{showSearchRes}}">
+                    <view class="one-pixel-vert-line seach-res-line-color" style="left:{{searchResXaxis}}"></view>
+                    <view class="one-pixel-hori-line seach-res-line-color" style="top:{{searchResYaxis}}"></view>
+                </block>
+                <block wx:if="{{showCrosshair}}">
+                    <view class="canvas-line-title">
+                        <view>
+                            <text class="k-line-title-key">开:</text>
+                            <text class="k-line-title-val {{lineLabelIsRed.o ? 'redK-color' : 'greenK-color'}}">{{lineLabel.o}}</text>
+                            <text class="k-line-title-key">高:</text>
+                            <text class="k-line-title-val {{lineLabelIsRed.h ? 'redK-color' : 'greenK-color'}}">{{lineLabel.h}}</text>
+                            <text class="k-line-title-key">值:</text>
+                            <text class="k-line-title-val {{lineLabelIsRed.v ? 'redK-color' : 'greenK-color'}}">{{lineLabel.v}}</text>
+                        </view>
+                        <view>
+                            <text class="k-line-title-key">收:</text>
+                            <text class="k-line-title-val {{lineLabelIsRed.c ? 'redK-color' : 'greenK-color'}}">{{lineLabel.c}}</text>
+                            <text class="k-line-title-key">低:</text>
+                            <text class="k-line-title-val {{lineLabelIsRed.l ? 'redK-color' : 'greenK-color'}}">{{lineLabel.l}}</text>
+                            <text class="k-line-title-key">幅:</text>
+                            <text class="k-line-title-val {{lineLabelIsRed.f ? 'redK-color' : 'greenK-color'}}">{{lineLabel.f}}</text>
+                        </view>
+                    </view>
+                    <view class="one-pixel-vert-line" style="left:{{crossXaxis}}"></view>
+                    <view class="one-pixel-hori-line" style="top:{{crossYaxis}}"></view>
+                </block>
+                <view class="canvas-line-title" wx:if="{{showSearchRes}}">
+                    <text class="search-res-color">搜索：{{searchRes}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="k-line-date">
+            <text class="k-line-date-word" style="left:70rpx">{{showDataStartDate}}</text>
+            <text class="k-line-date-word" style="left:680rpx">{{showDataEndDate}}</text>
+            <text class="k-line-date-word mid" wx:if="{{showSearchRes}}" style="left: {{searchResXaxis}}">{{searchResDate}}</text>
+            <text class="k-line-date-word mid" wx:if="{{showCrosshair}}" style="left: {{crossXaxis}}">{{crosshairDate}}</text>
+        </view>
+        <view class="k-turnover-wraper">
+            <canvas canvas-id="k-turnover" class="k-turnover"></canvas>
+            <view class="k-turnover-word">
+                <text class="k-turnover-word-title">成交量</text>
+                <view class="canvas-line-title" wx:if="{{!showCrosshair}}">
+                    <text class="k-line-ma MA5-color">MA5</text>
+                    <text class="k-line-ma MA10-color">MA10</text>
+                </view>
+                <block wx:if="{{showSearchRes}}">
+                    <view class="one-pixel-vert-line seach-res-line-color" style="left:{{searchResXaxis}}"></view>
+                </block>
+                <block wx:if="{{showCrosshair}}">
+                    <view class="canvas-line-title">
+                        <text class="k-line-title-key">成交量:</text>
+                        <text class="{{turnoverLabelIsRed ? 'redK-color' : 'greenK-color'}}">{{turnoverLabel}}</text>
+                    </view>
+                    <view class="one-pixel-vert-line" style="left:{{crossXaxis}}"></view>
+                </block>
+            </view>
+        </view>
+        <view class="k-macd-wraper">
+            <canvas canvas-id="k-macd" class="k-macd"></canvas>
+            <view class="k-macd-word">
+                <text class="k-macd-word-title">MACD</text>
+                <view class="canvas-line-title" wx:if="{{!showCrosshair}}">
+                    <text class="k-line-ma DIFF-color">DIFF</text>
+                    <text class="k-line-ma DEA-color">DEA</text>
+                </view>
+                <block wx:if="{{showSearchRes}}">
+                    <view class="one-pixel-vert-line seach-res-line-color" style="left:{{searchResXaxis}}"></view>
+                </block>
+                <block wx:if="{{showCrosshair}}">
+                    <view class="canvas-line-title">
+                        <text class="k-line-ma {{macdLabelMACDIsRed ? 'redK-color' : 'greenK-color'}}">MACD: {{macdLabel.MACD}}</text>
+                        <text class="k-line-ma DIFF-color">DIFF: {{macdLabel.DIFF}}</text>
+                        <text class="k-line-ma DEA-color">DEA: {{macdLabel.DEA}}</text>
+                    </view>
+                    <view class="one-pixel-vert-line" style="left:{{crossXaxis}}"></view>
+                </block>
+            </view>
+        </view>
+    </view>
+</view>

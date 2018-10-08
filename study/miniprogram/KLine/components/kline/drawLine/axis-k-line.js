@@ -4,12 +4,12 @@
  * @author txj
 */
 const onePixelLine = require('./onePixelLine');
-const globalData = getApp().globalData;
+const optData = require('../optData');
 
 class Axis {
     constructor(ctx, maxVal, minVal, height) {
         this.ctx = ctx;
-        this.width = globalData.gw;
+        this.width = optData.gw;
         this.height = height;
 
         // 比最小值小一些
@@ -56,7 +56,7 @@ class Axis {
         });
     }
     yAxisLabel(ctx, text, x, y, verticalAlign = 'bottom', align = 'left') {
-        ctx.setFillStyle(globalData.colors.generalChar);
+        ctx.setFillStyle(optData.colors.generalChar);
         ctx.setFontSize(10);
         ctx.setTextAlign(align);
         ctx.setTextBaseline(verticalAlign);

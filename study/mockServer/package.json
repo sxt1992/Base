@@ -13,8 +13,11 @@
   ],
   "author": "taoxuejiao",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "express": "^4.16.2",
+    "body-parser": "^1.18.3",
+    "connect-multiparty": "^2.2.0",
+    "request": "^2.88.0",
     "mockjs": "^1.0.1-beta3",
     "nodemon": "^1.12.1"
   }
